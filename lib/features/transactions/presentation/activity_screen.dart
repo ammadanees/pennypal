@@ -1,0 +1,286 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+import '../../../app/routes.dart';
+import '../../../core/constants/app_categories.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/finance_strings.dart';
+import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/app_text_styles.dart';
+import '../../../core/utils/app_dates.dart';
+import '../../../core/utils/formatters.dart';
+import '../../../shared/widgets/app_card.dart';
+import '../../../shared/widgets/app_chip.dart';
+import '../../../shared/widgets/app_empty_state.dart';
+import '../../../shared/widgets/app_scaffold.dart';
+import '../../../shared/widgets/app_text_field.dart';
+import '../../../shared/widgets/async_value_view.dart';
+import '../data/transaction_repository.dart';
+import '../domain/finance_transaction.dart';
+import '../domain/transaction_filter.dart';
+import 'transaction_detail_sheet.dart';
+import 'transaction_display.dart';
+import 'transaction_filter_controller.dart';
+
+/// Transaction history with search and filters.
+class ActivityScreen extends ConsumerStatefulWidget {
+  const ActivityScreen({super.key});
+
+  @override
+  ConsumerState<ActivityScreen> createState() => _ActivityScreenState();
+}
+
+class _ActivityScreenState extends ConsumerState<ActivityScreen> {
+  final _search = TextEditingController();
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  void _clearAll() {
+    _search.clear();
+    ref.read(transactionFilterProvider.notifier).clear();
+  }
+
+  Future<void> _pickRange() async {
+    final now = DateTime.now();
+    final current = ref.read(transactionFilterProvider).range;
+    final picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2020),
+      lastDate: now,
+      initialDateRange: current == null
+          ? null
+          : DateTimeRange(start: current.start, end: current.end),
+    );
+    if (picked == null) return;
+    ref
+        .read(transactionFilterProvider.notifier)
+        .setRange(DateRange(picked.start, picked.end));
+  }
+
+  void _showAddMenu() {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.north_east),
+              title: const Text(FinanceStrings.quickAddExpense),
+              onTap: () {
+                Navigator.of(sheetContext).pop();
+                context.push(AppRoutes.transactionNew,
+                    extra: TransactionType.expense);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.south_west),
+              title: const Text(FinanceStrings.quickAddIncome),
+              onTap: () {
+                Navigator.of(sheetContext).pop();
+                context.push(AppRoutes.transactionNew,
+                    extra: TransactionType.income);
+              },
+            ),
+            AppSpacing.vSm,
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final filter = ref.watch(transactionFilterProvider);
+    final notifier = ref.read(transactionFilterProvider.notifier);
+    final results = ref.watch(filteredTransactionsProvider);
+
+    final rangeLabel = filter.range == null
+        ? FinanceStrings.filterAnyDate
+        : '${DateFormat('d MMM').format(filter.range!.start)} - '
+            '${DateFormat('d MMM').format(filter.range!.end)}';
+
+    return AppScaffold(
+      title: FinanceStrings.activityTitle,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _showAddMenu,
+        icon: const Icon(Icons.add),
+        label: const Text(FinanceStrings.add),
+      ),
+      body: Column(
+        children: [
+          AppSpacing.vSm,
+          AppTextField(
+            label: FinanceStrings.searchLabel,
+            controller: _search,
+            prefixIcon: Icons.search,
+            textInputAction: TextInputAction.search,
+            onChanged: notifier.setQuery,
+          ),
+          AppSpacing.vSm,
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                AppChip(
+                  label: FinanceStrings.filterAll,
+                  selected: filter.type == null && filter.category == null,
+                  onSelected: () {
+                    notifier.setType(null);
+                    notifier.setCategory(null);
+                  },
+                ),
+                AppSpacing.hSm,
+                AppChip(
+                  label: FinanceStrings.filterIncome,
+                  icon: Icons.south_west,
+                  selected: filter.type == TransactionType.income,
+                  onSelected: () => notifier.setType(TransactionType.income),
+                ),
+                AppSpacing.hSm,
+                AppChip(
+                  label: FinanceStrings.filterExpense,
+                  icon: Icons.north_east,
+                  selected: filter.type == TransactionType.expense,
+                  onSelected: () => notifier.setType(TransactionType.expense),
+                ),
+                AppSpacing.hSm,
+                AppChip(
+                  label: rangeLabel,
+                  icon: Icons.event_outlined,
+                  selected: filter.range != null,
+                  onSelected: _pickRange,
+                ),
+                for (final category in ExpenseCategory.values) ...[
+                  AppSpacing.hSm,
+                  AppChip(
+                    label: category.label,
+                    icon: category.icon,
+                    selected: filter.category == category,
+                    onSelected: () => notifier.setCategory(
+                      filter.category == category ? null : category,
+                    ),
+                  ),
+                ],
+                if (filter.isActive) ...[
+                  AppSpacing.hSm,
+                  AppChip(
+                    label: FinanceStrings.clearFilters,
+                    icon: Icons.close,
+                    selected: false,
+                    onSelected: _clearAll,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          AppSpacing.vSm,
+          Expanded(
+            child: AsyncValueView<List<FinanceTransaction>>(
+              value: results,
+              onRetry: () => ref.invalidate(transactionsProvider),
+              data: (list) {
+                if (list.isEmpty) {
+                  return filter.isActive
+                      ? AppEmptyState(
+                          icon: Icons.search_off,
+                          title: FinanceStrings.noMatchTitle,
+                          message: FinanceStrings.noMatchMessage,
+                          actionLabel: FinanceStrings.clearFilters,
+                          onAction: _clearAll,
+                        )
+                      : AppEmptyState(
+                          icon: Icons.receipt_long_outlined,
+                          title: AppStrings.emptyTransactionsTitle,
+                          message: AppStrings.emptyTransactionsMessage,
+                          actionLabel: AppStrings.addExpense,
+                          onAction: () => context.push(
+                            AppRoutes.transactionNew,
+                            extra: TransactionType.expense,
+                          ),
+                        );
+                }
+                return _TransactionList(transactions: list);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DayGroup {
+  _DayGroup(this.day);
+
+  final DateTime day;
+  final List<FinanceTransaction> items = [];
+}
+
+class _TransactionList extends StatelessWidget {
+  const _TransactionList({required this.transactions});
+
+  final List<FinanceTransaction> transactions;
+
+  List<_DayGroup> _group() {
+    final groups = <_DayGroup>[];
+    for (final t in transactions) {
+      final day = AppDates.dateOnly(t.date);
+      if (groups.isEmpty || groups.last.day != day) groups.add(_DayGroup(day));
+      groups.last.items.add(t);
+    }
+    return groups;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final groups = _group();
+    return ListView.builder(
+      padding: const EdgeInsets.only(bottom: AppDimensions.fabClearance),
+      itemCount: groups.length,
+      itemBuilder: (context, index) {
+        final group = groups[index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: AppSpacing.md,
+                bottom: AppSpacing.sm,
+              ),
+              child: Text(
+                Formatters.dayLabel(group.day),
+                style: context.text.labelLarge,
+              ),
+            ),
+            AppCard(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.xs,
+              ),
+              child: Column(
+                children: [
+                  for (var i = 0; i < group.items.length; i++) ...[
+                    if (i > 0) const Divider(),
+                    TransactionListTile(
+                      transaction: group.items[i],
+                      onTap: () => showTransactionDetail(context, group.items[i]),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
