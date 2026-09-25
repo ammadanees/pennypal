@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_accents.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
+import 'accent_icon_box.dart';
 import 'money_display.dart';
 
 class TransactionTile extends StatelessWidget {
@@ -14,6 +16,7 @@ class TransactionTile extends StatelessWidget {
     required this.amount,
     required this.kind,
     required this.icon,
+    this.accent,
     this.onTap,
   });
 
@@ -22,31 +25,26 @@ class TransactionTile extends StatelessWidget {
   final double amount;
   final MoneyKind kind;
   final IconData icon;
+
+  /// Icon colour. Defaults to green for income and red for expenses.
+  final AppAccent? accent;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final tint = kind == MoneyKind.income ? c.income : c.expense;
+    final resolved = accent ??
+        AppAccent(kind == MoneyKind.income ? c.income : c.expense, c.onPrimary);
 
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
         child: ConstrainedBox(
-          constraints:
-              const BoxConstraints(minHeight: AppDimensions.touchTarget),
+          constraints: const BoxConstraints(minHeight: AppDimensions.touchTarget),
           child: Row(
             children: [
-              Container(
-                width: AppDimensions.leadingIcon,
-                height: AppDimensions.leadingIcon,
-                decoration: BoxDecoration(
-                  color: tint.withOpacity(0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, size: AppDimensions.iconMd, color: tint),
-              ),
+              AccentIconBox(icon: icon, accent: resolved),
               AppSpacing.hMd,
               Expanded(
                 child: Column(

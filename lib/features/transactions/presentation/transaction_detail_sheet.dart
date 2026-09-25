@@ -7,12 +7,15 @@ import '../../../app/routes.dart';
 import '../../../core/constants/finance_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../shared/widgets/accent_icon_box.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_inline_message.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
 import '../../../shared/widgets/money_display.dart';
+import 'receipt_viewer.dart';
 import '../data/transaction_repository.dart';
 import '../domain/finance_transaction.dart';
 import 'transaction_display.dart';
@@ -84,21 +87,34 @@ class TransactionDetailSheet extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: AppDimensions.leadingIcon,
-                height: AppDimensions.leadingIcon,
-                decoration: BoxDecoration(
-                  color: tint.withOpacity(0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(tx.icon, size: AppDimensions.iconMd, color: tint),
-              ),
+              AccentIconBox(icon: tx.icon, accent: tx.accent),
               AppSpacing.hMd,
               Expanded(child: Text(tx.title, style: t.titleLarge)),
             ],
           ),
           AppSpacing.vMd,
           MoneyDisplay(amount: tx.amount, size: MoneySize.hero, kind: tx.kind),
+          if (tx.receiptImageUrl != null) ...[
+            AppSpacing.vMd,
+            GestureDetector(
+              onTap: () => showReceiptViewer(context, tx.receiptImageUrl!),
+              child: ClipRRect(
+                borderRadius: AppRadius.mdAll,
+                child: Image.network(
+                  tx.receiptImageUrl!,
+                  height: 140,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(
+                    height: 140,
+                    color: c.surfaceElevated,
+                    alignment: Alignment.center,
+                    child: Icon(Icons.broken_image_outlined, color: c.textMuted),
+                  ),
+                ),
+              ),
+            ),
+          ],
           AppSpacing.vMd,
           for (final (label, value) in rows)
             Padding(

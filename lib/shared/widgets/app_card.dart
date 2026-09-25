@@ -5,6 +5,8 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../core/theme/app_spacing.dart';
 
+/// Rounded card with a soft shadow in light mode and a hairline border in
+/// dark mode.
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
@@ -22,18 +24,23 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final brightness = Theme.of(context).brightness;
     final content = Padding(padding: padding, child: child);
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: AppRadius.lgAll,
-        boxShadow: AppShadows.card(Theme.of(context).brightness),
+        boxShadow: color == null ? AppShadows.card(brightness) : const [],
       ),
       child: Material(
         color: color ?? c.surface,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: AppRadius.lgAll,
-          side: BorderSide(color: color == null ? c.border : Colors.transparent),
+          side: BorderSide(
+            color: (color == null && brightness == Brightness.dark)
+                ? c.border
+                : Colors.transparent,
+          ),
         ),
         child: onTap == null ? content : InkWell(onTap: onTap, child: content),
       ),

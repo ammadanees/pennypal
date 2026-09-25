@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_categories.dart';
+import '../../../core/theme/app_accents.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_radius.dart';
@@ -28,13 +29,14 @@ class WelcomeIllustration extends StatelessWidget {
       2 => const _SavingsIllustration(),
       _ => const _LearnIllustration(),
     };
+    final accent = AppAccents.welcomePalette[page % AppAccents.welcomePalette.length];
     return Container(
       height: AppDimensions.illustrationHeight,
       width: double.infinity,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: c.primarySoft,
-        borderRadius: AppRadius.lgAll,
+        color: accent.color.withOpacity(0.14),
+        borderRadius: AppRadius.xlAll,
       ),
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Center(child: content),

@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/finance_strings.dart';
+import '../../../core/constants/step5_strings.dart';
+import '../../../core/theme/app_accents.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_radius.dart';
@@ -12,6 +14,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/app_dates.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../shared/widgets/accent_icon_box.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_empty_state.dart';
@@ -20,12 +23,19 @@ import '../../../shared/widgets/app_loading.dart';
 import '../../../shared/widgets/app_scaffold.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/budget_progress.dart';
+import '../../../shared/widgets/color_segment_bar.dart';
+import '../../../shared/widgets/hero_card.dart';
+import '../../../shared/widgets/insight_banner.dart';
 import '../../../shared/widgets/money_display.dart';
+import '../../../shared/widgets/round_action.dart';
 import '../../../shared/widgets/savings_progress.dart';
 import '../../../shared/widgets/section_header.dart';
 import '../../auth/data/auth_providers.dart';
+import '../../auth/domain/app_user.dart';
 import '../../budgets/data/budget_repository.dart';
 import '../../budgets/domain/budget_calculator.dart';
+import '../../insights/domain/insight_calculator.dart';
+import '../../notifications/data/notification_repository.dart';
 import '../../savings/data/savings_repository.dart';
 import '../../transactions/data/transaction_repository.dart';
 import '../../transactions/domain/finance_transaction.dart';
@@ -39,12 +49,12 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final name = ref.watch(authStateProvider).valueOrNull?.firstName;
+    final user = ref.watch(authStateProvider).valueOrNull;
     return AppScaffold(
       body: AsyncValueView<List<FinanceTransaction>>(
         value: ref.watch(transactionsProvider),
         onRetry: () => ref.invalidate(transactionsProvider),
-        data: (all) => _HomeContent(all: all, name: name),
+        data: (all) => _HomeContent(all: all, user: user),
       ),
     );
   }
@@ -57,20 +67,24 @@ String _greeting(DateTime now) {
 }
 
 class _HomeContent extends ConsumerWidget {
-  const _HomeContent({required this.all, this.name});
+  const _HomeContent({required this.all, this.user});
 
   final List<FinanceTransaction> all;
-  final String? name;
+  final AppUser? user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pending = ref.watch(pendingWriteCountProvider);
     final now = DateTime.now();
     final summary = FinanceCalculator.monthSummary(all, now);
+    final budget =
+        ref.watch(budgetsProvider).valueOrNull?.forMonth(AppDates.startOfMonth(now));
+    final insights = InsightCalculator.forMonth(all, budget: budget, now: now)
+        .take(2)
+        .toList();
 
     final header = <Widget>[
-      Text('${_greeting(now)}, ${name ?? 'there'}',
-          style: context.text.headlineMedium),
+      _HomeHeader(user: user, greeting: _greeting(now)),
       if (pending > 0) ...[
         AppSpacing.vMd,
         AppInlineMessage(
@@ -81,7 +95,7 @@ class _HomeContent extends ConsumerWidget {
       AppSpacing.vLg,
     ];
 
-    final overview = all.isEmpty
+    final hero = all.isEmpty
         ? AppCard(
             child: AppEmptyState(
               icon: Icons.receipt_long_outlined,
@@ -94,37 +108,62 @@ class _HomeContent extends ConsumerWidget {
               ),
             ),
           )
-        : Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _BalanceCard(balance: FinanceCalculator.balance(all)),
-              AppSpacing.vMd,
-              Row(
-                children: [
-                  Expanded(
-                    child: _SummaryCard(
-                      icon: Icons.south_west,
-                      label: FinanceStrings.income,
-                      amount: summary.income,
-                      kind: MoneyKind.income,
-                    ),
+        : _BalanceHero(balance: FinanceCalculator.balance(all), net: summary.net, now: now);
+
+    final summaryRow = all.isEmpty
+        ? const SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.md),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _SummaryCard(
+                    icon: Icons.south_west,
+                    accent: AppAccents.green,
+                    label: FinanceStrings.income,
+                    amount: summary.income,
+                    kind: MoneyKind.income,
                   ),
-                  AppSpacing.hMd,
-                  Expanded(
-                    child: _SummaryCard(
-                      icon: Icons.north_east,
-                      label: FinanceStrings.expenses,
-                      amount: summary.expense,
-                      kind: MoneyKind.expense,
-                    ),
+                ),
+                AppSpacing.hMd,
+                Expanded(
+                  child: _SummaryCard(
+                    icon: Icons.north_east,
+                    accent: AppAccents.coral,
+                    label: FinanceStrings.expenses,
+                    amount: summary.expense,
+                    kind: MoneyKind.expense,
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           );
 
-    const actions = _QuickActions();
-    const budget = _BudgetSection();
+    final insightWidgets = Column(
+      children: [
+        for (final insight in insights)
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.md),
+            child: InsightBanner(
+              message: insight.message,
+              accent: switch (insight.kind) {
+                InsightKind.good => AppAccents.green,
+                InsightKind.watch => AppAccents.coral,
+                InsightKind.info => AppAccents.blue,
+              },
+              icon: switch (insight.kind) {
+                InsightKind.good => Icons.thumb_up_alt_outlined,
+                InsightKind.watch => Icons.trending_up,
+                InsightKind.info => Icons.lightbulb_outline,
+              },
+              onTap: () => context.push(AppRoutes.assistant),
+            ),
+          ),
+      ],
+    );
+
+    final ribbon = summary.expense > 0 ? _SpendingRibbon(summary: summary) : const SizedBox.shrink();
+    const budgetSection = _BudgetSection();
     const goals = _GoalSection();
     final recent = all.isEmpty ? null : _RecentSection(items: all.take(5).toList());
 
@@ -138,7 +177,7 @@ class _HomeContent extends ConsumerWidget {
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [overview, AppSpacing.vLg, actions],
+                      children: [hero, summaryRow, insightWidgets, ribbon],
                     ),
                   ),
                   AppSpacing.hLg,
@@ -146,7 +185,7 @@ class _HomeContent extends ConsumerWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [budget, goals, if (recent != null) recent],
+                      children: [budgetSection, goals, if (recent != null) recent],
                     ),
                   ),
                 ],
@@ -154,44 +193,209 @@ class _HomeContent extends ConsumerWidget {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  overview,
-                  AppSpacing.vLg,
-                  actions,
-                  budget,
+                  hero,
+                  summaryRow,
+                  insightWidgets,
+                  budgetSection,
+                  ribbon,
                   goals,
                   if (recent != null) recent,
                 ],
               );
         return ListView(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
-          children: [...header, body],
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+          children: [...header, body, AppSpacing.vLg],
         );
       },
     );
   }
 }
 
-class _BalanceCard extends StatelessWidget {
-  const _BalanceCard({required this.balance});
+class _HomeHeader extends ConsumerWidget {
+  const _HomeHeader({required this.user, required this.greeting});
 
-  final double balance;
+  final AppUser? user;
+  final String greeting;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = context.text;
+    final unread = ref.watch(unreadNotificationCountProvider);
+    return Row(
+      children: [
+        Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: AppAccents.coral.color,
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            user?.initials ?? '?',
+            style: t.titleMedium?.copyWith(color: AppAccents.coral.onColor),
+          ),
+        ),
+        AppSpacing.hMd,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(greeting, style: t.bodySmall),
+              Text(user?.firstName ?? 'there',
+                  style: t.titleLarge, maxLines: 1, overflow: TextOverflow.ellipsis),
+            ],
+          ),
+        ),
+        _HeaderButton(
+          icon: Icons.auto_awesome,
+          tooltip: Step5Strings.assistantTitle,
+          onTap: () => context.push(AppRoutes.assistant),
+        ),
+        AppSpacing.hSm,
+        _HeaderButton(
+          icon: Icons.notifications_none,
+          tooltip: Step5Strings.notificationsTitle,
+          showBadge: unread > 0,
+          onTap: () => context.push(AppRoutes.notifications),
+        ),
+      ],
+    );
+  }
+}
+
+class _HeaderButton extends StatelessWidget {
+  const _HeaderButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+    this.showBadge = false,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+  final bool showBadge;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return AppCard(
-      color: c.primary,
-      padding: const EdgeInsets.all(AppSpacing.lg),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Material(
+          color: c.surface,
+          shape: const CircleBorder(),
+          elevation: 1,
+          shadowColor: c.border,
+          child: IconButton(
+            tooltip: tooltip,
+            icon: Icon(icon, color: c.textPrimary),
+            onPressed: onTap,
+          ),
+        ),
+        if (showBadge)
+          Positioned(
+            top: 6,
+            right: 6,
+            child: Container(
+              width: AppDimensions.badge,
+              height: AppDimensions.badge,
+              decoration: BoxDecoration(
+                color: AppAccents.coral.color,
+                shape: BoxShape.circle,
+                border: Border.all(color: c.surface, width: 2),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _BalanceHero extends StatelessWidget {
+  const _BalanceHero({required this.balance, required this.net, required this.now});
+
+  final double balance;
+  final double net;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final t = context.text;
+    final up = net >= 0;
+    return HeroCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             FinanceStrings.availableBalance,
-            style: context.text.labelLarge
-                ?.copyWith(color: c.onPrimary.withOpacity(0.8)),
+            style: t.labelLarge?.copyWith(color: c.onInk.withOpacity(0.75)),
           ),
           AppSpacing.vSm,
-          MoneyDisplay(amount: balance, size: MoneySize.hero, color: c.onPrimary),
+          MoneyDisplay(amount: balance, size: MoneySize.hero, color: c.onInk),
+          AppSpacing.vSm,
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md - 2,
+              vertical: AppSpacing.xs + 2,
+            ),
+            decoration: BoxDecoration(
+              color: c.onInk.withOpacity(0.14),
+              borderRadius: AppRadius.pillAll,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  up ? Icons.trending_up : Icons.trending_down,
+                  size: AppDimensions.iconSm,
+                  color: up ? AppAccents.amber.color : AppAccents.coral.color,
+                ),
+                AppSpacing.hXs,
+                Text(
+                  '${up ? '+' : '-'}${Formatters.money(net.abs())} ${FinanceStrings.balanceNote}',
+                  style: t.labelLarge?.copyWith(color: c.onInk),
+                ),
+              ],
+            ),
+          ),
+          AppSpacing.vLg,
+          Row(
+            children: [
+              Expanded(
+                child: RoundAction(
+                  icon: Icons.south_west,
+                  label: FinanceStrings.quickAddIncome,
+                  onTap: () => context.push(AppRoutes.transactionNew,
+                      extra: TransactionType.income),
+                ),
+              ),
+              Expanded(
+                child: RoundAction(
+                  icon: Icons.north_east,
+                  label: FinanceStrings.quickAddExpense,
+                  onTap: () => context.push(AppRoutes.transactionNew,
+                      extra: TransactionType.expense),
+                ),
+              ),
+              Expanded(
+                child: RoundAction(
+                  icon: Icons.pie_chart_outline,
+                  label: FinanceStrings.quickBudget,
+                  onTap: () => context.go(AppRoutes.budget),
+                ),
+              ),
+              Expanded(
+                child: RoundAction(
+                  icon: Icons.savings_outlined,
+                  label: FinanceStrings.quickSavings,
+                  onTap: () => context.go(AppRoutes.savings),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -201,31 +405,27 @@ class _BalanceCard extends StatelessWidget {
 class _SummaryCard extends StatelessWidget {
   const _SummaryCard({
     required this.icon,
+    required this.accent,
     required this.label,
     required this.amount,
     required this.kind,
   });
 
   final IconData icon;
+  final AppAccent accent;
   final String label;
   final double amount;
   final MoneyKind kind;
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
-    final tint = kind == MoneyKind.income ? c.income : c.expense;
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(icon, size: AppDimensions.iconSm, color: tint),
-              AppSpacing.hXs,
-              Text(label, style: context.text.labelLarge),
-            ],
-          ),
+          AccentIconBox(icon: icon, accent: accent, size: 40),
+          AppSpacing.vMd,
+          Text(label, style: context.text.labelLarge),
           Text(FinanceStrings.thisMonth, style: context.text.bodySmall),
           AppSpacing.vSm,
           MoneyDisplay(amount: amount, kind: kind),
@@ -235,92 +435,69 @@ class _SummaryCard extends StatelessWidget {
   }
 }
 
-class _QuickActions extends StatelessWidget {
-  const _QuickActions();
+class _SpendingRibbon extends StatelessWidget {
+  const _SpendingRibbon({required this.summary});
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _QuickAction(
-            icon: Icons.south_west,
-            label: FinanceStrings.quickAddIncome,
-            onTap: () => context.push(AppRoutes.transactionNew,
-                extra: TransactionType.income),
-          ),
-        ),
-        Expanded(
-          child: _QuickAction(
-            icon: Icons.north_east,
-            label: FinanceStrings.quickAddExpense,
-            onTap: () => context.push(AppRoutes.transactionNew,
-                extra: TransactionType.expense),
-          ),
-        ),
-        Expanded(
-          child: _QuickAction(
-            icon: Icons.pie_chart_outline,
-            label: FinanceStrings.quickBudget,
-            onTap: () => context.go(AppRoutes.budget),
-          ),
-        ),
-        Expanded(
-          child: _QuickAction(
-            icon: Icons.savings_outlined,
-            label: FinanceStrings.quickSavings,
-            onTap: () => context.go(AppRoutes.savings),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _QuickAction extends StatelessWidget {
-  const _QuickAction({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
+  final MonthSummary summary;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return Semantics(
-      button: true,
-      label: label,
-      excludeSemantics: true,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: AppRadius.lgAll,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+    final t = context.text;
+    final entries = summary.byCategory.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionHeader(
+          title: FinanceStrings.whereItWent,
+          actionLabel: FinanceStrings.details,
+          onAction: () => context.push(AppRoutes.reports),
+        ),
+        AppCard(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: AppDimensions.touchTarget,
-                height: AppDimensions.touchTarget,
-                decoration:
-                    BoxDecoration(color: c.primarySoft, shape: BoxShape.circle),
-                child: Icon(icon, size: AppDimensions.iconMd, color: c.primary),
+              ColorSegmentBar(
+                trackColor: c.border,
+                segments: [
+                  for (final e in entries)
+                    ColorSegment(e.value, AppAccents.forCategory(e.key).color),
+                ],
               ),
-              AppSpacing.vXs,
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: context.text.labelMedium,
-              ),
+              AppSpacing.vMd,
+              for (final e in entries.take(4))
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: AppAccents.forCategory(e.key).color,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      AppSpacing.hSm,
+                      Expanded(child: Text(e.key.label, style: t.bodyMedium)),
+                      Text(Formatters.money(e.value), style: t.labelLarge),
+                      AppSpacing.hSm,
+                      SizedBox(
+                        width: 44,
+                        child: Text(
+                          Formatters.percent(e.value / summary.expense),
+                          textAlign: TextAlign.end,
+                          style: t.bodySmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -349,13 +526,11 @@ class _BudgetSection extends ConsumerWidget {
                 if (budget == null) {
                   return _CtaCard(
                     icon: Icons.pie_chart_outline,
+                    accent: AppAccents.blue,
                     title: AppStrings.emptyBudgetTitle,
                     message: AppStrings.emptyBudgetMessage,
                     actionLabel: AppStrings.createBudget,
-                    onAction: () => context.push(
-                      AppRoutes.budgetEdit,
-                      extra: month,
-                    ),
+                    onAction: () => context.push(AppRoutes.budgetEdit, extra: month),
                   );
                 }
                 final status = BudgetCalculator.status(
@@ -408,11 +583,11 @@ class _GoalSection extends ConsumerWidget {
               error: (_, __) => const SizedBox.shrink(),
               data: (goals) {
                 final active = goals.where((g) => !g.isCompleted).toList()
-                  ..sort((a, b) => (b.currentAmount / (b.targetAmount <= 0 ? 1 : b.targetAmount))
-                      .compareTo(a.currentAmount / (a.targetAmount <= 0 ? 1 : a.targetAmount)));
+                  ..sort((a, b) => b.currentAmount.compareTo(a.currentAmount));
                 if (active.isEmpty) {
                   return _CtaCard(
                     icon: Icons.savings_outlined,
+                    accent: AppAccents.amber,
                     title: AppStrings.emptyGoalsTitle,
                     message: AppStrings.emptyGoalsMessage,
                     actionLabel: AppStrings.createGoal,
@@ -422,10 +597,19 @@ class _GoalSection extends ConsumerWidget {
                 final goal = active.first;
                 return AppCard(
                   onTap: () => context.go(AppRoutes.savings),
-                  child: SavingsProgress(
-                    label: goal.name,
-                    current: goal.currentAmount,
-                    target: goal.targetAmount,
+                  child: Row(
+                    children: [
+                      const AccentIconBox(icon: Icons.flag_outlined, accent: AppAccents.amber),
+                      AppSpacing.hMd,
+                      Expanded(
+                        child: SavingsProgress(
+                          label: goal.name,
+                          current: goal.currentAmount,
+                          target: goal.targetAmount,
+                          color: AppAccents.amber.color,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -472,10 +656,10 @@ class _RecentSection extends StatelessWidget {
   }
 }
 
-/// Compact call-to-action shown when a section has no data yet.
 class _CtaCard extends StatelessWidget {
   const _CtaCard({
     required this.icon,
+    required this.accent,
     required this.title,
     required this.message,
     required this.actionLabel,
@@ -483,6 +667,7 @@ class _CtaCard extends StatelessWidget {
   });
 
   final IconData icon;
+  final AppAccent accent;
   final String title;
   final String message;
   final String actionLabel;
@@ -490,19 +675,18 @@ class _CtaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, color: c.primary),
-              AppSpacing.hSm,
+              AccentIconBox(icon: icon, accent: accent),
+              AppSpacing.hMd,
               Expanded(child: Text(title, style: context.text.titleMedium)),
             ],
           ),
-          AppSpacing.vXs,
+          AppSpacing.vSm,
           Text(message, style: context.text.bodySmall),
           AppSpacing.vMd,
           AppButton(

@@ -15,11 +15,13 @@ class SavingsProgress extends StatelessWidget {
     required this.current,
     required this.target,
     this.label,
+    this.color,
   });
 
   final double current;
   final double target;
   final String? label;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class SavingsProgress extends StatelessWidget {
               builder: (_, value, __) => LinearProgressIndicator(
                 value: value,
                 minHeight: AppDimensions.progressHeight,
-                color: c.savings,
+                color: color ?? c.savings,
                 backgroundColor: c.border,
               ),
             ),

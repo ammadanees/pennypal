@@ -80,6 +80,36 @@ Future<void> seedDemoData(MemoryRecordStore store, {DateTime? now}) async {
     'targetDate': AppDates.addMonths(today, 9),
     'createdAt': AppDates.addMonths(today, -4),
   });
+  await store.upsertShared('users', uid, {
+    'fullName': 'Alex Khan',
+    'email': DemoAuthRepository.studentEmail,
+    'mobile': '+92 300 1234567',
+    'role': 'student',
+    'createdAt': AppDates.addMonths(monthStart, -4),
+    'lastLogin': today,
+  });
+
+  await store.upsertShared('supportQueries', 'demo-query-1', {
+    'userId': uid,
+    'subject': 'Budget alert did not show up',
+    'message':
+        'I went over my Food budget but did not get a notification. Is this expected?',
+    'status': 'answered',
+    'adminResponse':
+        'Thanks for flagging this! Alerts fire once you cross the threshold you set '
+            '(80% by default). Since Food had no limit set that week, no alert was sent. '
+            'Setting a category limit in the Budget tab will enable alerts for it.',
+    'submittedOn': daysAgo(6, 10, 0),
+  });
+  await store.upsertShared('feedback', 'demo-feedback-1', {
+    'userId': uid,
+    'name': 'Alex Khan',
+    'email': DemoAuthRepository.studentEmail,
+    'rating': 5,
+    'comments': 'Love how simple it is to log an expense between classes!',
+    'createdAt': daysAgo(2, 9, 0),
+  });
+
   await store.upsert(uid, 'savingsGoals', 'demo-goal-headphones', {
     'name': 'Headphones',
     'targetAmount': 8000.0,

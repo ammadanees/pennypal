@@ -24,6 +24,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.warning,
     required this.error,
     required this.info,
+    required this.ink,
+    required this.onInk,
   });
 
   final Color primary;
@@ -46,48 +48,56 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color error;
   final Color info;
 
+  /// Dark hero surfaces (balance card, budget summary).
+  final Color ink;
+  final Color onInk;
+
   static const AppColors light = AppColors(
-    primary: Color(0xFF0F7B5F),
+    primary: Color(0xFF05875C),
     onPrimary: Color(0xFFFFFFFF),
-    primarySoft: Color(0xFFE3F2EC),
-    secondary: Color(0xFFF2B134),
-    onSecondary: Color(0xFF3A2A00),
-    background: Color(0xFFF6F8F7),
+    primarySoft: Color(0xFFD8F6E8),
+    secondary: Color(0xFFFFB020),
+    onSecondary: Color(0xFF2B1D00),
+    background: Color(0xFFF1F6F4),
     surface: Color(0xFFFFFFFF),
-    surfaceElevated: Color(0xFFF0F4F2),
-    textPrimary: Color(0xFF0F1B16),
-    textSecondary: Color(0xFF4A5A53),
-    textMuted: Color(0xFF66766F),
-    border: Color(0xFFDFE7E3),
-    income: Color(0xFF17824B),
-    expense: Color(0xFFC6423E),
-    savings: Color(0xFFC48A0F),
-    success: Color(0xFF17824B),
-    warning: Color(0xFFB87500),
-    error: Color(0xFFB83232),
-    info: Color(0xFF2A6FB5),
+    surfaceElevated: Color(0xFFE6F0EC),
+    textPrimary: Color(0xFF0B1B17),
+    textSecondary: Color(0xFF44554F),
+    textMuted: Color(0xFF63746D),
+    border: Color(0xFFDDE8E3),
+    income: Color(0xFF0E8A4F),
+    expense: Color(0xFFD6402F),
+    savings: Color(0xFFD98A00),
+    success: Color(0xFF0E8A4F),
+    warning: Color(0xFFC77700),
+    error: Color(0xFFD03030),
+    info: Color(0xFF2563EB),
+    ink: Color(0xFF0C1F1A),
+    onInk: Color(0xFFFFFFFF),
   );
 
   static const AppColors dark = AppColors(
-    primary: Color(0xFF3FC79F),
-    onPrimary: Color(0xFF06251C),
-    primarySoft: Color(0xFF173229),
-    secondary: Color(0xFFF5C25E),
-    onSecondary: Color(0xFF2B1F00),
-    background: Color(0xFF0E1512),
-    surface: Color(0xFF16201C),
-    surfaceElevated: Color(0xFF1E2B26),
-    textPrimary: Color(0xFFEAF2EE),
-    textSecondary: Color(0xFFB4C4BC),
-    textMuted: Color(0xFF8A9B93),
-    border: Color(0xFF2A3832),
-    income: Color(0xFF4AD08A),
-    expense: Color(0xFFF07A76),
-    savings: Color(0xFFF5C25E),
-    success: Color(0xFF4AD08A),
-    warning: Color(0xFFF2B84B),
-    error: Color(0xFFF28B82),
-    info: Color(0xFF6BB0EE),
+    primary: Color(0xFF2EE6A6),
+    onPrimary: Color(0xFF04261C),
+    primarySoft: Color(0xFF12362B),
+    secondary: Color(0xFFFFC145),
+    onSecondary: Color(0xFF2B1D00),
+    background: Color(0xFF0A1411),
+    surface: Color(0xFF13201C),
+    surfaceElevated: Color(0xFF1B2C26),
+    textPrimary: Color(0xFFEAF6F1),
+    textSecondary: Color(0xFFB6C9C0),
+    textMuted: Color(0xFF8CA198),
+    border: Color(0xFF25392F),
+    income: Color(0xFF3DE08F),
+    expense: Color(0xFFFF7A70),
+    savings: Color(0xFFFFC145),
+    success: Color(0xFF3DE08F),
+    warning: Color(0xFFFFC145),
+    error: Color(0xFFFF8A80),
+    info: Color(0xFF7AA7FF),
+    ink: Color(0xFF10302A),
+    onInk: Color(0xFFFFFFFF),
   );
 
   @override
@@ -111,6 +121,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? warning,
     Color? error,
     Color? info,
+    Color? ink,
+    Color? onInk,
   }) {
     return AppColors(
       primary: primary ?? this.primary,
@@ -132,6 +144,8 @@ class AppColors extends ThemeExtension<AppColors> {
       warning: warning ?? this.warning,
       error: error ?? this.error,
       info: info ?? this.info,
+      ink: ink ?? this.ink,
+      onInk: onInk ?? this.onInk,
     );
   }
 
@@ -158,6 +172,8 @@ class AppColors extends ThemeExtension<AppColors> {
       warning: _mix(warning, other.warning, t),
       error: _mix(error, other.error, t),
       info: _mix(info, other.info, t),
+      ink: _mix(ink, other.ink, t),
+      onInk: _mix(onInk, other.onInk, t),
     );
   }
 }

@@ -14,6 +14,7 @@ class FinanceTransaction {
     this.source,
     this.description = '',
     this.paymentMode,
+    this.receiptImageUrl,
     this.pending = false,
   });
 
@@ -26,6 +27,7 @@ class FinanceTransaction {
   /// Expenses only.
   final ExpenseCategory? category;
   final PaymentMode? paymentMode;
+  final String? receiptImageUrl;
 
   /// Income only (allowance, scholarship, ...).
   final String? source;
@@ -53,6 +55,7 @@ class FinanceTransaction {
         'paymentMode': paymentMode?.name,
         'source': source,
         'description': description,
+        'receiptImageUrl': receiptImageUrl,
       };
 
   factory FinanceTransaction.fromRecord(StoredRecord record) {
@@ -68,6 +71,7 @@ class FinanceTransaction {
       paymentMode: PaymentMode.parse(d['paymentMode']),
       source: d['source'] as String?,
       description: (d['description'] as String?) ?? '',
+      receiptImageUrl: d['receiptImageUrl'] as String?,
       pending: record.hasPendingWrites,
     );
   }

@@ -66,6 +66,7 @@ class FirebaseAuthRepository implements AuthRepository {
       email: user.email ?? (data['email'] as String? ?? ''),
       mobile: (data['mobile'] as String?) ?? '',
       role: UserRole.parse(data['role']),
+      photoUrl: data['photoUrl'] as String?,
     );
   }
 
@@ -152,13 +153,18 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<void> updateProfile({
     required String fullName,
     required String mobile,
+    String? photoUrl,
   }) async {
     final user = _auth.currentUser;
     if (user == null) throw const AppFailure(AppStrings.authNoSession);
     try {
       await user.updateDisplayName(fullName.trim());
       await _users.doc(user.uid).set(
-        {'fullName': fullName.trim(), 'mobile': mobile.trim()},
+        {
+          'fullName': fullName.trim(),
+          'mobile': mobile.trim(),
+          if (photoUrl != null) 'photoUrl': photoUrl,
+        },
         SetOptions(merge: true),
       );
     } on FirebaseException {

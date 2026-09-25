@@ -26,17 +26,17 @@ abstract final class AppTextStyles {
 
   static TextTheme textTheme(AppColors c) {
     return TextTheme(
-      displayLarge: _heading(32, FontWeight.w700, letterSpacing: -0.5)
+      displayLarge: _heading(34, FontWeight.w800, letterSpacing: -0.6)
           .copyWith(color: c.textPrimary),
-      headlineMedium: _heading(24, FontWeight.w700, letterSpacing: -0.25)
+      headlineMedium: _heading(26, FontWeight.w800, letterSpacing: -0.4)
           .copyWith(color: c.textPrimary),
-      titleLarge: _heading(18, FontWeight.w700).copyWith(color: c.textPrimary),
+      titleLarge: _heading(19, FontWeight.w800).copyWith(color: c.textPrimary),
       titleMedium:
-          _heading(15, FontWeight.w600).copyWith(color: c.textPrimary),
+          _heading(16, FontWeight.w700).copyWith(color: c.textPrimary),
       bodyLarge: _body(15, FontWeight.w400).copyWith(color: c.textPrimary),
       bodyMedium: _body(15, FontWeight.w400).copyWith(color: c.textPrimary),
       bodySmall: _body(12, FontWeight.w400).copyWith(color: c.textSecondary),
-      labelLarge: _body(13, FontWeight.w600).copyWith(color: c.textPrimary),
+      labelLarge: _body(13, FontWeight.w700).copyWith(color: c.textPrimary),
       labelMedium: _body(13, FontWeight.w500).copyWith(color: c.textSecondary),
       labelSmall: _body(12, FontWeight.w500).copyWith(color: c.textSecondary),
     );
@@ -51,14 +51,14 @@ abstract final class AppTextStyles {
   // digits line up when scanning a list.
   static const List<FontFeature> _tabular = [FontFeature.tabularFigures()];
 
-  static TextStyle moneyHero(Color color) => _heading(36, FontWeight.w800,
+  static TextStyle moneyHero(Color color) => _heading(44, FontWeight.w800,
           height: 1.1, letterSpacing: -0.5)
       .copyWith(color: color, fontFeatures: _tabular);
 
-  static TextStyle moneyTitle(Color color) => _heading(18, FontWeight.w700)
+  static TextStyle moneyTitle(Color color) => _heading(19, FontWeight.w800)
       .copyWith(color: color, fontFeatures: _tabular);
 
-  static TextStyle moneyBody(Color color) => _body(15, FontWeight.w600)
+  static TextStyle moneyBody(Color color) => _body(15, FontWeight.w700)
       .copyWith(color: color, fontFeatures: _tabular);
 }
 

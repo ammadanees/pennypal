@@ -1,7 +1,9 @@
 rules_version = '2';
 
 // PennyPal security rules.
-// - A student can only read and write their own data.
+// - A student can only read and write their own private data.
+// - supportQueries and feedback are top-level collections keyed by userId,
+//   so a student can read their own, and an admin can read and reply to all.
 // - Admins are users whose /users/{uid} document has role == 'admin'.
 //   Set that by hand in the Firebase console; the app can never grant it.
 service cloud.firestore {
@@ -35,13 +37,13 @@ service cloud.firestore {
 
       allow delete: if false;
 
-      // Private financial records: owner only (not even admins).
-      match /transactions/{id}   { allow read, write: if isOwner(uid); }
-      match /budgets/{id}        { allow read, write: if isOwner(uid); }
-      match /savingsGoals/{id}   { allow read, write: if isOwner(uid); }
-      match /notifications/{id}  { allow read, write: if isOwner(uid); }
-      match /reports/{id}        { allow read, write: if isOwner(uid); }
-      match /learningProgress/{id} { allow read, write: if isOwner(uid); }
+      // Private financial and personal records: owner only (not even admins).
+      match /transactions/{id}      { allow read, write: if isOwner(uid); }
+      match /budgets/{id}           { allow read, write: if isOwner(uid); }
+      match /savingsGoals/{id}      { allow read, write: if isOwner(uid); }
+      match /notifications/{id}     { allow read, write: if isOwner(uid); }
+      match /reports/{id}           { allow read, write: if isOwner(uid); }
+      match /learningProgress/{id}  { allow read, write: if isOwner(uid); }
     }
 
     match /categories/{id} {
@@ -54,15 +56,21 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // A student creates their own query and can read it; only an admin can
+    // set status or write a reply.
     match /supportQueries/{id} {
-      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
-      allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'open';
+      allow read: if signedIn() &&
+        (resource.data.userId == request.auth.uid || isAdmin());
       allow update: if isAdmin();
     }
 
     match /feedback/{id} {
-      allow create: if signedIn();
-      allow read: if isAdmin();
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if signedIn() &&
+        (resource.data.userId == request.auth.uid || isAdmin());
     }
 
     // Everything else is closed.

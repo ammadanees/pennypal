@@ -5,6 +5,7 @@ import '../../../app/routes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/learning_strings.dart';
 import '../../../core/constants/report_strings.dart';
+import '../../../core/constants/step5_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -32,6 +33,24 @@ class MoreScreen extends StatelessWidget {
             icon: Icons.menu_book_outlined,
             label: LearningStrings.title,
             onTap: () => context.push(AppRoutes.learning),
+          ),
+          AppSpacing.vSm,
+          _MoreTile(
+            icon: Icons.auto_awesome,
+            label: Step5Strings.assistantTitle,
+            onTap: () => context.push(AppRoutes.assistant),
+          ),
+          AppSpacing.vSm,
+          _MoreTile(
+            icon: Icons.favorite_outline,
+            label: Step5Strings.feedbackTitle,
+            onTap: () => context.push(AppRoutes.feedback),
+          ),
+          AppSpacing.vSm,
+          _MoreTile(
+            icon: Icons.support_agent_outlined,
+            label: Step5Strings.supportTitle,
+            onTap: () => context.push(AppRoutes.support),
           ),
           AppSpacing.vSm,
           _MoreTile(

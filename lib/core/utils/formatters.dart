@@ -44,5 +44,17 @@ abstract final class Formatters {
     return t.endsWith('.0') ? t.substring(0, t.length - 2) : t;
   }
 
+  /// "Just now", "5 min ago", "Today 1:20 PM", "Yesterday", "12 Sep".
+  static String relativeTime(DateTime date, {DateTime? now}) {
+    final current = now ?? DateTime.now();
+    final diff = current.difference(date);
+    if (diff.inMinutes < 1) return 'Just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} min ago';
+    final label = dayLabel(date, now: current);
+    if (label == 'Today') return 'Today ${time(date)}';
+    if (label == 'Yesterday') return 'Yesterday ${time(date)}';
+    return label;
+  }
+
   static String time(DateTime date) => DateFormat('h:mm a').format(date);
 }

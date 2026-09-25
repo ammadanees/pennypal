@@ -1,6 +1,6 @@
 # PennyPal - Fresh All Along
 
-Step 4: Reports and Learning, on top of the Home, Activity, Budget and Savings tabs.
+Step 6: Admin portal, and Cloudinary-hosted receipt/profile photos, on top of steps 1-5.
 
 ## Run it right now (no Firebase needed)
 ```bash
@@ -80,3 +80,21 @@ phone, tablet and desktop frames, rotate, change text size and toggle dark
 mode. Pick a tablet or desktop frame to see the navigation rail and sidebar
 layouts. It is off on Android and iOS. To switch it off in a public web
 build, run `flutter build web --dart-define=DEVICE_PREVIEW=false`.
+
+## Admin portal
+Sign in with an admin account (see "Connect Firebase" below for how to
+create one, or use the demo admin login) to reach Dashboard, Users, Support
+and Feedback tabs. Admins can read student profiles, support queries and
+feedback, and reply to or close a support query — but never a student's
+private transactions, budgets or savings goals (the Firestore rules block
+that, not just the UI).
+
+## Cloudinary (receipt and profile photos)
+Fill in `lib/core/config/cloudinary_config.dart` with your cloud name and an
+**unsigned** upload preset (Cloudinary dashboard > Settings > Upload >
+Upload presets > Add preset > Signing mode: Unsigned). The API secret is
+never used and must never be put in the app. Until it's configured, the
+upload buttons show a friendly "not set up yet" message instead of failing
+silently.
+Used for: the expense form's optional receipt photo, and the profile
+picture on the Profile screen.

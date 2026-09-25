@@ -17,12 +17,19 @@ abstract final class AppRoutes {
   static const String goalEdit = '/savings/edit';
 
   static const String reports = '/reports';
+  static const String notifications = '/notifications';
+  static const String assistant = '/assistant';
+  static const String feedback = '/feedback';
+  static const String support = '/support';
   static const String learning = '/learning';
   static const String lessonBase = '/learning/lesson';
 
   static const String profile = '/profile';
   static const String about = '/about';
-  static const String admin = '/admin';
+  static const String admin = '/admin/dashboard';
+  static const String adminUsers = '/admin/users';
+  static const String adminSupport = '/admin/support';
+  static const String adminFeedback = '/admin/feedback';
 
   static const Set<String> authRoutes = {welcome, login, register, forgotPassword};
 }

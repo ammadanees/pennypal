@@ -5,7 +5,8 @@ import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Selectable pill used for filters and option pickers.
+/// Selectable pill for filters and option pickers. Selected is solid brand
+/// colour so the active choice is obvious at a glance.
 class AppChip extends StatelessWidget {
   const AppChip({
     super.key,
@@ -23,24 +24,20 @@ class AppChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final fg = selected ? c.onPrimary : c.textPrimary;
     return ChoiceChip(
       label: Text(label),
       avatar: icon == null
           ? null
-          : Icon(
-              icon,
-              size: AppDimensions.iconSm,
-              color: selected ? c.primary : c.textSecondary,
-            ),
+          : Icon(icon, size: AppDimensions.iconSm, color: fg),
       selected: selected,
       onSelected: (_) => onSelected(),
       showCheckmark: false,
-      selectedColor: c.primarySoft,
+      selectedColor: c.primary,
       backgroundColor: c.surface,
       side: BorderSide(color: selected ? c.primary : c.border),
       shape: const RoundedRectangleBorder(borderRadius: AppRadius.pillAll),
-      labelStyle: context.text.labelLarge
-          ?.copyWith(color: selected ? c.primary : c.textPrimary),
+      labelStyle: context.text.labelLarge?.copyWith(color: fg),
     );
   }
 }

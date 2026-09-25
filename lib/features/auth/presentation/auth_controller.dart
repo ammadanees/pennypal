@@ -34,10 +34,11 @@ class AuthController extends Notifier<bool> {
   Future<String?> updateProfile({
     required String fullName,
     required String mobile,
+    String? photoUrl,
   }) =>
       _run(() => ref
           .read(authRepositoryProvider)
-          .updateProfile(fullName: fullName, mobile: mobile));
+          .updateProfile(fullName: fullName, mobile: mobile, photoUrl: photoUrl));
 
   Future<void> signOut() => ref.read(authRepositoryProvider).signOut();
 

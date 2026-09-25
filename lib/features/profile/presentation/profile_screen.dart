@@ -6,6 +6,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../core/services/cloudinary_service.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_loading.dart';
@@ -17,8 +20,15 @@ import '../../auth/domain/app_user.dart';
 import '../../auth/presentation/auth_controller.dart';
 import 'edit_profile_sheet.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  bool _uploadingPhoto = false;
 
   Future<void> _edit(BuildContext context, AppUser user) async {
     final saved = await showModalBottomSheet<bool>(
@@ -57,8 +67,32 @@ class ProfileScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _changePhoto(AppUser user) async {
+    final picker = ImagePicker();
+    final file = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80, maxWidth: 800, maxHeight: 800);
+    if (file == null) return;
+    setState(() => _uploadingPhoto = true);
+    try {
+      final bytes = await file.readAsBytes();
+      final url = await ref.read(cloudinaryServiceProvider).uploadImage(bytes, fileName: file.name);
+      await ref.read(authControllerProvider.notifier).updateProfile(
+            fullName: user.fullName,
+            mobile: user.mobile,
+            photoUrl: url,
+          );
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('The photo could not be uploaded.')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _uploadingPhoto = false);
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final user = ref.watch(authStateProvider).valueOrNull;
     if (user == null) {
       // Signing out: the router is already sending the student to sign in.
@@ -74,15 +108,56 @@ class ProfileScreen extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: AppDimensions.avatar,
-                height: AppDimensions.avatar,
-                alignment: Alignment.center,
-                decoration:
-                    BoxDecoration(color: c.primarySoft, shape: BoxShape.circle),
-                child: Text(
-                  user.initials,
-                  style: t.titleLarge?.copyWith(color: c.primary),
+              GestureDetector(
+                onTap: _uploadingPhoto ? null : () => _changePhoto(user),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: AppDimensions.avatar,
+                      height: AppDimensions.avatar,
+                      alignment: Alignment.center,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color: c.primarySoft,
+                        shape: BoxShape.circle,
+                      ),
+                      child: user.photoUrl == null
+                          ? Text(user.initials,
+                              style: t.titleLarge?.copyWith(color: c.primary))
+                          : Image.network(
+                              user.photoUrl!,
+                              width: AppDimensions.avatar,
+                              height: AppDimensions.avatar,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Text(
+                                user.initials,
+                                style: t.titleLarge?.copyWith(color: c.primary),
+                              ),
+                            ),
+                    ),
+                    Positioned(
+                      right: -2,
+                      bottom: -2,
+                      child: Container(
+                        width: 26,
+                        height: 26,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: c.primary,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: c.background, width: 2),
+                        ),
+                        child: _uploadingPhoto
+                            ? SizedBox(
+                                width: 12,
+                                height: 12,
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 2, color: c.onPrimary),
+                              )
+                            : Icon(Icons.edit, size: 14, color: c.onPrimary),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               AppSpacing.hMd,

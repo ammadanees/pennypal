@@ -107,12 +107,16 @@ class DemoAuthRepository implements AuthRepository {
   Future<void> updateProfile({
     required String fullName,
     required String mobile,
+    String? photoUrl,
   }) async {
     final current = _current;
     if (current == null) throw const AppFailure(AppStrings.authNoSession);
     await Future<void>.delayed(latency);
-    final updated =
-        current.copyWith(fullName: fullName.trim(), mobile: mobile.trim());
+    final updated = current.copyWith(
+      fullName: fullName.trim(),
+      mobile: mobile.trim(),
+      photoUrl: photoUrl,
+    );
     _accounts[_key(current.email)]?.user = updated;
     _set(updated);
   }

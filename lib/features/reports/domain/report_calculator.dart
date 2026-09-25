@@ -34,6 +34,22 @@ enum ReportPeriod {
     }
   }
 
+  /// The equally long stretch just before this one (same day span).
+  DateRange previousRange(DateTime now) {
+    final r = range(now);
+    final shift = switch (this) {
+      ReportPeriod.thisMonth || ReportPeriod.lastMonth => 1,
+      ReportPeriod.last3Months => 3,
+      ReportPeriod.thisYear => 12,
+    };
+    final today = AppDates.dateOnly(now);
+    final coveredEnd = today.isBefore(r.end) ? today : r.end;
+    return DateRange(
+      AppDates.addMonths(r.start, -shift),
+      AppDates.addMonths(coveredEnd, -shift),
+    );
+  }
+
   /// The month whose budget the report shows.
   DateTime budgetMonth(DateTime now) => this == ReportPeriod.lastMonth
       ? AppDates.addMonths(AppDates.startOfMonth(now), -1)
@@ -150,6 +166,25 @@ abstract final class ReportCalculator {
       }
     }
     return MonthTotal(month: month, income: income, expense: expense);
+  }
+
+  /// Spending over time for a sparkline: one value per day, or per week
+  /// for long periods. Only days that have already happened.
+  static List<double> spendingSeries(
+    List<FinanceTransaction> all,
+    DateRange range,
+    DateTime now,
+  ) {
+    final start = AppDates.dateOnly(range.start);
+    final days = daysCovered(range, now);
+    final bucket = days > 62 ? 7 : 1;
+    final buckets = List<double>.filled((days / bucket).ceil(), 0);
+    for (final t in all) {
+      if (t.isIncome || !range.contains(t.date)) continue;
+      final index = AppDates.dateOnly(t.date).difference(start).inDays ~/ bucket;
+      if (index >= 0 && index < buckets.length) buckets[index] += t.amount;
+    }
+    return buckets;
   }
 
   /// Days of the range that have already happened (at least 1).

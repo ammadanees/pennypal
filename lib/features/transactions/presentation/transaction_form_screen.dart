@@ -14,6 +14,7 @@ import '../../../core/utils/input_formatters.dart';
 import '../../../core/utils/validators.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_chip.dart';
+import '../../../shared/widgets/image_upload_button.dart';
 import '../../../shared/widgets/app_scaffold.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
@@ -46,6 +47,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
   ExpenseCategory? _category;
   PaymentMode _mode = PaymentMode.cash;
   bool _categoryMissing = false;
+  String? _receiptUrl;
 
   bool get _isEditing => widget.existing != null;
   bool get _isIncome => _type == TransactionType.income;
@@ -58,6 +60,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     _date = e?.date ?? DateTime.now();
     _category = e?.category;
     _mode = e?.paymentMode ?? PaymentMode.cash;
+    _receiptUrl = e?.receiptImageUrl;
     _amount = TextEditingController(
       text: e == null
           ? ''
@@ -106,6 +109,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       paymentMode: _isIncome ? null : _mode,
       source: _isIncome ? _source.text.trim() : null,
       description: _description.text.trim(),
+      receiptImageUrl: _isIncome ? null : _receiptUrl,
     );
     await ref.read(transactionRepositoryProvider).save(transaction);
     if (!mounted) return;
@@ -276,6 +280,47 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               ),
               AppSpacing.vXs,
               Text(FinanceStrings.paymentNote, style: t.bodySmall),
+              AppSpacing.vMd,
+              Text(FinanceStrings.labelReceipt, style: t.labelLarge),
+              AppSpacing.vSm,
+              if (_receiptUrl != null)
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: AppRadius.mdAll,
+                      child: Image.network(
+                        _receiptUrl!,
+                        height: 160,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          height: 160,
+                          color: c.surfaceElevated,
+                          alignment: Alignment.center,
+                          child: Icon(Icons.broken_image_outlined, color: c.textMuted),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: AppSpacing.sm,
+                      right: AppSpacing.sm,
+                      child: Material(
+                        color: c.surface,
+                        shape: const CircleBorder(),
+                        child: IconButton(
+                          icon: const Icon(Icons.close),
+                          tooltip: 'Remove photo',
+                          onPressed: () => setState(() => _receiptUrl = null),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              else
+                ImageUploadButton(
+                  label: FinanceStrings.addReceipt,
+                  onUploaded: (url) => setState(() => _receiptUrl = url),
+                ),
             ],
             AppSpacing.vLg,
             AppButton(label: FinanceStrings.save, onPressed: _save),

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../notifications/data/notification_repository.dart';
 
 import '../../../core/responsive/adaptive_scaffold.dart';
 
 /// Signed-in student navigation: bottom bar, rail or sidebar by screen size.
 /// Each tab keeps its own navigation state.
-class StudentShell extends StatelessWidget {
+class StudentShell extends ConsumerWidget {
   const StudentShell({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
@@ -39,7 +42,8 @@ class StudentShell extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(notificationEngineProvider);
     return AdaptiveScaffold(
       destinations: _destinations,
       selectedIndex: navigationShell.currentIndex,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/finance_strings.dart';
+import '../../../core/theme/app_accents.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/money_display.dart';
 import '../../../shared/widgets/transaction_tile.dart';
@@ -11,6 +13,10 @@ extension TransactionDisplay on FinanceTransaction {
       isIncome ? Icons.south_west : (category?.icon ?? Icons.category_outlined);
 
   MoneyKind get kind => isIncome ? MoneyKind.income : MoneyKind.expense;
+
+  AppAccent get accent => isIncome
+      ? AppAccents.green
+      : AppAccents.forCategory(category ?? ExpenseCategory.miscellaneous);
 
   String get subtitle {
     final kindLabel = isIncome ? FinanceStrings.income : (category?.label ?? '');
@@ -35,6 +41,7 @@ class TransactionListTile extends StatelessWidget {
       amount: transaction.amount,
       kind: transaction.kind,
       icon: transaction.icon,
+      accent: transaction.accent,
       onTap: onTap,
     );
   }

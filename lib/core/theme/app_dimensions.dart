@@ -8,11 +8,13 @@ abstract final class AppDimensions {
   static const double brandTile = 36;
   static const double avatar = 64;
   static const double emptyIllustration = 72;
-  static const double progressHeight = 8;
+  static const double progressHeight = 10;
   static const double ringSize = 96;
   static const double ringStroke = 10;
   static const double maxContentWidth = 1100;
   static const double authFormWidth = 440;
   static const double illustrationHeight = 300;
   static const double fabClearance = 88;
+  static const double actionButton = 56;
+  static const double badge = 10;
 }

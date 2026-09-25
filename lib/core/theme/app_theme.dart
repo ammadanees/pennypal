@@ -80,27 +80,32 @@ abstract final class AppTheme {
         backgroundColor: c.surface,
         surfaceTintColor: c.surface,
         elevation: 0,
-        indicatorColor: c.primarySoft,
+        height: 72,
+        indicatorColor: c.primary,
+        indicatorShape: const StadiumBorder(),
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => textTheme.labelSmall?.copyWith(
             color: states.contains(WidgetState.selected)
                 ? c.primary
                 : c.textSecondary,
+            fontWeight: states.contains(WidgetState.selected)
+                ? FontWeight.w800
+                : FontWeight.w500,
           ),
         ),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
             size: AppDimensions.iconMd,
             color: states.contains(WidgetState.selected)
-                ? c.primary
+                ? c.onPrimary
                 : c.textSecondary,
           ),
         ),
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: c.surface,
-        indicatorColor: c.primarySoft,
-        selectedIconTheme: IconThemeData(color: c.primary),
+        indicatorColor: c.primary,
+        selectedIconTheme: IconThemeData(color: c.onPrimary),
         unselectedIconTheme: IconThemeData(color: c.textSecondary),
         selectedLabelTextStyle:
             textTheme.labelLarge?.copyWith(color: c.primary),
@@ -117,12 +122,12 @@ abstract final class AppTheme {
           textStyle: WidgetStatePropertyAll(textTheme.labelLarge),
           backgroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.selected)
-                ? c.primarySoft
+                ? c.primary
                 : c.surface,
           ),
           foregroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.selected)
-                ? c.primary
+                ? c.onPrimary
                 : c.textSecondary,
           ),
         ),

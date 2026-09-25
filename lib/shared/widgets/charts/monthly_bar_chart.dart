@@ -21,7 +21,8 @@ class MonthBar {
   final bool highlighted;
 }
 
-/// Simple vertical bars with value labels above and month labels below.
+/// Pill-shaped bars in a soft track. The highlighted bar uses the full
+/// accent colour; the others are quieter.
 class MonthlyBarChart extends StatelessWidget {
   const MonthlyBarChart({
     super.key,
@@ -37,6 +38,7 @@ class MonthlyBarChart extends StatelessWidget {
   final double barAreaHeight;
 
   static const double _labelRow = 20;
+  static const double _barWidth = 26;
 
   @override
   Widget build(BuildContext context) {
@@ -63,26 +65,35 @@ class MonthlyBarChart extends StatelessWidget {
                           Formatters.compact(bar.value),
                           style: context.text.labelSmall?.copyWith(
                             color: bar.highlighted ? c.textPrimary : c.textSecondary,
+                            fontWeight:
+                                bar.highlighted ? FontWeight.w800 : FontWeight.w500,
                           ),
                         ),
                       ),
                       AppSpacing.vXs,
-                      TweenAnimationBuilder<double>(
-                        tween: Tween(
-                          begin: 0,
-                          end: maxValue <= 0 ? 0 : bar.value / maxValue,
+                      Container(
+                        width: _barWidth,
+                        height: barAreaHeight,
+                        alignment: Alignment.bottomCenter,
+                        decoration: BoxDecoration(
+                          color: c.surfaceElevated,
+                          borderRadius: AppRadius.pillAll,
                         ),
-                        duration: AppDurations.slow,
-                        curve: Curves.easeOutCubic,
-                        builder: (_, fraction, __) => Container(
-                          height: math.max(2.0, barAreaHeight * fraction),
-                          margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
-                          decoration: BoxDecoration(
-                            color: bar.value <= 0
-                                ? c.border
-                                : (bar.highlighted ? color : color.withOpacity(0.4)),
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(AppRadius.sm),
+                        child: TweenAnimationBuilder<double>(
+                          tween: Tween(
+                            begin: 0,
+                            end: maxValue <= 0 ? 0 : bar.value / maxValue,
+                          ),
+                          duration: AppDurations.slow,
+                          curve: Curves.easeOutCubic,
+                          builder: (_, fraction, __) => Container(
+                            width: _barWidth,
+                            height: bar.value <= 0
+                                ? 0
+                                : math.max(_barWidth, barAreaHeight * fraction),
+                            decoration: BoxDecoration(
+                              color: bar.highlighted ? color : color.withOpacity(0.38),
+                              borderRadius: AppRadius.pillAll,
                             ),
                           ),
                         ),
@@ -95,7 +106,7 @@ class MonthlyBarChart extends StatelessWidget {
                           style: context.text.labelSmall?.copyWith(
                             color: bar.highlighted ? c.textPrimary : c.textSecondary,
                             fontWeight:
-                                bar.highlighted ? FontWeight.w700 : FontWeight.w500,
+                                bar.highlighted ? FontWeight.w800 : FontWeight.w500,
                           ),
                         ),
                       ),

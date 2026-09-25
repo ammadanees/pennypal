@@ -48,4 +48,53 @@ class MemoryRecordStore implements RecordStore {
     _data[key]?.remove(id);
     _emit(key);
   }
+
+  @override
+  Stream<List<StoredRecord>> watchShared(String collection, {required String userId}) async* {
+    List<StoredRecord> mine() => [
+          for (final r in _snapshot(_sharedKey(collection)))
+            if (r.data['userId'] == userId) r,
+        ];
+    yield mine();
+    yield* _controller(_sharedKey(collection)).stream.map((_) => mine());
+  }
+
+  @override
+  Future<void> upsertShared(
+    String collection,
+    String id,
+    Map<String, dynamic> data,
+  ) async {
+    final key = _sharedKey(collection);
+    final docs = _data.putIfAbsent(key, () => {});
+    docs[id] = {...?docs[id], ...data};
+    _emit(key);
+  }
+
+  String _sharedKey(String collection) => '_shared|$collection';
+
+  @override
+  Stream<List<StoredRecord>> watchAdminCollection(String collection) async* {
+    final key = _sharedKey(collection);
+    yield _snapshot(key);
+    yield* _controller(key).stream;
+  }
+
+  @override
+  Future<void> updateAdminDoc(
+    String collection,
+    String id,
+    Map<String, dynamic> data,
+  ) =>
+      upsertShared(collection, id, data);
+
+  @override
+  Future<StoredRecord?> getUserProfile(String uid) async {
+    final doc = _data[_sharedKey('users')]?[uid];
+    return doc == null ? null : StoredRecord(id: uid, data: Map.of(doc));
+  }
+
+  /// Test/demo seeding helper: writes a `users/{uid}` profile document.
+  Future<void> seedUserProfile(String uid, Map<String, dynamic> data) =>
+      upsertShared('users', uid, data);
 }

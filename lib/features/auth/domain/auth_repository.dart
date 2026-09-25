@@ -19,7 +19,11 @@ abstract class AuthRepository {
 
   Future<void> signOut();
 
-  Future<void> updateProfile({required String fullName, required String mobile});
+  Future<void> updateProfile({
+    required String fullName,
+    required String mobile,
+    String? photoUrl,
+  });
 
   /// True when running without Firebase (local development only).
   bool get isDemo => false;

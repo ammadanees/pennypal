@@ -17,6 +17,7 @@ import '../../../shared/widgets/app_inline_message.dart';
 import '../../../shared/widgets/app_scaffold.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/budget_progress.dart';
+import '../../../shared/widgets/category_card.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
 import '../../../shared/widgets/progress_ring.dart';
 import '../../../shared/widgets/section_header.dart';
@@ -171,15 +172,12 @@ class _BudgetContent extends StatelessWidget {
           for (final usage in status.categories)
             Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.md),
-              child: AppCard(
-                child: usage.limit == null
-                    ? _NoLimitRow(usage: usage)
-                    : BudgetProgress(
-                        label: usage.category.label,
-                        spent: usage.spent,
-                        limit: usage.limit!,
-                        alertThreshold: status.alertThreshold,
-                      ),
+              child: CategoryCard(
+                category: usage.category,
+                spent: usage.spent,
+                shareOfSpend: status.spent <= 0 ? 0 : usage.spent / status.spent,
+                limit: usage.limit,
+                alertThreshold: status.alertThreshold,
               ),
             ),
       ],
@@ -266,33 +264,6 @@ class _OverviewCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _NoLimitRow extends StatelessWidget {
-  const _NoLimitRow({required this.usage});
-
-  final CategoryUsage usage;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = context.text;
-    return Row(
-      children: [
-        Icon(usage.category.icon, size: AppDimensions.iconMd),
-        AppSpacing.hMd,
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(usage.category.label, style: t.titleMedium),
-              Text(FinanceStrings.budgetNoLimit, style: t.bodySmall),
-            ],
-          ),
-        ),
-        Text(Formatters.money(usage.spent), style: t.labelLarge),
-      ],
     );
   }
 }

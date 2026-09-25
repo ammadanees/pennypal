@@ -18,6 +18,11 @@ abstract final class FinanceStrings {
   static const String seeAll = 'See all';
   static const String details = 'Details';
   static const String overall = 'Overall';
+  static const String whereItWent = 'Where it went';
+  static const String categoriesCount = 'categories';
+  static const String leftToSpend = 'Left to spend';
+  static const String overBudgetLabel = 'Over budget by';
+  static const String balanceNote = 'this month';
   static const String noActiveGoals = 'No active goals right now.';
 
   static String pendingChanges(int count) => count == 1
@@ -59,6 +64,8 @@ abstract final class FinanceStrings {
   static const String edit = 'Edit';
   static const String transactionDeleted = 'Transaction deleted.';
   static const String waitingToSync = 'Waiting to sync';
+  static const String labelReceipt = 'Receipt photo (optional)';
+  static const String addReceipt = 'Add receipt photo';
   static const String paymentNote =
       'Only a note for your records. PennyPal never moves money.';
 

@@ -13,6 +13,7 @@ class AppUser {
     required this.email,
     required this.mobile,
     required this.role,
+    this.photoUrl,
   });
 
   final String uid;
@@ -20,6 +21,7 @@ class AppUser {
   final String email;
   final String mobile;
   final UserRole role;
+  final String? photoUrl;
 
   bool get isAdmin => role == UserRole.admin;
 
@@ -39,11 +41,12 @@ class AppUser {
     return (parts.first[0] + parts.last[0]).toUpperCase();
   }
 
-  AppUser copyWith({String? fullName, String? mobile}) => AppUser(
+  AppUser copyWith({String? fullName, String? mobile, String? photoUrl}) => AppUser(
         uid: uid,
         fullName: fullName ?? this.fullName,
         email: email,
         mobile: mobile ?? this.mobile,
         role: role,
+        photoUrl: photoUrl ?? this.photoUrl,
       );
 }
