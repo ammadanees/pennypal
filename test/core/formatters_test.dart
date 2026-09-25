@@ -20,5 +20,9 @@ void main() {
           Formatters.dayLabel(DateTime(2026, 9, 23, 20), now: now), 'Yesterday');
       expect(Formatters.dayLabel(DateTime(2026, 9, 1), now: now), '1 Sep');
     });
+
+    test('formats short dates', () {
+      expect(Formatters.shortDate(DateTime(2026, 9, 25)), '25 Sep 2026');
+    });
   });
 }

@@ -57,4 +57,6 @@ abstract final class Formatters {
   }
 
   static String time(DateTime date) => DateFormat('h:mm a').format(date);
+
+  static String shortDate(DateTime date) => DateFormat('d MMM y').format(date);
 }

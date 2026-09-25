@@ -201,7 +201,7 @@ class _StudentRow extends StatelessWidget {
           Text(
             student.createdAt == null
                 ? AdminStrings.notAvailable
-                : Formatters.relativeTime(student.createdAt),
+                : Formatters.relativeTime(student.createdAt!),
             style: t.bodySmall,
           ),
         ],
