@@ -22,7 +22,24 @@ class AccentIconBox extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(color: accent.color, borderRadius: AppRadius.mdAll),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            accent.color,
+            Color.lerp(accent.color, Colors.black, 0.10) ?? accent.color,
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: accent.color.withOpacity(0.28),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        borderRadius: AppRadius.mdAll,
+      ),
       child: Icon(icon, size: size * 0.5, color: accent.onColor),
     );
   }

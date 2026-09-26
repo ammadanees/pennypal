@@ -19,7 +19,8 @@ service cloud.firestore {
 
     function isAdmin() {
       return signedIn() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'admin';
     }
 
     match /users/{uid} {
@@ -27,13 +28,12 @@ service cloud.firestore {
 
       // New accounts can only ever be students.
       allow create: if isOwner(uid)
-        && request.resource.data.role == 'student'
-        && request.resource.data.keys().hasOnly(
-             ['fullName', 'email', 'mobile', 'role', 'isEmailVerified', 'createdAt', 'lastLogin']);
+        && (!('role' in request.resource.data) || request.resource.data.role == 'student');
 
-      // Owners can update their profile but never their role.
-      allow update: if isOwner(uid)
-        && request.resource.data.role == resource.data.role;
+      // Owners can update their profile but never their role. Admins can update.
+      allow update: if (isOwner(uid)
+        && (!('role' in request.resource.data) || request.resource.data.role == resource.data.get('role', 'student')))
+        || isAdmin();
 
       allow delete: if false;
 

@@ -28,16 +28,40 @@ class RoundAction extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Material(
-            color: c.onInk.withOpacity(0.14),
-            shape: const CircleBorder(),
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: onTap,
-              child: SizedBox(
-                width: AppDimensions.actionButton,
-                height: AppDimensions.actionButton,
-                child: Icon(icon, color: c.onInk),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withOpacity(0.22),
+                  Colors.white.withOpacity(0.10),
+                ],
+              ),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.24),
+                width: 1.2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.16),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              shape: const CircleBorder(),
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: onTap,
+                child: SizedBox(
+                  width: AppDimensions.actionButton,
+                  height: AppDimensions.actionButton,
+                  child: Icon(icon, color: Colors.white, size: 21),
+                ),
               ),
             ),
           ),

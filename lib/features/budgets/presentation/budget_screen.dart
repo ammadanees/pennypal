@@ -145,7 +145,7 @@ class _BudgetContent extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.only(
         top: AppSpacing.sm,
-        bottom: AppSpacing.xl,
+        bottom: AppDimensions.fabClearance + 16,
       ),
       children: [
         _OverviewCard(status: status),

@@ -26,6 +26,10 @@ class FirebaseAuthRepository implements AuthRepository {
   CollectionReference<Map<String, dynamic>> get _users =>
       _firestore.collection('users');
 
+  static final Set<String> _locallyVerifiedUids = <String>{};
+  static final Map<String, Map<String, dynamic>> _pendingProfiles = {};
+  static final Map<String, ({String code, DateTime expiresAt})> _pendingOtps = {};
+
   @override
   bool get isDemo => false;
 
@@ -62,7 +66,8 @@ class FirebaseAuthRepository implements AuthRepository {
   AppUser _fromSnapshot(User user, DocumentSnapshot<Map<String, dynamic>> snap) {
     final data = snap.data();
     if (data == null) return _fallback(user);
-    final isVerified = (data['isEmailVerified'] as bool?) ?? user.emailVerified;
+    final isVerified = _locallyVerifiedUids.contains(user.uid) ||
+        ((data['isEmailVerified'] as bool?) ?? user.emailVerified);
     return AppUser(
       uid: user.uid,
       fullName: (data['fullName'] as String?) ?? _fallback(user).fullName,
@@ -75,14 +80,18 @@ class FirebaseAuthRepository implements AuthRepository {
     );
   }
 
-  AppUser _fallback(User user) => AppUser(
-        uid: user.uid,
-        fullName: user.displayName ?? user.email?.split('@').first ?? 'Student',
-        email: user.email ?? '',
-        mobile: '',
-        role: UserRole.student,
-        isEmailVerified: user.emailVerified,
-      );
+  AppUser _fallback(User user) {
+    final isVerified =
+        _locallyVerifiedUids.contains(user.uid) || user.emailVerified;
+    return AppUser(
+      uid: user.uid,
+      fullName: user.displayName ?? user.email?.split('@').first ?? 'Student',
+      email: user.email ?? '',
+      mobile: '',
+      role: UserRole.student,
+      isEmailVerified: isVerified,
+    );
+  }
 
   @override
   Future<void> signIn({required String email, required String password}) async {
@@ -123,19 +132,24 @@ class FirebaseAuthRepository implements AuthRepository {
       );
       final user = cred.user!;
       await user.updateDisplayName(fullName.trim());
+
+      final initialProfile = <String, dynamic>{
+        'fullName': fullName.trim(),
+        'email': email.trim().toLowerCase(),
+        'mobile': mobile.trim(),
+        if (studentId != null && studentId.trim().isNotEmpty)
+          'studentId': studentId.trim(),
+        'role': 'student',
+        'isEmailVerified': false,
+        'createdAt': FieldValue.serverTimestamp(),
+        'lastLogin': FieldValue.serverTimestamp(),
+      };
+      _pendingProfiles[user.uid] = initialProfile;
+
       try {
-        await _users.doc(user.uid).set({
-          'fullName': fullName.trim(),
-          'email': email.trim().toLowerCase(),
-          'mobile': mobile.trim(),
-          'studentId': studentId?.trim(),
-          'role': 'student',
-          'isEmailVerified': false,
-          'createdAt': FieldValue.serverTimestamp(),
-          'lastLogin': FieldValue.serverTimestamp(),
-        });
+        await _users.doc(user.uid).set(initialProfile);
       } catch (e) {
-        debugPrint('Could not save profile document: $e');
+        debugPrint('Could not save profile document immediately: $e');
       }
       await sendEmailOtp(email: email.trim().toLowerCase());
     } on FirebaseAuthException catch (e) {
@@ -154,6 +168,8 @@ class FirebaseAuthRepository implements AuthRepository {
     final rng = math.Random();
     final otp = (100000 + rng.nextInt(900000)).toString();
     final expiresAt = DateTime.now().add(const Duration(minutes: 5));
+
+    _pendingOtps[user.uid] = (code: otp, expiresAt: expiresAt);
 
     try {
       await _users.doc(user.uid).collection('verification').doc('otp').set({
@@ -196,30 +212,73 @@ class FirebaseAuthRepository implements AuthRepository {
       throw const AppFailure('Please enter a valid 6-digit verification code.');
     }
 
-    final docSnap =
-        await _users.doc(user.uid).collection('verification').doc('otp').get();
-    if (!docSnap.exists) {
-      throw const AppFailure('No active verification code found. Please tap Resend Code.');
+    String? storedCode;
+    DateTime? expiresAt;
+
+    try {
+      final docSnap =
+          await _users.doc(user.uid).collection('verification').doc('otp').get();
+      if (docSnap.exists) {
+        final data = docSnap.data();
+        storedCode = data?['code'] as String?;
+        final expiresAtTs = data?['expiresAt'] as Timestamp?;
+        expiresAt = expiresAtTs?.toDate();
+      }
+    } catch (e) {
+      debugPrint('Could not read verification doc from Firestore: $e');
     }
 
-    final data = docSnap.data();
-    final storedCode = data?['code'] as String?;
-    final expiresAtTs = data?['expiresAt'] as Timestamp?;
-    final expiresAt = expiresAtTs?.toDate();
+    // Fall back to in-memory OTP if Firestore document was missing
+    if (storedCode == null && _pendingOtps.containsKey(user.uid)) {
+      final pendingOtpRecord = _pendingOtps[user.uid]!;
+      storedCode = pendingOtpRecord.code;
+      expiresAt = pendingOtpRecord.expiresAt;
+    }
+
+    if (storedCode == null) {
+      throw const AppFailure('No active verification code found. Please tap Resend Code.');
+    }
 
     if (expiresAt != null && DateTime.now().isAfter(expiresAt)) {
       throw const AppFailure('This verification code has expired. Please tap Resend Code.');
     }
 
-    if (storedCode == null || storedCode != cleanOtp) {
+    if (storedCode != cleanOtp) {
       throw const AppFailure('Invalid verification code. Please check and try again.');
     }
 
-    // Mark as verified in Firestore
-    await _users.doc(user.uid).set({
+    _locallyVerifiedUids.add(user.uid);
+    _pendingOtps.remove(user.uid);
+
+    // Save complete user document to Firestore upon OTP verification
+    final pendingProfile = _pendingProfiles.remove(user.uid) ?? {};
+    final profileUpdate = <String, dynamic>{
+      'role': 'student',
       'isEmailVerified': true,
       'emailVerifiedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+      'lastLogin': FieldValue.serverTimestamp(),
+      if (pendingProfile['fullName'] != null)
+        'fullName': pendingProfile['fullName']
+      else if (user.displayName != null && user.displayName!.isNotEmpty)
+        'fullName': user.displayName,
+      if (pendingProfile['email'] != null)
+        'email': pendingProfile['email']
+      else if (user.email != null)
+        'email': user.email!.toLowerCase(),
+      if (pendingProfile['mobile'] != null) 'mobile': pendingProfile['mobile'],
+      if (pendingProfile['studentId'] != null)
+        'studentId': pendingProfile['studentId'],
+      if (pendingProfile['createdAt'] != null)
+        'createdAt': pendingProfile['createdAt']
+      else
+        'createdAt': FieldValue.serverTimestamp(),
+    };
+
+    try {
+      await _users.doc(user.uid).set(profileUpdate, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint('Firestore update profile notice: $e');
+    }
 
     try {
       await _users.doc(user.uid).collection('verification').doc('otp').delete();

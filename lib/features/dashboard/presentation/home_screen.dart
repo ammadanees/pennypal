@@ -203,7 +203,10 @@ class _HomeContent extends ConsumerWidget {
                 ],
               );
         return ListView(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+          padding: const EdgeInsets.only(
+            top: AppSpacing.md,
+            bottom: 96,
+          ),
           children: [...header, body, AppSpacing.vLg],
         );
       },

@@ -26,6 +26,8 @@ class HeroCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final glowColor = glow ?? c.primary;
+    final accentGlow = c.secondary;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: AppRadius.xlAll,
@@ -34,16 +36,36 @@ class HeroCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: AppRadius.xlAll,
         child: Container(
-          color: c.ink,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0E382B),
+                Color(0xFF08221A),
+                Color(0xFF03140F),
+              ],
+            ),
+            borderRadius: AppRadius.xlAll,
+            border: Border.all(
+              color: Colors.white.withOpacity(0.14),
+              width: 1.2,
+            ),
+          ),
           child: Stack(
             children: [
-              Positioned.fill(
+              const Positioned.fill(
                 child: CustomPaint(
-                  painter: HexPatternPainter(color: c.onInk, opacity: 0.07, cell: 26),
+                  painter: HexPatternPainter(
+                    color: Colors.white,
+                    opacity: 0.05,
+                    cell: 28,
+                  ),
                 ),
               ),
+              // Top-Right Primary Emerald Glow
               Positioned(
-                top: -_glowSize / 2.4,
+                top: -_glowSize / 2.2,
                 right: -_glowSize / 3,
                 child: Container(
                   width: _glowSize,
@@ -51,7 +73,28 @@ class HeroCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
-                      colors: [glowColor.withOpacity(0.6), glowColor.withOpacity(0)],
+                      colors: [
+                        glowColor.withOpacity(0.55),
+                        glowColor.withOpacity(0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // Bottom-Left Warm Gold Glow
+              Positioned(
+                bottom: -_glowSize / 2.5,
+                left: -_glowSize / 3,
+                child: Container(
+                  width: _glowSize * 0.9,
+                  height: _glowSize * 0.9,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        accentGlow.withOpacity(0.18),
+                        accentGlow.withOpacity(0),
+                      ],
                     ),
                   ),
                 ),

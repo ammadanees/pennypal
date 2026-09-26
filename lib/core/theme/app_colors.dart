@@ -53,51 +53,70 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color onInk;
 
   static const AppColors light = AppColors(
-    primary: Color(0xFF05875C),
+    primary: Color(0xFF00A86B),
     onPrimary: Color(0xFFFFFFFF),
-    primarySoft: Color(0xFFD8F6E8),
+    primarySoft: Color(0xFFE6F9F0),
     secondary: Color(0xFFFFB020),
     onSecondary: Color(0xFF2B1D00),
-    background: Color(0xFFF1F6F4),
+    background: Color(0xFFF6FAF8),
     surface: Color(0xFFFFFFFF),
-    surfaceElevated: Color(0xFFE6F0EC),
-    textPrimary: Color(0xFF0B1B17),
-    textSecondary: Color(0xFF44554F),
-    textMuted: Color(0xFF63746D),
-    border: Color(0xFFDDE8E3),
-    income: Color(0xFF0E8A4F),
-    expense: Color(0xFFD6402F),
-    savings: Color(0xFFD98A00),
-    success: Color(0xFF0E8A4F),
-    warning: Color(0xFFC77700),
-    error: Color(0xFFD03030),
+    surfaceElevated: Color(0xFFEDF6F2),
+    textPrimary: Color(0xFF091F18),
+    textSecondary: Color(0xFF42574F),
+    textMuted: Color(0xFF677E75),
+    border: Color(0xFFE2ECE7),
+    income: Color(0xFF00B074),
+    expense: Color(0xFFF04438),
+    savings: Color(0xFFF79009),
+    success: Color(0xFF00B074),
+    warning: Color(0xFFF79009),
+    error: Color(0xFFF04438),
     info: Color(0xFF2563EB),
-    ink: Color(0xFF0C1F1A),
+    ink: Color(0xFF08221A),
     onInk: Color(0xFFFFFFFF),
   );
 
   static const AppColors dark = AppColors(
     primary: Color(0xFF2EE6A6),
-    onPrimary: Color(0xFF04261C),
-    primarySoft: Color(0xFF12362B),
-    secondary: Color(0xFFFFC145),
+    onPrimary: Color(0xFF03241A),
+    primarySoft: Color(0xFF0E382B),
+    secondary: Color(0xFFFFC043),
     onSecondary: Color(0xFF2B1D00),
-    background: Color(0xFF0A1411),
-    surface: Color(0xFF13201C),
-    surfaceElevated: Color(0xFF1B2C26),
-    textPrimary: Color(0xFFEAF6F1),
-    textSecondary: Color(0xFFB6C9C0),
-    textMuted: Color(0xFF8CA198),
-    border: Color(0xFF25392F),
-    income: Color(0xFF3DE08F),
-    expense: Color(0xFFFF7A70),
-    savings: Color(0xFFFFC145),
-    success: Color(0xFF3DE08F),
-    warning: Color(0xFFFFC145),
-    error: Color(0xFFFF8A80),
-    info: Color(0xFF7AA7FF),
-    ink: Color(0xFF10302A),
+    background: Color(0xFF061410),
+    surface: Color(0xFF0C201A),
+    surfaceElevated: Color(0xFF142D25),
+    textPrimary: Color(0xFFEAF8F2),
+    textSecondary: Color(0xFFB4C8BE),
+    textMuted: Color(0xFF819A90),
+    border: Color(0xFF1A3D32),
+    income: Color(0xFF34D399),
+    expense: Color(0xFFF87171),
+    savings: Color(0xFFFBBF24),
+    success: Color(0xFF34D399),
+    warning: Color(0xFFFBBF24),
+    error: Color(0xFFF87171),
+    info: Color(0xFF60A5FA),
+    ink: Color(0xFF0A261F),
     onInk: Color(0xFFFFFFFF),
+  );
+
+  /// Vibrant gradients for fintech elements and cards
+  static const LinearGradient heroGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF0D3327), Color(0xFF041913)],
+  );
+
+  static const LinearGradient primaryGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF00B574), Color(0xFF008C59)],
+  );
+
+  static const LinearGradient goldGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFFFFC533), Color(0xFFFF9E00)],
   );
 
   @override

@@ -13,35 +13,45 @@ class AppCard extends StatelessWidget {
     required this.child,
     this.padding = const EdgeInsets.all(AppSpacing.md),
     this.color,
+    this.gradient,
+    this.borderRadius,
+    this.border,
     this.onTap,
   });
 
   final Widget child;
   final EdgeInsetsGeometry padding;
   final Color? color;
+  final Gradient? gradient;
+  final BorderRadius? borderRadius;
+  final BoxBorder? border;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final brightness = Theme.of(context).brightness;
+    final r = borderRadius ?? AppRadius.lgAll;
     final content = Padding(padding: padding, child: child);
+
+    final borderColor = color == null
+        ? (brightness == Brightness.dark
+            ? c.border
+            : c.border.withOpacity(0.65))
+        : Colors.transparent;
+
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: AppRadius.lgAll,
+        color: gradient == null ? (color ?? c.surface) : null,
+        gradient: gradient,
+        borderRadius: r,
+        border: border ?? Border.all(color: borderColor, width: 1),
         boxShadow: color == null ? AppShadows.card(brightness) : const [],
       ),
       child: Material(
-        color: color ?? c.surface,
+        color: Colors.transparent,
         clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: AppRadius.lgAll,
-          side: BorderSide(
-            color: (color == null && brightness == Brightness.dark)
-                ? c.border
-                : Colors.transparent,
-          ),
-        ),
+        borderRadius: r,
         child: onTap == null ? content : InkWell(onTap: onTap, child: content),
       ),
     );

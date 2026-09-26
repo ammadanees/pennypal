@@ -154,7 +154,12 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
           content: Text('Email verified successfully! Welcome to PennyPal.'),
         ),
       );
-      // The router redirect will automatically take the verified user to Home or Admin.
+      if (mounted) {
+        final user = ref.read(authStateProvider).valueOrNull;
+        final targetRoute =
+            (user?.isAdmin ?? false) ? AppRoutes.admin : AppRoutes.home;
+        context.go(targetRoute);
+      }
     }
   }
 
