@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/errors/app_failure.dart';
+import '../../../core/services/email_service.dart';
 import '../domain/app_user.dart';
 import '../domain/auth_repository.dart';
 import 'auth_error_mapper.dart';
@@ -60,13 +62,16 @@ class FirebaseAuthRepository implements AuthRepository {
   AppUser _fromSnapshot(User user, DocumentSnapshot<Map<String, dynamic>> snap) {
     final data = snap.data();
     if (data == null) return _fallback(user);
+    final isVerified = (data['isEmailVerified'] as bool?) ?? user.emailVerified;
     return AppUser(
       uid: user.uid,
       fullName: (data['fullName'] as String?) ?? _fallback(user).fullName,
       email: user.email ?? (data['email'] as String? ?? ''),
       mobile: (data['mobile'] as String?) ?? '',
+      studentId: data['studentId'] as String?,
       role: UserRole.parse(data['role']),
       photoUrl: data['photoUrl'] as String?,
+      isEmailVerified: isVerified,
     );
   }
 
@@ -76,6 +81,7 @@ class FirebaseAuthRepository implements AuthRepository {
         email: user.email ?? '',
         mobile: '',
         role: UserRole.student,
+        isEmailVerified: user.emailVerified,
       );
 
   @override
@@ -108,6 +114,7 @@ class FirebaseAuthRepository implements AuthRepository {
     required String email,
     required String mobile,
     required String password,
+    String? studentId,
   }) async {
     try {
       final cred = await _auth.createUserWithEmailAndPassword(
@@ -121,17 +128,103 @@ class FirebaseAuthRepository implements AuthRepository {
           'fullName': fullName.trim(),
           'email': email.trim().toLowerCase(),
           'mobile': mobile.trim(),
+          'studentId': studentId?.trim(),
           'role': 'student',
+          'isEmailVerified': false,
           'createdAt': FieldValue.serverTimestamp(),
           'lastLogin': FieldValue.serverTimestamp(),
         });
       } catch (e) {
-        // The account exists; the app falls back to Auth data until the
-        // profile document can be written (for example, rules not deployed).
         debugPrint('Could not save profile document: $e');
       }
+      await sendEmailOtp(email: email.trim().toLowerCase());
     } on FirebaseAuthException catch (e) {
       throw mapAuthError(e);
+    }
+  }
+
+  @override
+  Future<void> sendEmailOtp({String? email}) async {
+    final user = _auth.currentUser;
+    final targetEmail = email ?? user?.email;
+    if (user == null || targetEmail == null) {
+      throw const AppFailure(AppStrings.authNoSession);
+    }
+
+    final rng = math.Random();
+    final otp = (100000 + rng.nextInt(900000)).toString();
+    final expiresAt = DateTime.now().add(const Duration(minutes: 5));
+
+    try {
+      await _users.doc(user.uid).collection('verification').doc('otp').set({
+        'code': otp,
+        'expiresAt': Timestamp.fromDate(expiresAt),
+        'createdAt': FieldValue.serverTimestamp(),
+        'email': targetEmail,
+      });
+    } catch (e) {
+      debugPrint('Could not write verification document: $e');
+    }
+
+    try {
+      await _firestore.collection('mail').add({
+        'to': [targetEmail],
+        'message': {
+          'subject': '$otp is your PennyPal verification code',
+          'html':
+              '<p>Hi ${user.displayName ?? 'Student'},</p><p>Your 6-digit PennyPal verification code is: <b>$otp</b></p><p>This code expires in 5 minutes.</p>',
+        },
+      });
+    } catch (e) {
+      debugPrint('Firestore mail collection write notice: $e');
+    }
+
+    await EmailService.sendVerificationOtp(
+      email: targetEmail,
+      otp: otp,
+      recipientName: user.displayName ?? 'Student',
+    );
+  }
+
+  @override
+  Future<void> verifyEmailOtp(String otp) async {
+    final user = _auth.currentUser;
+    if (user == null) throw const AppFailure(AppStrings.authNoSession);
+
+    final cleanOtp = otp.trim();
+    if (cleanOtp.length != 6) {
+      throw const AppFailure('Please enter a valid 6-digit verification code.');
+    }
+
+    final docSnap =
+        await _users.doc(user.uid).collection('verification').doc('otp').get();
+    if (!docSnap.exists) {
+      throw const AppFailure('No active verification code found. Please tap Resend Code.');
+    }
+
+    final data = docSnap.data();
+    final storedCode = data?['code'] as String?;
+    final expiresAtTs = data?['expiresAt'] as Timestamp?;
+    final expiresAt = expiresAtTs?.toDate();
+
+    if (expiresAt != null && DateTime.now().isAfter(expiresAt)) {
+      throw const AppFailure('This verification code has expired. Please tap Resend Code.');
+    }
+
+    if (storedCode == null || storedCode != cleanOtp) {
+      throw const AppFailure('Invalid verification code. Please check and try again.');
+    }
+
+    // Mark as verified in Firestore
+    await _users.doc(user.uid).set({
+      'isEmailVerified': true,
+      'emailVerifiedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+
+    try {
+      await _users.doc(user.uid).collection('verification').doc('otp').delete();
+    } catch (e) {
+      debugPrint('Could not delete used OTP: $e');
     }
   }
 
@@ -153,6 +246,7 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<void> updateProfile({
     required String fullName,
     required String mobile,
+    String? studentId,
     String? photoUrl,
   }) async {
     final user = _auth.currentUser;
@@ -163,6 +257,7 @@ class FirebaseAuthRepository implements AuthRepository {
         {
           'fullName': fullName.trim(),
           'mobile': mobile.trim(),
+          if (studentId != null) 'studentId': studentId.trim(),
           if (photoUrl != null) 'photoUrl': photoUrl,
         },
         SetOptions(merge: true),

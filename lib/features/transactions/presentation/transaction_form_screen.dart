@@ -20,6 +20,7 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
 import '../data/transaction_repository.dart';
 import '../domain/finance_transaction.dart';
+import '../../cards/presentation/card_selector_view.dart';
 
 /// Add or edit an income or expense. Works fully offline.
 class TransactionFormScreen extends ConsumerStatefulWidget {
@@ -46,6 +47,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
   late final TextEditingController _description;
   ExpenseCategory? _category;
   PaymentMode _mode = PaymentMode.cash;
+  String? _selectedCardId;
+  String? _selectedCardName;
   bool _categoryMissing = false;
   String? _receiptUrl;
 
@@ -60,6 +63,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     _date = e?.date ?? DateTime.now();
     _category = e?.category;
     _mode = e?.paymentMode ?? PaymentMode.cash;
+    _selectedCardId = e?.cardId;
+    _selectedCardName = e?.cardName;
     _receiptUrl = e?.receiptImageUrl;
     _amount = TextEditingController(
       text: e == null
@@ -106,7 +111,9 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       date: _date,
       createdAt: existing?.createdAt ?? DateTime.now(),
       category: _isIncome ? null : _category,
-      paymentMode: _isIncome ? null : _mode,
+      paymentMode: _mode,
+      cardId: _mode == PaymentMode.card ? _selectedCardId : null,
+      cardName: _mode == PaymentMode.card ? _selectedCardName : null,
       source: _isIncome ? _source.text.trim() : null,
       description: _description.text.trim(),
       receiptImageUrl: _isIncome ? null : _receiptUrl,
@@ -261,25 +268,40 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               maxLines: 2,
               validator: (v) => Validators.maxLength(v, 100),
             ),
-            if (!_isIncome) ...[
+            AppSpacing.vMd,
+            Text(
+              _isIncome ? 'Payment received via' : FinanceStrings.labelPaidWith,
+              style: t.labelLarge,
+            ),
+            AppSpacing.vSm,
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
+              children: [
+                for (final m in PaymentMode.values)
+                  AppChip(
+                    label: m.label,
+                    icon: m.icon,
+                    selected: _mode == m,
+                    onSelected: () => setState(() => _mode = m),
+                  ),
+              ],
+            ),
+            if (_mode == PaymentMode.card) ...[
               AppSpacing.vMd,
-              Text(FinanceStrings.labelPaidWith, style: t.labelLarge),
-              AppSpacing.vSm,
-              Wrap(
-                spacing: AppSpacing.sm,
-                runSpacing: AppSpacing.sm,
-                children: [
-                  for (final m in PaymentMode.values)
-                    AppChip(
-                      label: m.label,
-                      icon: m.icon,
-                      selected: _mode == m,
-                      onSelected: () => setState(() => _mode = m),
-                    ),
-                ],
+              CardSelectorView(
+                selectedCardId: _selectedCardId,
+                onCardSelected: (card) {
+                  setState(() {
+                    _selectedCardId = card?.id;
+                    _selectedCardName = card?.displayName;
+                  });
+                },
               ),
-              AppSpacing.vXs,
-              Text(FinanceStrings.paymentNote, style: t.bodySmall),
+            ],
+            AppSpacing.vXs,
+            Text(FinanceStrings.paymentNote, style: t.bodySmall),
+            if (!_isIncome) ...[
               AppSpacing.vMd,
               Text(FinanceStrings.labelReceipt, style: t.labelLarge),
               AppSpacing.vSm,

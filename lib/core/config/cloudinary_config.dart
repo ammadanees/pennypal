@@ -6,5 +6,8 @@ abstract final class CloudinaryConfig {
   static const String uploadPreset = 'pennypal';
 
   static bool get isConfigured =>
-      cloudName != 'dkdeqminw' && uploadPreset != 'pennypal';
+      cloudName.isNotEmpty &&
+      uploadPreset.isNotEmpty &&
+      cloudName != 'YOUR_CLOUD_NAME' &&
+      uploadPreset != 'YOUR_UPLOAD_PRESET';
 }

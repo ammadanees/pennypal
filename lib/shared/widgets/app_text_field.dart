@@ -20,6 +20,7 @@ class AppTextField extends StatefulWidget {
     this.enabled = true,
     this.autofillHints,
     this.inputFormatters,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   final String label;
@@ -38,6 +39,7 @@ class AppTextField extends StatefulWidget {
   final bool enabled;
   final Iterable<String>? autofillHints;
   final List<TextInputFormatter>? inputFormatters;
+  final TextCapitalization textCapitalization;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -55,6 +57,7 @@ class _AppTextFieldState extends State<AppTextField> {
       maxLines: widget.obscureText ? 1 : widget.maxLines,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
+      textCapitalization: widget.textCapitalization,
       autofillHints: widget.autofillHints,
       inputFormatters: widget.inputFormatters,
       validator: widget.validator,

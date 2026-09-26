@@ -13,7 +13,14 @@ abstract class AuthRepository {
     required String email,
     required String mobile,
     required String password,
+    String? studentId,
   });
+
+  /// Sends a 6-digit verification OTP to the user's email.
+  Future<void> sendEmailOtp({String? email});
+
+  /// Verifies the entered 6-digit OTP and marks email as verified.
+  Future<void> verifyEmailOtp(String otp);
 
   Future<void> sendPasswordReset(String email);
 
@@ -22,6 +29,7 @@ abstract class AuthRepository {
   Future<void> updateProfile({
     required String fullName,
     required String mobile,
+    String? studentId,
     String? photoUrl,
   });
 

@@ -25,12 +25,15 @@ class EditProfileSheet extends ConsumerStatefulWidget {
 class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
   final _formKey = GlobalKey<FormState>();
   late final _name = TextEditingController(text: widget.user.fullName);
+  late final _studentId =
+      TextEditingController(text: widget.user.studentId ?? '');
   late final _mobile = TextEditingController(text: widget.user.mobile);
   String? _error;
 
   @override
   void dispose() {
     _name.dispose();
+    _studentId.dispose();
     _mobile.dispose();
     super.dispose();
   }
@@ -40,7 +43,11 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
     setState(() => _error = null);
     final error = await ref
         .read(authControllerProvider.notifier)
-        .updateProfile(fullName: _name.text, mobile: _mobile.text);
+        .updateProfile(
+          fullName: _name.text,
+          studentId: _studentId.text,
+          mobile: _mobile.text,
+        );
     if (!mounted) return;
     if (error == null) {
       Navigator.of(context).pop(true);
@@ -74,6 +81,16 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
               prefixIcon: Icons.person_outline,
               textInputAction: TextInputAction.next,
               validator: Validators.fullName,
+            ),
+            AppSpacing.vMd,
+            AppTextField(
+              label: AppStrings.labelStudentId,
+              hint: AppStrings.hintStudentId,
+              controller: _studentId,
+              prefixIcon: Icons.badge_outlined,
+              textInputAction: TextInputAction.next,
+              textCapitalization: TextCapitalization.characters,
+              validator: Validators.studentId,
             ),
             AppSpacing.vMd,
             AppTextField(

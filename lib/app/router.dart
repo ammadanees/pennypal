@@ -32,6 +32,7 @@ import '../features/auth/domain/app_user.dart';
 import '../features/auth/presentation/forgot_password_screen.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/register_screen.dart';
+import '../features/auth/presentation/verify_email_screen.dart';
 import '../features/onboarding/presentation/onboarding_controller.dart';
 import '../features/onboarding/presentation/welcome_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
@@ -65,6 +66,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.register,
         builder: (_, __) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.verifyEmail,
+        builder: (_, __) => const VerifyEmailScreen(),
       ),
       GoRoute(
         path: AppRoutes.forgotPassword,
@@ -221,12 +226,20 @@ String? _redirect(Ref ref, String location) {
     if (location == AppRoutes.welcome) {
       return seenWelcome ? AppRoutes.login : null;
     }
+    if (location == AppRoutes.verifyEmail) {
+      return AppRoutes.login;
+    }
     if (onAuthRoute) return null;
     return seenWelcome ? AppRoutes.login : AppRoutes.welcome;
   }
 
+  // User is logged in, but must verify email before accessing the app
+  if (!user.isEmailVerified) {
+    return location == AppRoutes.verifyEmail ? null : AppRoutes.verifyEmail;
+  }
+
   final landing = user.isAdmin ? AppRoutes.admin : AppRoutes.home;
-  if (onAuthRoute) return landing;
+  if (onAuthRoute || location == AppRoutes.verifyEmail) return landing;
 
   if (user.isAdmin) {
     const adminAllowed = {

@@ -187,6 +187,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   label: AppStrings.labelFullName,
                   value: user.fullName,
                 ),
+                if (user.studentId != null && user.studentId!.isNotEmpty) ...[
+                  const Divider(),
+                  _InfoRow(
+                    icon: Icons.badge_outlined,
+                    label: AppStrings.labelStudentId,
+                    value: user.studentId!,
+                  ),
+                ],
                 const Divider(),
                 _InfoRow(
                   icon: Icons.mail_outline,

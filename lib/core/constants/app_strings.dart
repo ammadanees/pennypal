@@ -46,12 +46,14 @@ abstract final class AppStrings {
   static const String forgotSubtitle =
       'Enter your email and we will send you a link to reset it.';
   static const String labelFullName = 'Full name';
+  static const String labelStudentId = 'Student ID / Enrollment';
   static const String labelEmail = 'Email';
   static const String labelMobile = 'Mobile number';
   static const String labelPassword = 'Password';
   static const String labelConfirmPassword = 'Confirm password';
   static const String hintEmail = 'you@example.com';
   static const String hintMobile = '+92 300 1234567';
+  static const String hintStudentId = 'e.g. BC250207353';
   static const String passwordRules =
       'At least 8 characters with upper and lower case letters and a number.';
   static const String signIn = 'Sign in';

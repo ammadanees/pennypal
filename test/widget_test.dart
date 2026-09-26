@@ -5,26 +5,34 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:pennypal/main.dart';
+import 'package:pennypal/app/app.dart';
+import 'package:pennypal/core/services/shared_preferences_provider.dart';
+import 'package:pennypal/data/memory_record_store.dart';
+import 'package:pennypal/data/record_store_provider.dart';
+import 'package:pennypal/features/auth/data/auth_providers.dart';
+import 'package:pennypal/features/auth/data/demo_auth_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App smoke test', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final auth = DemoAuthRepository(latency: Duration.zero);
+    final store = MemoryRecordStore();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          authRepositoryProvider.overrideWithValue(auth),
+          recordStoreProvider.overrideWithValue(store),
+        ],
+        child: const PennyPalApp(),
+      ),
+    );
     await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(PennyPalApp), findsOneWidget);
   });
 }

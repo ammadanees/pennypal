@@ -29,7 +29,7 @@ service cloud.firestore {
       allow create: if isOwner(uid)
         && request.resource.data.role == 'student'
         && request.resource.data.keys().hasOnly(
-             ['fullName', 'email', 'mobile', 'role', 'createdAt', 'lastLogin']);
+             ['fullName', 'email', 'mobile', 'role', 'isEmailVerified', 'createdAt', 'lastLogin']);
 
       // Owners can update their profile but never their role.
       allow update: if isOwner(uid)
@@ -39,6 +39,8 @@ service cloud.firestore {
 
       // Private financial and personal records: owner only (not even admins).
       match /transactions/{id}      { allow read, write: if isOwner(uid); }
+      match /cards/{id}             { allow read, write: if isOwner(uid); }
+      match /verification/{id}      { allow read, write: if isOwner(uid); }
       match /budgets/{id}           { allow read, write: if isOwner(uid); }
       match /savingsGoals/{id}      { allow read, write: if isOwner(uid); }
       match /notifications/{id}     { allow read, write: if isOwner(uid); }
@@ -71,6 +73,10 @@ service cloud.firestore {
       allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
       allow read: if signedIn() &&
         (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    match /mail/{id} {
+      allow create: if signedIn();
     }
 
     // Everything else is closed.

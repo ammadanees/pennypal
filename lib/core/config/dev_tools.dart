@@ -5,5 +5,7 @@ import 'package:flutter/foundation.dart';
 ///
 /// Turn it off for a public web build:
 ///   flutter build web --dart-define=DEVICE_PREVIEW=false
-const bool devicePreviewEnabled =
-    kIsWeb && bool.fromEnvironment('DEVICE_PREVIEW', defaultValue: true);
+const bool devicePreviewEnabled = kIsWeb &&
+    !kReleaseMode &&
+    bool.fromEnvironment('DEVICE_PREVIEW', defaultValue: true);
+

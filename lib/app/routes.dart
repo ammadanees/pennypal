@@ -3,6 +3,7 @@ abstract final class AppRoutes {
   static const String welcome = '/welcome';
   static const String login = '/login';
   static const String register = '/register';
+  static const String verifyEmail = '/verify-email';
   static const String forgotPassword = '/forgot-password';
 
   static const String home = '/home';
@@ -31,5 +32,11 @@ abstract final class AppRoutes {
   static const String adminSupport = '/admin/support';
   static const String adminFeedback = '/admin/feedback';
 
-  static const Set<String> authRoutes = {welcome, login, register, forgotPassword};
+  static const Set<String> authRoutes = {
+    welcome,
+    login,
+    register,
+    verifyEmail,
+    forgotPassword,
+  };
 }

@@ -20,13 +20,21 @@ class AuthController extends Notifier<bool> {
     required String email,
     required String mobile,
     required String password,
+    String? studentId,
   }) =>
       _run(() => ref.read(authRepositoryProvider).register(
             fullName: fullName,
             email: email,
             mobile: mobile,
             password: password,
+            studentId: studentId,
           ));
+
+  Future<String?> sendEmailOtp({String? email}) =>
+      _run(() => ref.read(authRepositoryProvider).sendEmailOtp(email: email));
+
+  Future<String?> verifyEmailOtp(String otp) =>
+      _run(() => ref.read(authRepositoryProvider).verifyEmailOtp(otp));
 
   Future<String?> sendPasswordReset(String email) =>
       _run(() => ref.read(authRepositoryProvider).sendPasswordReset(email));
@@ -34,11 +42,15 @@ class AuthController extends Notifier<bool> {
   Future<String?> updateProfile({
     required String fullName,
     required String mobile,
+    String? studentId,
     String? photoUrl,
   }) =>
-      _run(() => ref
-          .read(authRepositoryProvider)
-          .updateProfile(fullName: fullName, mobile: mobile, photoUrl: photoUrl));
+      _run(() => ref.read(authRepositoryProvider).updateProfile(
+            fullName: fullName,
+            mobile: mobile,
+            studentId: studentId,
+            photoUrl: photoUrl,
+          ));
 
   Future<void> signOut() => ref.read(authRepositoryProvider).signOut();
 

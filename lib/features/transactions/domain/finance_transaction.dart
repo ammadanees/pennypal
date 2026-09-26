@@ -14,6 +14,8 @@ class FinanceTransaction {
     this.source,
     this.description = '',
     this.paymentMode,
+    this.cardId,
+    this.cardName,
     this.receiptImageUrl,
     this.pending = false,
   });
@@ -27,6 +29,8 @@ class FinanceTransaction {
   /// Expenses only.
   final ExpenseCategory? category;
   final PaymentMode? paymentMode;
+  final String? cardId;
+  final String? cardName;
   final String? receiptImageUrl;
 
   /// Income only (allowance, scholarship, ...).
@@ -53,6 +57,8 @@ class FinanceTransaction {
         'updatedAt': DateTime.now(),
         'category': category?.name,
         'paymentMode': paymentMode?.name,
+        'cardId': cardId,
+        'cardName': cardName,
         'source': source,
         'description': description,
         'receiptImageUrl': receiptImageUrl,
@@ -69,6 +75,8 @@ class FinanceTransaction {
       createdAt: (d['createdAt'] as DateTime?) ?? date,
       category: ExpenseCategory.parse(d['category']),
       paymentMode: PaymentMode.parse(d['paymentMode']),
+      cardId: d['cardId'] as String?,
+      cardName: d['cardName'] as String?,
       source: d['source'] as String?,
       description: (d['description'] as String?) ?? '',
       receiptImageUrl: d['receiptImageUrl'] as String?,

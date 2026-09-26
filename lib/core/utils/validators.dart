@@ -15,6 +15,15 @@ abstract final class Validators {
     return null;
   }
 
+  static String? studentId(String? value) {
+    final missing = required(value, 'student ID / enrollment');
+    if (missing != null) return missing;
+    final v = value!.trim();
+    if (v.length < 3) return 'Student ID must be at least 3 characters.';
+    if (v.length > 30) return 'Keep your student ID under 30 characters.';
+    return null;
+  }
+
   static String? email(String? value) {
     final missing = required(value, 'email');
     if (missing != null) return missing;

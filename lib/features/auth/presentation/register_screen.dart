@@ -24,6 +24,7 @@ class RegisterScreen extends ConsumerStatefulWidget {
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
+  final _studentId = TextEditingController();
   final _email = TextEditingController();
   final _mobile = TextEditingController();
   final _password = TextEditingController();
@@ -33,6 +34,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   void dispose() {
     _name.dispose();
+    _studentId.dispose();
     _email.dispose();
     _mobile.dispose();
     _password.dispose();
@@ -45,11 +47,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     setState(() => _error = null);
     final error = await ref.read(authControllerProvider.notifier).register(
           fullName: _name.text,
+          studentId: _studentId.text,
           email: _email.text,
           mobile: _mobile.text,
           password: _password.text,
         );
-    if (mounted && error != null) setState(() => _error = error);
+    if (!mounted) return;
+    if (error != null) {
+      setState(() => _error = error);
+    } else {
+      context.go(AppRoutes.verifyEmail);
+    }
   }
 
   @override
@@ -87,6 +95,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 textInputAction: TextInputAction.next,
                 autofillHints: const [AutofillHints.name],
                 validator: Validators.fullName,
+              ),
+              AppSpacing.vMd,
+              AppTextField(
+                label: AppStrings.labelStudentId,
+                hint: AppStrings.hintStudentId,
+                controller: _studentId,
+                prefixIcon: Icons.badge_outlined,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.characters,
+                validator: Validators.studentId,
               ),
               AppSpacing.vMd,
               AppTextField(

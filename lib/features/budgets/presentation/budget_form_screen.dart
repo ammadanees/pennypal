@@ -64,15 +64,30 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
     super.dispose();
   }
 
+  double get _categorySum => _limits.values.fold<double>(
+        0,
+        (sum, c) => sum + (double.tryParse(c.text.trim()) ?? 0),
+      );
+
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    final total = double.parse(_total.text.trim());
+    
+    final enteredTotal = double.tryParse(_total.text.trim());
     final limits = <ExpenseCategory, double>{
       for (final entry in _limits.entries)
         if ((double.tryParse(entry.value.text.trim()) ?? 0) > 0)
           entry.key: double.parse(entry.value.text.trim()),
     };
     final sum = limits.values.fold<double>(0, (a, b) => a + b);
+
+    // If total was left empty or 0, consider the sum of all categories as total budget
+    final total = (enteredTotal == null || enteredTotal <= 0) ? sum : enteredTotal;
+
+    if (total <= 0) {
+      setState(() => _limitError = 'Please enter a total budget or at least one category limit.');
+      return;
+    }
+
     if (sum > total) {
       setState(() => _limitError = FinanceStrings.limitsTooHigh);
       return;
@@ -136,12 +151,30 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
             AppSpacing.vMd,
             AppTextField(
               label: FinanceStrings.labelBudgetTotal,
+              hint: _categorySum > 0 ? _plain(_categorySum) : '0',
+              helperText: _total.text.trim().isEmpty && _categorySum > 0
+                  ? 'Auto-summed from categories: Rs. ${_plain(_categorySum)}'
+                  : 'Leave empty to auto-sum from categories below',
               controller: _total,
               prefixText: 'Rs. ',
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
               textInputAction: TextInputAction.next,
-              validator: Validators.amount,
+              onChanged: (_) {
+                setState(() {
+                  if (_limitError != null) _limitError = null;
+                });
+              },
+              validator: (val) {
+                final text = val?.trim() ?? '';
+                if (text.isNotEmpty) {
+                  final n = double.tryParse(text);
+                  if (n == null || n <= 0) return 'Enter a valid amount.';
+                  return null;
+                }
+                if (_categorySum > 0) return null;
+                return 'Enter a total budget or at least one category limit.';
+              },
             ),
             AppSpacing.vLg,
             Text(FinanceStrings.categoryLimits, style: t.titleMedium),
@@ -155,6 +188,11 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: AppInputFormatters.amount,
                 textInputAction: TextInputAction.next,
+                onChanged: (_) {
+                  setState(() {
+                    if (_limitError != null) _limitError = null;
+                  });
+                },
                 validator: Validators.optionalAmount,
               ),
               AppSpacing.vSm,

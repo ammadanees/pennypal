@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/routes.dart';
+import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/finance_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
@@ -61,14 +62,28 @@ class TransactionDetailSheet extends ConsumerWidget {
     final tx = transaction;
     final tint = tx.isIncome ? c.income : c.expense;
 
+    String? paymentLabel;
+    if (tx.paymentMode != null) {
+      final base = tx.paymentMode!.label;
+      if (tx.paymentMode == PaymentMode.card &&
+          tx.cardName != null &&
+          tx.cardName!.isNotEmpty) {
+        paymentLabel = '$base (${tx.cardName})';
+      } else {
+        paymentLabel = base;
+      }
+    }
+
     final rows = <(String, String)>[
       (FinanceStrings.labelDate, DateFormat('EEE, d MMM y, h:mm a').format(tx.date)),
-      if (tx.isIncome)
-        (FinanceStrings.labelSource, tx.source ?? '')
-      else ...[
+      if (tx.isIncome) ...[
+        (FinanceStrings.labelSource, tx.source ?? ''),
+        if (paymentLabel != null)
+          ('Received via', paymentLabel),
+      ] else ...[
         (FinanceStrings.labelCategory, tx.category?.label ?? ''),
-        if (tx.paymentMode != null)
-          (FinanceStrings.labelPaidWith, tx.paymentMode!.label),
+        if (paymentLabel != null)
+          (FinanceStrings.labelPaidWith, paymentLabel),
       ],
       if (tx.description.isNotEmpty && tx.description != tx.title)
         (FinanceStrings.labelNote, tx.description),
