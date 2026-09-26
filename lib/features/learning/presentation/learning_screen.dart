@@ -32,12 +32,13 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final allLessons = ref.watch(allLessonsProvider).valueOrNull ?? bundledLessons;
     final read = ref.watch(readLessonsProvider).valueOrNull ?? const <String>{};
     final visible = [
-      for (final l in bundledLessons)
+      for (final l in allLessons)
         if (_topic == null || l.topic == _topic) l,
     ];
-    final firstUnread = bundledLessons.where((l) => !read.contains(l.id)).firstOrNull;
+    final firstUnread = allLessons.where((l) => !read.contains(l.id)).firstOrNull;
 
     return AppScaffold(
       title: LearningStrings.title,
@@ -48,8 +49,8 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
             children: [
               _ProgressCard(
-                readCount: bundledLessons.where((l) => read.contains(l.id)).length,
-                total: bundledLessons.length,
+                readCount: allLessons.where((l) => read.contains(l.id)).length,
+                total: allLessons.length,
                 onStart: firstUnread == null
                     ? null
                     : () => context.push('${AppRoutes.lessonBase}/${firstUnread.id}'),

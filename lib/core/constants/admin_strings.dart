@@ -4,6 +4,7 @@ abstract final class AdminStrings {
   static const String tabUsers = 'Users';
   static const String tabSupport = 'Support';
   static const String tabFeedback = 'Feedback';
+  static const String tabContent = 'Content';
 
   static const String totalStudents = 'Total students';
   static const String openQueries = 'Open queries';

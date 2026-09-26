@@ -31,6 +31,7 @@ abstract final class AppRoutes {
   static const String adminUsers = '/admin/users';
   static const String adminSupport = '/admin/support';
   static const String adminFeedback = '/admin/feedback';
+  static const String adminContent = '/admin/content';
 
   static const Set<String> authRoutes = {
     welcome,

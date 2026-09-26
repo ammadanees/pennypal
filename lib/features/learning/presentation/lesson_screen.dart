@@ -25,7 +25,8 @@ class LessonScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final index = bundledLessons.indexWhere((l) => l.id == lessonId);
+    final allLessons = ref.watch(allLessonsProvider).valueOrNull ?? bundledLessons;
+    final index = allLessons.indexWhere((l) => l.id == lessonId);
     if (index < 0) {
       return AppScaffold(
         title: LearningStrings.title,
@@ -39,8 +40,8 @@ class LessonScreen extends ConsumerWidget {
       );
     }
 
-    final lesson = bundledLessons[index];
-    final next = index + 1 < bundledLessons.length ? bundledLessons[index + 1] : null;
+    final lesson = allLessons[index];
+    final next = index + 1 < allLessons.length ? allLessons[index + 1] : null;
     final isRead = ref.watch(readLessonsProvider).valueOrNull?.contains(lesson.id) ?? false;
     final t = context.text;
     final c = context.colors;

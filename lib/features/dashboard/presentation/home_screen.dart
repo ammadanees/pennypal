@@ -167,6 +167,8 @@ class _HomeContent extends ConsumerWidget {
     const goals = _GoalSection();
     final recent = all.isEmpty ? null : _RecentSection(items: all.take(5).toList());
 
+    const quickShortcuts = _QuickShortcutsSection();
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final wide = constraints.maxWidth >= 800;
@@ -177,7 +179,7 @@ class _HomeContent extends ConsumerWidget {
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [hero, summaryRow, insightWidgets, ribbon],
+                      children: [hero, summaryRow, quickShortcuts, insightWidgets, ribbon],
                     ),
                   ),
                   AppSpacing.hLg,
@@ -195,6 +197,7 @@ class _HomeContent extends ConsumerWidget {
                 children: [
                   hero,
                   summaryRow,
+                  quickShortcuts,
                   insightWidgets,
                   budgetSection,
                   ribbon,
@@ -703,3 +706,108 @@ class _CtaCard extends StatelessWidget {
     );
   }
 }
+
+class _QuickShortcutsSection extends StatelessWidget {
+  const _QuickShortcutsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final t = context.text;
+
+    final shortcuts = [
+      (
+        icon: Icons.history,
+        label: 'History',
+        subtitle: 'All records',
+        accent: AppAccents.blue,
+        onTap: () => context.go(AppRoutes.activity),
+      ),
+      (
+        icon: Icons.school_outlined,
+        label: 'Learning',
+        subtitle: 'Finance tips',
+        accent: AppAccents.amber,
+        onTap: () => context.push(AppRoutes.learning),
+      ),
+      (
+        icon: Icons.rate_review_outlined,
+        label: 'Feedback',
+        subtitle: 'Share review',
+        accent: AppAccents.green,
+        onTap: () => context.push(AppRoutes.feedback),
+      ),
+      (
+        icon: Icons.headset_mic_outlined,
+        label: 'Support',
+        subtitle: 'Get help',
+        accent: AppAccents.coral,
+        onTap: () => context.push(AppRoutes.support),
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppSpacing.vMd,
+        Row(
+          children: [
+            for (var i = 0; i < shortcuts.length; i++) ...[
+              if (i > 0) AppSpacing.hSm,
+              Expanded(
+                child: Material(
+                  color: c.surface,
+                  borderRadius: AppRadius.mdAll,
+                  elevation: 0.5,
+                  child: InkWell(
+                    onTap: shortcuts[i].onTap,
+                    borderRadius: AppRadius.mdAll,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.md,
+                        horizontal: AppSpacing.xs,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: c.border.withOpacity(0.6)),
+                        borderRadius: AppRadius.mdAll,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AccentIconBox(
+                            icon: shortcuts[i].icon,
+                            accent: shortcuts[i].accent,
+                            size: 38,
+                          ),
+                          AppSpacing.vSm,
+                          Text(
+                            shortcuts[i].label,
+                            style: t.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            shortcuts[i].subtitle,
+                            style: t.bodySmall?.copyWith(
+                              fontSize: 10,
+                              color: c.textSecondary,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
+

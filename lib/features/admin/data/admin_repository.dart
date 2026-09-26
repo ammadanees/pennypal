@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/record_store.dart';
 import '../../../data/record_store_provider.dart';
 import '../../support/domain/support_query.dart';
+import '../../learning/domain/lesson.dart';
+import '../../learning/data/lessons.dart';
 import '../domain/admin_feedback_entry.dart';
 import '../domain/admin_student.dart';
 
@@ -51,6 +53,18 @@ class AdminRepository {
           ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
         return list;
       });
+
+  Stream<List<Lesson>> watchLearningContent() =>
+      _store.watchAdminCollection('learningContent').map((records) {
+        if (records.isEmpty) return bundledLessons;
+        return records.map(Lesson.fromRecord).toList();
+      });
+
+  Future<void> saveLesson(Lesson lesson) =>
+      _store.updateAdminDoc('learningContent', lesson.id, lesson.toMap());
+
+  Future<void> deleteLesson(String id) =>
+      _store.delete('', 'learningContent', id);
 }
 
 final adminRepositoryProvider =
@@ -66,3 +80,8 @@ final adminSupportQueriesProvider = StreamProvider<List<SupportQuery>>(
 final adminFeedbackProvider = StreamProvider<List<AdminFeedbackEntry>>(
   (ref) => ref.watch(adminRepositoryProvider).watchAllFeedback(),
 );
+
+final adminLessonsProvider = StreamProvider<List<Lesson>>(
+  (ref) => ref.watch(adminRepositoryProvider).watchLearningContent(),
+);
+

@@ -25,6 +25,11 @@ class AdminShell extends StatelessWidget {
       selectedIcon: Icons.people,
     ),
     AdaptiveDestination(
+      label: AdminStrings.tabContent,
+      icon: Icons.menu_book_outlined,
+      selectedIcon: Icons.menu_book,
+    ),
+    AdaptiveDestination(
       label: AdminStrings.tabSupport,
       icon: Icons.support_agent_outlined,
       selectedIcon: Icons.support_agent,

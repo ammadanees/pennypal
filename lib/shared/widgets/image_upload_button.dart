@@ -38,18 +38,58 @@ class _ImageUploadButtonState extends ConsumerState<ImageUploadButton> {
   String? _error;
 
   Future<void> _pickAndUpload() async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Select Receipt Image',
+                style: ctx.text.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+              AppSpacing.vMd,
+              ListTile(
+                leading: const Icon(Icons.camera_alt_outlined),
+                title: const Text('Take Photo (Camera)'),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                onTap: () => Navigator.of(ctx).pop(ImageSource.camera),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined),
+                title: const Text('Choose from Gallery'),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                onTap: () => Navigator.of(ctx).pop(ImageSource.gallery),
+              ),
+              AppSpacing.vSm,
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (source == null || !mounted) return;
+
     setState(() => _error = null);
     final picker = ImagePicker();
     XFile? file;
     try {
       file = await picker.pickImage(
-        source: ImageSource.gallery,
+        source: source,
         imageQuality: widget.imageQuality,
         maxWidth: widget.maxDimension,
         maxHeight: widget.maxDimension,
       );
     } catch (_) {
-      setState(() => _error = 'Could not open the photo picker.');
+      setState(() => _error = 'Could not open the camera or photo picker.');
       return;
     }
     if (file == null) return;

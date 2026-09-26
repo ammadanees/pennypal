@@ -21,6 +21,7 @@ import '../../../shared/widgets/confirm_dialog.dart';
 import '../data/transaction_repository.dart';
 import '../domain/finance_transaction.dart';
 import '../../cards/presentation/card_selector_view.dart';
+import '../../../core/services/expense_categorizer.dart';
 
 /// Add or edit an income or expense. Works fully offline.
 class TransactionFormScreen extends ConsumerStatefulWidget {
@@ -50,6 +51,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
   String? _selectedCardId;
   String? _selectedCardName;
   bool _categoryMissing = false;
+  bool _isAutoCategorized = false;
   String? _receiptUrl;
 
   bool get _isEditing => widget.existing != null;
@@ -219,7 +221,35 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 ],
               ),
             ] else ...[
-              Text(FinanceStrings.labelCategory, style: t.labelLarge),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(FinanceStrings.labelCategory, style: t.labelLarge),
+                  if (_isAutoCategorized && _category != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: c.primarySoft,
+                        borderRadius: AppRadius.pillAll,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.auto_awesome, size: 13, color: c.primary),
+                          AppSpacing.hXs,
+                          Text(
+                            'AI Suggested',
+                            style: t.bodySmall?.copyWith(
+                              color: c.primary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
               AppSpacing.vSm,
               Wrap(
                 spacing: AppSpacing.sm,
@@ -232,6 +262,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                       selected: _category == cat,
                       onSelected: () => setState(() {
                         _category = cat;
+                        _isAutoCategorized = false;
                         _categoryMissing = false;
                       }),
                     ),
@@ -267,6 +298,18 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               prefixIcon: Icons.notes_outlined,
               maxLines: 2,
               validator: (v) => Validators.maxLength(v, 100),
+              onChanged: (text) {
+                if (!_isIncome && text.trim().isNotEmpty) {
+                  final predicted = ExpenseCategorizer.predictCategory(text);
+                  if (predicted != null && (_category == null || _isAutoCategorized)) {
+                    setState(() {
+                      _category = predicted;
+                      _isAutoCategorized = true;
+                      _categoryMissing = false;
+                    });
+                  }
+                }
+              },
             ),
             AppSpacing.vMd,
             Text(

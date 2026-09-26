@@ -22,6 +22,7 @@ import '../features/transactions/domain/finance_transaction.dart';
 import '../features/transactions/presentation/activity_screen.dart';
 import '../features/transactions/presentation/transaction_form_screen.dart';
 import '../core/utils/app_dates.dart';
+import '../features/admin/presentation/admin_content_screen.dart';
 import '../features/admin/presentation/admin_dashboard_screen.dart';
 import '../features/admin/presentation/admin_feedback_screen.dart';
 import '../features/admin/presentation/admin_shell.dart';
@@ -191,6 +192,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
+              path: AppRoutes.adminContent,
+              builder: (_, __) => const AdminContentScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
               path: AppRoutes.adminSupport,
               builder: (_, __) => const AdminSupportScreen(),
             ),
@@ -245,6 +252,7 @@ String? _redirect(Ref ref, String location) {
     const adminAllowed = {
       AppRoutes.admin,
       AppRoutes.adminUsers,
+      AppRoutes.adminContent,
       AppRoutes.adminSupport,
       AppRoutes.adminFeedback,
       AppRoutes.profile,
@@ -259,6 +267,7 @@ String? _redirect(Ref ref, String location) {
 const adminOnlyRoutes = {
   AppRoutes.admin,
   AppRoutes.adminUsers,
+  AppRoutes.adminContent,
   AppRoutes.adminSupport,
   AppRoutes.adminFeedback,
 };

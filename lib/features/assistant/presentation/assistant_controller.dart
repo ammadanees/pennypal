@@ -10,10 +10,11 @@ import '../../reports/domain/report_calculator.dart';
 import '../../savings/data/savings_repository.dart';
 import '../../savings/domain/savings_calculator.dart';
 import '../../transactions/data/transaction_repository.dart';
+import '../data/gemini_assistant_service.dart';
 import '../domain/assistant_engine.dart';
 
 final assistantServiceProvider =
-    Provider<AssistantService>((ref) => const RuleBasedAssistant());
+    Provider<AssistantService>((ref) => const GeminiAssistantService());
 
 /// The numbers the assistant can refer to, taken from the student's data.
 final assistantContextProvider = Provider<AssistantContext>((ref) {

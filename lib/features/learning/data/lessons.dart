@@ -1,4 +1,19 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../data/record_store_provider.dart';
 import '../domain/lesson.dart';
+
+final allLessonsProvider = StreamProvider<List<Lesson>>((ref) {
+  final store = ref.watch(recordStoreProvider);
+  return store.watchAdminCollection('learningContent').map((records) {
+    if (records.isEmpty) return bundledLessons;
+    final custom = records.map(Lesson.fromRecord).toList();
+    final customIds = custom.map((l) => l.id).toSet();
+    return [
+      ...custom,
+      ...bundledLessons.where((l) => !customIds.contains(l.id)),
+    ];
+  });
+});
 
 /// Built-in lessons. All content is educational and general; it is not
 /// financial advice. Amounts are examples in rupees.
