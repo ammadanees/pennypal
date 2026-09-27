@@ -7,7 +7,6 @@ import '../../../app/routes.dart';
 import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/finance_strings.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -27,6 +26,7 @@ Future<void> showTransactionDetail(
 ) {
   return showModalBottomSheet<void>(
     context: context,
+    useRootNavigator: true,
     isScrollControlled: true,
     showDragHandle: true,
     useSafeArea: true,
@@ -60,7 +60,6 @@ class TransactionDetailSheet extends ConsumerWidget {
     final c = context.colors;
     final t = context.text;
     final tx = transaction;
-    final tint = tx.isIncome ? c.income : c.expense;
 
     String? paymentLabel;
     if (tx.paymentMode != null) {
@@ -89,12 +88,13 @@ class TransactionDetailSheet extends ConsumerWidget {
         (FinanceStrings.labelNote, tx.description),
     ];
 
+    final bottomSafe = MediaQuery.paddingOf(context).bottom;
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
+      padding: EdgeInsets.fromLTRB(
         AppSpacing.lg,
         AppSpacing.sm,
         AppSpacing.lg,
-        AppSpacing.lg,
+        AppSpacing.lg + bottomSafe,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

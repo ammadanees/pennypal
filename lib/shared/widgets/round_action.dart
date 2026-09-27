@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -12,15 +11,17 @@ class RoundAction extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.accentColor,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final Color? accentColor;
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
+    final tint = accentColor ?? Colors.white;
     return Semantics(
       button: true,
       label: label,
@@ -28,24 +29,26 @@ class RoundAction extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          DecoratedBox(
+          Container(
+            width: AppDimensions.actionButton,
+            height: AppDimensions.actionButton,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withOpacity(0.22),
-                  Colors.white.withOpacity(0.10),
+                  tint.withOpacity(0.28),
+                  tint.withOpacity(0.12),
                 ],
               ),
               border: Border.all(
-                color: Colors.white.withOpacity(0.24),
+                color: tint.withOpacity(0.40),
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.16),
+                  color: tint.withOpacity(0.22),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -57,10 +60,8 @@ class RoundAction extends StatelessWidget {
               child: InkWell(
                 customBorder: const CircleBorder(),
                 onTap: onTap,
-                child: SizedBox(
-                  width: AppDimensions.actionButton,
-                  height: AppDimensions.actionButton,
-                  child: Icon(icon, color: Colors.white, size: 21),
+                child: Center(
+                  child: Icon(icon, color: tint, size: 21),
                 ),
               ),
             ),
@@ -71,7 +72,10 @@ class RoundAction extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: context.text.labelMedium?.copyWith(color: c.onInk),
+            style: context.text.labelMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),

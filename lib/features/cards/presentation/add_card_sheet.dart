@@ -15,6 +15,7 @@ import '../domain/payment_card.dart';
 Future<PaymentCard?> showAddCardSheet(BuildContext context) {
   return showModalBottomSheet<PaymentCard>(
     context: context,
+    useRootNavigator: true,
     isScrollControlled: true,
     showDragHandle: true,
     useSafeArea: true,
@@ -76,7 +77,9 @@ class _AddCardSheetState extends ConsumerState<AddCardSheet> {
         AppSpacing.lg,
         AppSpacing.sm,
         AppSpacing.lg,
-        AppSpacing.lg + MediaQuery.viewInsetsOf(context).bottom,
+        AppSpacing.lg +
+            MediaQuery.viewInsetsOf(context).bottom +
+            MediaQuery.paddingOf(context).bottom,
       ),
       child: Form(
         key: _formKey,

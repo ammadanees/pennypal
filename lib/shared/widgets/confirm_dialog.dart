@@ -11,6 +11,7 @@ Future<bool> confirmAction(
 }) async {
   final result = await showDialog<bool>(
     context: context,
+    useRootNavigator: true,
     builder: (dialogContext) => AlertDialog(
       title: Text(title),
       content: Text(message),

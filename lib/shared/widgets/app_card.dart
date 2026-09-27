@@ -40,6 +40,8 @@ class AppCard extends StatelessWidget {
             : c.border.withOpacity(0.65))
         : Colors.transparent;
 
+    final shouldClip = onTap != null || gradient != null;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: gradient == null ? (color ?? c.surface) : null,
@@ -50,7 +52,7 @@ class AppCard extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        clipBehavior: Clip.antiAlias,
+        clipBehavior: shouldClip ? Clip.antiAlias : Clip.none,
         borderRadius: r,
         child: onTap == null ? content : InkWell(onTap: onTap, child: content),
       ),

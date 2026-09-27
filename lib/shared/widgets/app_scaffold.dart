@@ -13,6 +13,7 @@ class AppScaffold extends StatelessWidget {
     this.title,
     this.actions,
     this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.padded = true,
   });
 
@@ -20,16 +21,21 @@ class AppScaffold extends StatelessWidget {
   final String? title;
   final List<Widget>? actions;
   final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool padded;
 
   @override
   Widget build(BuildContext context) {
     final gutter = context.isCompact ? AppSpacing.md : AppSpacing.lg;
+    final effectiveFabLocation =
+        floatingActionButtonLocation ?? FloatingActionButtonLocation.endFloat;
+
     return Scaffold(
       appBar: title == null
           ? null
           : AppBar(title: Text(title!), actions: actions),
       floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: effectiveFabLocation,
       body: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,

@@ -64,7 +64,9 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
         AppSpacing.lg,
         AppSpacing.sm,
         AppSpacing.lg,
-        AppSpacing.lg + MediaQuery.viewInsetsOf(context).bottom,
+        AppSpacing.lg +
+            MediaQuery.viewInsetsOf(context).bottom +
+            MediaQuery.paddingOf(context).bottom,
       ),
       child: Form(
         key: _formKey,

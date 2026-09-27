@@ -95,7 +95,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                   ],
                 ),
               Text(LearningStrings.disclaimer, style: context.text.bodySmall),
-              AppSpacing.vLg,
+              const SizedBox(height: AppDimensions.bottomNavClearance),
             ],
           );
         },

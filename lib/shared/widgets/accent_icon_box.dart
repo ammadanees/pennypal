@@ -28,19 +28,21 @@ class AccentIconBox extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [
             accent.color,
-            Color.lerp(accent.color, Colors.black, 0.10) ?? accent.color,
+            Color.lerp(accent.color, Colors.black, 0.15) ?? accent.color,
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: accent.color.withOpacity(0.28),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: accent.color.withOpacity(0.35),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
         borderRadius: AppRadius.mdAll,
       ),
-      child: Icon(icon, size: size * 0.5, color: accent.onColor),
+      child: Center(
+        child: Icon(icon, size: size * 0.52, color: accent.onColor),
+      ),
     );
   }
 }

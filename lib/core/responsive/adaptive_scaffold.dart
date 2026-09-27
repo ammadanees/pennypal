@@ -42,10 +42,10 @@ class AdaptiveScaffold extends StatelessWidget {
 
     if (size == ScreenSize.compact) {
       return Scaffold(
-        extendBody: true,
+        extendBody: false,
         body: body,
         floatingActionButton: floatingActionButton,
-        bottomNavigationBar: _FloatingGlassNavBar(
+        bottomNavigationBar: _AnchoredNavBar(
           destinations: destinations,
           selectedIndex: selectedIndex,
           onDestinationSelected: onDestinationSelected,
@@ -86,8 +86,8 @@ class AdaptiveScaffold extends StatelessWidget {
   }
 }
 
-class _FloatingGlassNavBar extends StatelessWidget {
-  const _FloatingGlassNavBar({
+class _AnchoredNavBar extends StatelessWidget {
+  const _AnchoredNavBar({
     required this.destinations,
     required this.selectedIndex,
     required this.onDestinationSelected,
@@ -99,53 +99,41 @@ class _FloatingGlassNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     final brightness = Theme.of(context).brightness;
     final isDark = brightness == Brightness.dark;
-    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        16,
-        0,
-        16,
-        bottomInset > 0 ? bottomInset + 4 : 12,
+    final navBg = isDark ? const Color(0xFF0F141C) : Colors.white;
+    final navBorder = isDark ? const Color(0x26FFFFFF) : const Color(0x14000000);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: navBg,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+        border: Border.all(color: navBorder, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.35 : 0.07),
+            blurRadius: 14,
+            offset: const Offset(0, -3),
+          ),
+        ],
       ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(26),
-          boxShadow: AppShadows.floatingNav(brightness),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(26),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-            child: Container(
-              height: 66,
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF0C201A).withOpacity(0.88)
-                    : Colors.white.withOpacity(0.88),
-                borderRadius: BorderRadius.circular(26),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF2EE6A6).withOpacity(0.18)
-                      : Colors.black.withOpacity(0.06),
-                  width: 1.2,
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  for (var i = 0; i < destinations.length; i++)
-                    _NavBarItem(
-                      destination: destinations[i],
-                      isSelected: i == selectedIndex,
-                      onTap: () => onDestinationSelected(i),
-                    ),
-                ],
-              ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+        child: SafeArea(
+          top: false,
+          child: SizedBox(
+            height: 62,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                for (var i = 0; i < destinations.length; i++)
+                  _NavBarItem(
+                    destination: destinations[i],
+                    isSelected: i == selectedIndex,
+                    onTap: () => onDestinationSelected(i),
+                  ),
+              ],
             ),
           ),
         ),
@@ -171,32 +159,17 @@ class _NavBarItem extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
-        padding: EdgeInsets.symmetric(
-          horizontal: isSelected ? 12 : 8,
-          vertical: 6,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? c.primary.withOpacity(0.13)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(18),
-        ),
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedScale(
-              duration: const Duration(milliseconds: 200),
-              scale: isSelected ? 1.08 : 1.0,
-              child: Icon(
-                isSelected ? destination.selectedIcon : destination.icon,
-                color: isSelected ? c.primary : c.textMuted,
-                size: 23,
-              ),
+            Icon(
+              isSelected ? destination.selectedIcon : destination.icon,
+              color: isSelected ? c.primary : c.textMuted,
+              size: 24,
             ),
             const SizedBox(height: 3),
             Text(

@@ -5,8 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../core/errors/app_failure.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_dimensions.dart';
+import '../../core/services/receipt_ocr_service.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/services/cloudinary_service.dart';
@@ -20,12 +19,14 @@ class ImageUploadButton extends ConsumerStatefulWidget {
     super.key,
     required this.label,
     required this.onUploaded,
+    this.onReceiptParsed,
     this.imageQuality = 80,
     this.maxDimension = 1600,
   });
 
   final String label;
   final ValueChanged<String> onUploaded;
+  final ValueChanged<ParsedReceipt>? onReceiptParsed;
   final int imageQuality;
   final double maxDimension;
 
@@ -40,6 +41,7 @@ class _ImageUploadButtonState extends ConsumerState<ImageUploadButton> {
   Future<void> _pickAndUpload() async {
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
+      useRootNavigator: true,
       showDragHandle: true,
       builder: (ctx) => SafeArea(
         child: Padding(
@@ -101,6 +103,13 @@ class _ImageUploadButtonState extends ConsumerState<ImageUploadButton> {
           .read(cloudinaryServiceProvider)
           .uploadImage(bytes, fileName: file.name);
       if (mounted) widget.onUploaded(url);
+
+      if (widget.onReceiptParsed != null) {
+        final parsed = await ReceiptOcrService.parseReceiptImage(bytes);
+        if (mounted && parsed != null) {
+          widget.onReceiptParsed!(parsed);
+        }
+      }
     } on AppFailure catch (e) {
       if (mounted) setState(() => _error = e.message);
     } catch (_) {

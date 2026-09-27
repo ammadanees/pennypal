@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../app/routes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/report_strings.dart';
+import '../../../core/theme/app_accents.dart';
 import '../../../core/theme/app_chart_colors.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
@@ -35,6 +36,7 @@ import '../../savings/data/savings_repository.dart';
 import '../../transactions/data/transaction_repository.dart';
 import '../../transactions/domain/finance_transaction.dart';
 import '../domain/report_calculator.dart';
+import 'statement_preview_sheet.dart';
 
 class ReportsScreen extends ConsumerStatefulWidget {
   const ReportsScreen({super.key});
@@ -48,10 +50,25 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final transactionsAsync = ref.watch(transactionsProvider);
+    final all = transactionsAsync.asData?.value ?? const [];
+
     return AppScaffold(
       title: ReportStrings.title,
+      actions: [
+        if (all.isNotEmpty)
+          IconButton(
+            icon: const Icon(Icons.file_download_outlined),
+            tooltip: 'Export Statement',
+            onPressed: () => StatementPreviewSheet.show(
+              context,
+              allTransactions: all,
+              period: _period,
+            ),
+          ),
+      ],
       body: AsyncValueView<List<FinanceTransaction>>(
-        value: ref.watch(transactionsProvider),
+        value: transactionsAsync,
         onRetry: () => ref.invalidate(transactionsProvider),
         data: (all) {
           if (all.isEmpty) {
@@ -145,7 +162,54 @@ class _ReportsBody extends StatelessWidget {
                 ),
               ],
             ),
-            AppSpacing.vLg,
+            AppSpacing.vMd,
+            AppCard(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(AppSpacing.sm),
+                    decoration: BoxDecoration(
+                      color: AppAccents.blue.color.withOpacity(0.12),
+                      borderRadius: AppRadius.mdAll,
+                    ),
+                    child: Icon(
+                      Icons.receipt_long_rounded,
+                      color: AppAccents.blue.color,
+                      size: 28,
+                    ),
+                  ),
+                  AppSpacing.hMd,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Official Student Statement',
+                          style: context.text.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Export CSV & archive report for ${period.label}',
+                          style: context.text.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                  AppSpacing.hSm,
+                  AppButton(
+                    label: 'Export',
+                    variant: AppButtonVariant.tonal,
+                    expand: false,
+                    onPressed: () => StatementPreviewSheet.show(
+                      context,
+                      allTransactions: all,
+                      period: period,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppDimensions.bottomNavClearance),
           ],
         );
       },

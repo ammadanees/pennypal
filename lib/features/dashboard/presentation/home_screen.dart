@@ -39,6 +39,7 @@ import '../../notifications/data/notification_repository.dart';
 import '../../savings/data/savings_repository.dart';
 import '../../transactions/data/transaction_repository.dart';
 import '../../transactions/domain/finance_transaction.dart';
+import '../../transactions/presentation/split_bill_sheet.dart';
 import '../../transactions/presentation/transaction_detail_sheet.dart';
 import '../../transactions/presentation/transaction_display.dart';
 import '../data/sync_status.dart';
@@ -208,7 +209,7 @@ class _HomeContent extends ConsumerWidget {
         return ListView(
           padding: const EdgeInsets.only(
             top: AppSpacing.md,
-            bottom: 96,
+            bottom: AppDimensions.bottomNavClearance,
           ),
           children: [...header, body, AppSpacing.vLg],
         );
@@ -344,25 +345,32 @@ class _BalanceHero extends StatelessWidget {
           AppSpacing.vSm,
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.md - 2,
+              horizontal: AppSpacing.md,
               vertical: AppSpacing.xs + 2,
             ),
             decoration: BoxDecoration(
-              color: c.onInk.withOpacity(0.14),
+              color: (up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B)).withOpacity(0.18),
               borderRadius: AppRadius.pillAll,
+              border: Border.all(
+                color: (up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B)).withOpacity(0.45),
+                width: 1.0,
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  up ? Icons.trending_up : Icons.trending_down,
+                  up ? Icons.trending_up_rounded : Icons.trending_down_rounded,
                   size: AppDimensions.iconSm,
-                  color: up ? AppAccents.amber.color : AppAccents.coral.color,
+                  color: up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B),
                 ),
                 AppSpacing.hXs,
                 Text(
                   '${up ? '+' : '-'}${Formatters.money(net.abs())} ${FinanceStrings.balanceNote}',
-                  style: t.labelLarge?.copyWith(color: c.onInk),
+                  style: t.labelMedium?.copyWith(
+                    color: up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B),
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ),
@@ -374,6 +382,7 @@ class _BalanceHero extends StatelessWidget {
                 child: RoundAction(
                   icon: Icons.south_west,
                   label: FinanceStrings.quickAddIncome,
+                  accentColor: const Color(0xFF2EE6A6),
                   onTap: () => context.push(AppRoutes.transactionNew,
                       extra: TransactionType.income),
                 ),
@@ -382,6 +391,7 @@ class _BalanceHero extends StatelessWidget {
                 child: RoundAction(
                   icon: Icons.north_east,
                   label: FinanceStrings.quickAddExpense,
+                  accentColor: const Color(0xFFFF6B6B),
                   onTap: () => context.push(AppRoutes.transactionNew,
                       extra: TransactionType.expense),
                 ),
@@ -390,6 +400,7 @@ class _BalanceHero extends StatelessWidget {
                 child: RoundAction(
                   icon: Icons.pie_chart_outline,
                   label: FinanceStrings.quickBudget,
+                  accentColor: const Color(0xFF60A5FA),
                   onTap: () => context.go(AppRoutes.budget),
                 ),
               ),
@@ -397,6 +408,7 @@ class _BalanceHero extends StatelessWidget {
                 child: RoundAction(
                   icon: Icons.savings_outlined,
                   label: FinanceStrings.quickSavings,
+                  accentColor: const Color(0xFFFBBF24),
                   onTap: () => context.go(AppRoutes.savings),
                 ),
               ),
@@ -717,6 +729,13 @@ class _QuickShortcutsSection extends StatelessWidget {
 
     final shortcuts = [
       (
+        icon: Icons.call_split_rounded,
+        label: 'Split Bill',
+        subtitle: 'Dorm & dining',
+        accent: AppAccents.coral,
+        onTap: () => SplitBillSheet.show(context),
+      ),
+      (
         icon: Icons.history,
         label: 'History',
         subtitle: 'All records',
@@ -741,7 +760,7 @@ class _QuickShortcutsSection extends StatelessWidget {
         icon: Icons.headset_mic_outlined,
         label: 'Support',
         subtitle: 'Get help',
-        accent: AppAccents.coral,
+        accent: AppAccents.purple,
         onTap: () => context.push(AppRoutes.support),
       ),
     ];
@@ -750,61 +769,68 @@ class _QuickShortcutsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppSpacing.vMd,
-        Row(
-          children: [
-            for (var i = 0; i < shortcuts.length; i++) ...[
-              if (i > 0) AppSpacing.hSm,
-              Expanded(
-                child: Material(
-                  color: c.surface,
-                  borderRadius: AppRadius.mdAll,
-                  elevation: 0.5,
-                  child: InkWell(
-                    onTap: shortcuts[i].onTap,
-                    borderRadius: AppRadius.mdAll,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.md,
-                        horizontal: AppSpacing.xs,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: c.border.withOpacity(0.6)),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          clipBehavior: Clip.none,
+          child: Row(
+            children: [
+              for (var i = 0; i < shortcuts.length; i++) ...[
+                if (i > 0) AppSpacing.hSm,
+                SizedBox(
+                  width: 96,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: c.surface,
+                      borderRadius: AppRadius.mdAll,
+                      border: Border.all(color: c.border, width: 1.0),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      borderRadius: AppRadius.mdAll,
+                      child: InkWell(
+                        onTap: shortcuts[i].onTap,
                         borderRadius: AppRadius.mdAll,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          AccentIconBox(
-                            icon: shortcuts[i].icon,
-                            accent: shortcuts[i].accent,
-                            size: 38,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSpacing.md,
+                            horizontal: AppSpacing.xs,
                           ),
-                          AppSpacing.vSm,
-                          Text(
-                            shortcuts[i].label,
-                            style: t.labelMedium?.copyWith(fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AccentIconBox(
+                                icon: shortcuts[i].icon,
+                                accent: shortcuts[i].accent,
+                                size: 38,
+                              ),
+                              AppSpacing.vSm,
+                              Text(
+                                shortcuts[i].label,
+                                style: t.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                shortcuts[i].subtitle,
+                                style: t.bodySmall?.copyWith(
+                                  fontSize: 10,
+                                  color: c.textSecondary,
+                                ),
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                          Text(
-                            shortcuts[i].subtitle,
-                            style: t.bodySmall?.copyWith(
-                              fontSize: 10,
-                              color: c.textSecondary,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ],
     );

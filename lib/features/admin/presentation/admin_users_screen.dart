@@ -72,7 +72,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                   );
                 }
                 return ListView.separated(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                  padding: const EdgeInsets.only(bottom: AppDimensions.bottomNavClearance),
                   itemCount: filtered.length,
                   separatorBuilder: (_, __) => AppSpacing.vSm,
                   itemBuilder: (context, i) => _StudentCard(student: filtered[i]),

@@ -1,7 +1,7 @@
 /// All user-facing copy lives here so wording stays consistent.
 abstract final class AppStrings {
   static const String appName = 'PennyPal';
-  static const String tagline = 'Fresh All Along';
+  static const String tagline = 'Make Every Penny Count';
   static const String splashFootnote = 'Personal finance for students';
   static const String defaultCurrency = 'Rs.';
 

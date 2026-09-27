@@ -1,4 +1,4 @@
-# PennyPal - Fresh All Along
+# PennyPal - Make Every Penny Count
 
 Step 6: Admin portal, and Cloudinary-hosted receipt/profile photos, on top of steps 1-5.
 

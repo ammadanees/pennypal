@@ -21,6 +21,7 @@ import '../../../shared/widgets/async_value_view.dart';
 import '../data/transaction_repository.dart';
 import '../domain/finance_transaction.dart';
 import '../domain/transaction_filter.dart';
+import 'split_bill_sheet.dart';
 import 'transaction_detail_sheet.dart';
 import 'transaction_display.dart';
 import 'transaction_filter_controller.dart';
@@ -67,6 +68,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   void _showAddMenu() {
     showModalBottomSheet<void>(
       context: context,
+      useRootNavigator: true,
       showDragHandle: true,
       builder: (sheetContext) => SafeArea(
         child: Column(
@@ -90,6 +92,15 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                     extra: TransactionType.income);
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.call_split_rounded),
+              title: const Text('Split Bill with Roommates'),
+              subtitle: const Text('Calculate per-person share & tip'),
+              onTap: () {
+                Navigator.of(sheetContext).pop();
+                SplitBillSheet.show(context);
+              },
+            ),
             AppSpacing.vSm,
           ],
         ),
@@ -110,6 +121,13 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
 
     return AppScaffold(
       title: FinanceStrings.activityTitle,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.call_split_rounded),
+          tooltip: 'Split Bill with Roommates',
+          onPressed: () => SplitBillSheet.show(context),
+        ),
+      ],
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _showAddMenu,
         icon: const Icon(Icons.add),

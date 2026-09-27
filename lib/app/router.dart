@@ -107,11 +107,21 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.transactionNew,
-        builder: (_, state) => TransactionFormScreen(
-          initialType: state.extra is TransactionType
-              ? state.extra! as TransactionType
-              : TransactionType.expense,
-        ),
+        builder: (_, state) {
+          if (state.extra is Map<String, dynamic>) {
+            final map = state.extra! as Map<String, dynamic>;
+            return TransactionFormScreen(
+              initialType: (map['type'] as TransactionType?) ?? TransactionType.expense,
+              initialAmount: (map['amount'] as num?)?.toDouble(),
+              initialDescription: map['description'] as String?,
+            );
+          }
+          return TransactionFormScreen(
+            initialType: state.extra is TransactionType
+                ? state.extra! as TransactionType
+                : TransactionType.expense,
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.transactionEdit,

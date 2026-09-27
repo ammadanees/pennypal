@@ -28,10 +28,14 @@ class TransactionFormScreen extends ConsumerStatefulWidget {
   const TransactionFormScreen({
     super.key,
     this.initialType = TransactionType.expense,
+    this.initialAmount,
+    this.initialDescription,
     this.existing,
   });
 
   final TransactionType initialType;
+  final double? initialAmount;
+  final String? initialDescription;
   final FinanceTransaction? existing;
 
   @override
@@ -69,12 +73,24 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     _selectedCardName = e?.cardName;
     _receiptUrl = e?.receiptImageUrl;
     _amount = TextEditingController(
-      text: e == null
-          ? ''
-          : (e.amount % 1 == 0 ? e.amount.toInt().toString() : e.amount.toString()),
+      text: e != null
+          ? (e.amount % 1 == 0 ? e.amount.toInt().toString() : e.amount.toString())
+          : (widget.initialAmount != null
+              ? (widget.initialAmount! % 1 == 0
+                  ? widget.initialAmount!.toInt().toString()
+                  : widget.initialAmount!.toStringAsFixed(2))
+              : ''),
     );
     _source = TextEditingController(text: e?.source ?? '');
-    _description = TextEditingController(text: e?.description ?? '');
+    _description = TextEditingController(
+      text: e?.description ?? (widget.initialDescription ?? ''),
+    );
+    if (widget.initialDescription != null && _category == null && !_isIncome) {
+      _category = ExpenseCategorizer.predictCategory(widget.initialDescription!);
+      if (_category != null) {
+        _isAutoCategorized = true;
+      }
+    }
   }
 
   @override
@@ -385,6 +401,38 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 ImageUploadButton(
                   label: FinanceStrings.addReceipt,
                   onUploaded: (url) => setState(() => _receiptUrl = url),
+                  onReceiptParsed: (receipt) {
+                    setState(() {
+                      if (receipt.totalAmount != null &&
+                          (_amount.text.trim().isEmpty || _amount.text.trim() == '0')) {
+                        _amount.text = receipt.totalAmount! % 1 == 0
+                            ? receipt.totalAmount!.toInt().toString()
+                            : receipt.totalAmount!.toString();
+                      }
+                      if (receipt.merchantName != null && _description.text.trim().isEmpty) {
+                        _description.text = receipt.merchantName!;
+                      }
+                      if (receipt.date != null) {
+                        _date = receipt.date!;
+                      }
+                      if (receipt.category != null && _category == null) {
+                        _category = receipt.category;
+                        _isAutoCategorized = true;
+                        _categoryMissing = false;
+                      }
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.auto_awesome, color: Colors.amber, size: 18),
+                            SizedBox(width: 8),
+                            Expanded(child: Text('Receipt scanned! Details auto-filled with AI.')),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
             ],
             AppSpacing.vLg,

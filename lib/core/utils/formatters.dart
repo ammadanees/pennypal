@@ -11,9 +11,10 @@ abstract final class Formatters {
   static String number(double value) =>
       (value.abs() % 1 == 0 ? _whole : _decimal).format(value);
 
-  static String money(double value,
-          {String currency = AppStrings.defaultCurrency}) =>
-      '$currency ${number(value)}';
+  static String currentCurrency = AppStrings.defaultCurrency;
+
+  static String money(double value, {String? currency}) =>
+      '${currency ?? currentCurrency} ${number(value)}';
 
   static String percent(double ratio) => '${(ratio * 100).round()}%';
 

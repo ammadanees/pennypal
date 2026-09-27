@@ -14,6 +14,7 @@ abstract final class AppDimensions {
   static const double maxContentWidth = 1100;
   static const double authFormWidth = 440;
   static const double illustrationHeight = 300;
+  static const double bottomNavClearance = 24;
   static const double fabClearance = 88;
   static const double actionButton = 56;
   static const double badge = 10;

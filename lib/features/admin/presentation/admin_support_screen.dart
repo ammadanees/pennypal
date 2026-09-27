@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/admin_strings.dart';
 import '../../../core/theme/app_accents.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -83,7 +84,7 @@ class _AdminSupportScreenState extends ConsumerState<AdminSupportScreen> {
                   );
                 }
                 return ListView.separated(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                  padding: const EdgeInsets.only(bottom: AppDimensions.bottomNavClearance),
                   itemCount: filtered.length,
                   separatorBuilder: (_, __) => AppSpacing.vSm,
                   itemBuilder: (context, i) => _QueryCard(query: filtered[i]),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/admin_strings.dart';
 import '../../../core/theme/app_accents.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/formatters.dart';
@@ -31,7 +32,10 @@ class AdminFeedbackScreen extends ConsumerWidget {
           message: AdminStrings.noFeedbackMessage,
         ),
         data: (list) => ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+          padding: const EdgeInsets.only(
+            top: AppSpacing.md,
+            bottom: AppDimensions.bottomNavClearance,
+          ),
           itemCount: list.length,
           separatorBuilder: (_, __) => AppSpacing.vSm,
           itemBuilder: (context, i) => _FeedbackCard(entry: list[i]),

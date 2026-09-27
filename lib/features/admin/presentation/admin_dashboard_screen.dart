@@ -123,7 +123,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                     ),
             ),
           ),
-          AppSpacing.vLg,
+          const SizedBox(height: AppDimensions.bottomNavClearance),
         ],
       ),
     );

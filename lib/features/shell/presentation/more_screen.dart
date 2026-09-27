@@ -21,7 +21,10 @@ class MoreScreen extends StatelessWidget {
     return AppScaffold(
       title: 'More',
       body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+        padding: const EdgeInsets.only(
+          top: AppSpacing.md,
+          bottom: AppDimensions.bottomNavClearance,
+        ),
         children: [
           _MoreTile(
             icon: Icons.insights_outlined,

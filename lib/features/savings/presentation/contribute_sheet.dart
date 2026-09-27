@@ -14,6 +14,7 @@ import '../domain/savings_goal.dart';
 Future<void> showContributeSheet(BuildContext context, SavingsGoal goal) {
   return showModalBottomSheet<void>(
     context: context,
+    useRootNavigator: true,
     isScrollControlled: true,
     showDragHandle: true,
     useSafeArea: true,
@@ -73,7 +74,9 @@ class _ContributeSheetState extends ConsumerState<ContributeSheet> {
         AppSpacing.lg,
         AppSpacing.sm,
         AppSpacing.lg,
-        AppSpacing.lg + MediaQuery.viewInsetsOf(context).bottom,
+        AppSpacing.lg +
+            MediaQuery.viewInsetsOf(context).bottom +
+            MediaQuery.paddingOf(context).bottom,
       ),
       child: Form(
         key: _formKey,

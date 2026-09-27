@@ -49,13 +49,15 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
 
     final saved = await showModalBottomSheet<bool>(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       showDragHandle: true,
       useSafeArea: true,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setModalState) => Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom +
+                MediaQuery.paddingOf(ctx).bottom,
             left: AppSpacing.lg,
             right: AppSpacing.lg,
             top: AppSpacing.sm,
