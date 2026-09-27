@@ -17,6 +17,7 @@ import '../../../shared/widgets/app_loading.dart';
 import '../../../shared/widgets/app_scaffold.dart';
 import '../../../shared/widgets/section_header.dart';
 import '../../../shared/widgets/theme_mode_selector.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../../auth/data/auth_providers.dart';
 import '../../auth/domain/app_user.dart';
 import '../../auth/presentation/auth_controller.dart';
@@ -112,57 +113,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         children: [
           Row(
             children: [
-              GestureDetector(
+              UserAvatar(
+                photoUrl: user.photoUrl,
+                initials: user.initials,
+                size: AppDimensions.avatar,
+                showEditBadge: true,
+                isUploading: _uploadingPhoto,
+                tooltip: 'Change profile picture',
                 onTap: _uploadingPhoto ? null : () => _changePhoto(user),
-                child: Stack(
-                  children: [
-                    Container(
-                      width: AppDimensions.avatar,
-                      height: AppDimensions.avatar,
-                      alignment: Alignment.center,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        color: c.primarySoft,
-                        shape: BoxShape.circle,
-                      ),
-                      child: user.photoUrl == null
-                          ? Text(user.initials,
-                              style: t.titleLarge?.copyWith(color: c.primary))
-                          : Image.network(
-                              user.photoUrl!,
-                              width: AppDimensions.avatar,
-                              height: AppDimensions.avatar,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Text(
-                                user.initials,
-                                style: t.titleLarge?.copyWith(color: c.primary),
-                              ),
-                            ),
-                    ),
-                    Positioned(
-                      right: -2,
-                      bottom: -2,
-                      child: Container(
-                        width: 26,
-                        height: 26,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: c.primary,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: c.background, width: 2),
-                        ),
-                        child: _uploadingPhoto
-                            ? SizedBox(
-                                width: 12,
-                                height: 12,
-                                child: CircularProgressIndicator(
-                                    strokeWidth: 2, color: c.onPrimary),
-                              )
-                            : Icon(Icons.edit, size: 14, color: c.onPrimary),
-                      ),
-                    ),
-                  ],
-                ),
               ),
               AppSpacing.hMd,
               Expanded(

@@ -53,10 +53,10 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color onInk;
 
   static const AppColors light = AppColors(
-    primary: Color(0xFF00B074),
+    primary: Color(0xFF4F46E5),
     onPrimary: Color(0xFFFFFFFF),
-    primarySoft: Color(0xFFE6F8F0),
-    secondary: Color(0xFFF59E0B),
+    primarySoft: Color(0xFFEEF2FF),
+    secondary: Color(0xFF7C3AED),
     onSecondary: Color(0xFFFFFFFF),
     background: Color(0xFFF8FAFC),
     surface: Color(0xFFFFFFFF),
@@ -71,32 +71,32 @@ class AppColors extends ThemeExtension<AppColors> {
     success: Color(0xFF10B981),
     warning: Color(0xFFF59E0B),
     error: Color(0xFFF43F5E),
-    info: Color(0xFF3B82F6),
+    info: Color(0xFF6366F1),
     ink: Color(0xFF0F172A),
     onInk: Color(0xFFFFFFFF),
   );
 
   static const AppColors dark = AppColors(
-    primary: Color(0xFF2EE6A6),
-    onPrimary: Color(0xFF03241A),
-    primarySoft: Color(0xFF0E2A20),
-    secondary: Color(0xFFFBBF24),
-    onSecondary: Color(0xFF1C1300),
-    background: Color(0xFF090D14),
-    surface: Color(0xFF121824),
-    surfaceElevated: Color(0xFF1A2232),
+    primary: Color(0xFF818CF8),
+    onPrimary: Color(0xFF0F0B2E),
+    primarySoft: Color(0xFF1E1B4B),
+    secondary: Color(0xFFA78BFA),
+    onSecondary: Color(0xFF1B0E3D),
+    background: Color(0xFF090A12),
+    surface: Color(0xFF111424),
+    surfaceElevated: Color(0xFF181C32),
     textPrimary: Color(0xFFF8FAFC),
     textSecondary: Color(0xFF94A3B8),
     textMuted: Color(0xFF64748B),
-    border: Color(0xFF1E293B),
+    border: Color(0xFF1E243C),
     income: Color(0xFF34D399),
     expense: Color(0xFFFB7185),
     savings: Color(0xFFFBBF24),
     success: Color(0xFF34D399),
     warning: Color(0xFFFBBF24),
     error: Color(0xFFFB7185),
-    info: Color(0xFF60A5FA),
-    ink: Color(0xFF111827),
+    info: Color(0xFF818CF8),
+    ink: Color(0xFF111424),
     onInk: Color(0xFFFFFFFF),
   );
 
@@ -104,13 +104,13 @@ class AppColors extends ThemeExtension<AppColors> {
   static const LinearGradient heroGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+    colors: [Color(0xFF241C5A), Color(0xFF15103A), Color(0xFF0C0922)],
   );
 
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF00B074), Color(0xFF059669)],
+    colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
   );
 
   static const LinearGradient goldGradient = LinearGradient(

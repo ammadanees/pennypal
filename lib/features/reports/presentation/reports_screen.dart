@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/routes.dart';
+import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/report_strings.dart';
 import '../../../core/theme/app_accents.dart';
@@ -159,6 +160,11 @@ class _ReportsBody extends StatelessWidget {
                 _ReportCard(
                   title: ReportStrings.savingsTitle,
                   child: const _SavingsSummary(),
+                ),
+                _ReportCard(
+                  title: 'Payment Methods & Accounts',
+                  subtitle: 'Cash, Card, and Bank income vs expense',
+                  child: _PaymentModesBreakdown(report: report),
                 ),
               ],
             ),
@@ -633,5 +639,112 @@ class _SavingsSummary extends ConsumerWidget {
             );
           },
         );
+  }
+}
+
+class _PaymentModesBreakdown extends StatelessWidget {
+  const _PaymentModesBreakdown({required this.report});
+
+  final PeriodReport report;
+
+  @override
+  Widget build(BuildContext context) {
+    final modes = report.paymentModes;
+    final hasAnyActivity = modes.any((m) => m.hasActivity);
+
+    if (!hasAnyActivity) {
+      return const _ChartEmpty('No payment method activity in this period.');
+    }
+
+    return Column(
+      children: [
+        for (var i = 0; i < modes.length; i++) ...[
+          if (i > 0) const Divider(height: 20),
+          _PaymentModeRow(item: modes[i]),
+        ],
+      ],
+    );
+  }
+}
+
+class _PaymentModeRow extends StatelessWidget {
+  const _PaymentModeRow({required this.item});
+
+  final PaymentModeShare item;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final t = context.text;
+
+    final accent = switch (item.mode) {
+      PaymentMode.cash => AppAccents.green,
+      PaymentMode.card => AppAccents.purple,
+      PaymentMode.bankTransfer => AppAccents.blue,
+      PaymentMode.wallet => AppAccents.amber,
+    };
+
+    return Row(
+      children: [
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: accent.color.withOpacity(0.12),
+            borderRadius: AppRadius.smAll,
+          ),
+          child: Icon(item.mode.icon, color: accent.color, size: 20),
+        ),
+        AppSpacing.hSm,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.mode.label,
+                style: t.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+              ),
+              Row(
+                children: [
+                  Text(
+                    'In: +${Formatters.money(item.income)}',
+                    style: t.bodySmall?.copyWith(
+                      color: AppAccents.green.color,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Out: -${Formatters.money(item.expense)}',
+                    style: t.bodySmall?.copyWith(
+                      color: AppAccents.coral.color,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              'Sum',
+              style: t.bodySmall?.copyWith(fontSize: 10, color: c.textMuted),
+            ),
+            Text(
+              Formatters.money(item.net),
+              style: t.labelMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: item.net >= 0 ? c.textPrimary : AppAccents.coral.color,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

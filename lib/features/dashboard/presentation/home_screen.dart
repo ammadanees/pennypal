@@ -30,11 +30,13 @@ import '../../../shared/widgets/money_display.dart';
 import '../../../shared/widgets/round_action.dart';
 import '../../../shared/widgets/savings_progress.dart';
 import '../../../shared/widgets/section_header.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../../auth/data/auth_providers.dart';
 import '../../auth/domain/app_user.dart';
 import '../../budgets/data/budget_repository.dart';
 import '../../budgets/domain/budget_calculator.dart';
 import '../../insights/domain/insight_calculator.dart';
+import '../../../core/constants/app_categories.dart';
 import '../../notifications/data/notification_repository.dart';
 import '../../savings/data/savings_repository.dart';
 import '../../transactions/data/transaction_repository.dart';
@@ -42,6 +44,7 @@ import '../../transactions/domain/finance_transaction.dart';
 import '../../transactions/presentation/split_bill_sheet.dart';
 import '../../transactions/presentation/transaction_detail_sheet.dart';
 import '../../transactions/presentation/transaction_display.dart';
+import '../../transactions/presentation/transaction_filter_controller.dart';
 import '../data/sync_status.dart';
 import '../domain/finance_calculator.dart';
 
@@ -164,6 +167,9 @@ class _HomeContent extends ConsumerWidget {
     );
 
     final ribbon = summary.expense > 0 ? _SpendingRibbon(summary: summary) : const SizedBox.shrink();
+    final accountsSection = all.isEmpty
+        ? const SizedBox.shrink()
+        : _AccountsBreakdownSection(all: all, now: now);
     const budgetSection = _BudgetSection();
     const goals = _GoalSection();
     final recent = all.isEmpty ? null : _RecentSection(items: all.take(5).toList());
@@ -180,7 +186,14 @@ class _HomeContent extends ConsumerWidget {
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [hero, summaryRow, quickShortcuts, insightWidgets, ribbon],
+                      children: [
+                        hero,
+                        summaryRow,
+                        accountsSection,
+                        quickShortcuts,
+                        insightWidgets,
+                        ribbon,
+                      ],
                     ),
                   ),
                   AppSpacing.hLg,
@@ -198,6 +211,7 @@ class _HomeContent extends ConsumerWidget {
                 children: [
                   hero,
                   summaryRow,
+                  accountsSection,
                   quickShortcuts,
                   insightWidgets,
                   budgetSection,
@@ -228,20 +242,15 @@ class _HomeHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = context.text;
     final unread = ref.watch(unreadNotificationCountProvider);
+    final currentUser = ref.watch(authStateProvider).valueOrNull ?? user;
     return Row(
       children: [
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppAccents.coral.color,
-            shape: BoxShape.circle,
-          ),
-          child: Text(
-            user?.initials ?? '?',
-            style: t.titleMedium?.copyWith(color: AppAccents.coral.onColor),
-          ),
+        UserAvatar(
+          photoUrl: currentUser?.photoUrl,
+          initials: currentUser?.initials ?? '?',
+          size: 48,
+          tooltip: AppStrings.profileTitle,
+          onTap: () => context.push(AppRoutes.profile),
         ),
         AppSpacing.hMd,
         Expanded(
@@ -249,7 +258,7 @@ class _HomeHeader extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(greeting, style: t.bodySmall),
-              Text(user?.firstName ?? 'there',
+              Text(currentUser?.firstName ?? 'there',
                   style: t.titleLarge, maxLines: 1, overflow: TextOverflow.ellipsis),
             ],
           ),
@@ -833,6 +842,169 @@ class _QuickShortcutsSection extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _AccountsBreakdownSection extends ConsumerWidget {
+  const _AccountsBreakdownSection({required this.all, required this.now});
+
+  final List<FinanceTransaction> all;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final summaries = FinanceCalculator.modeSummaries(all, month: now);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionHeader(
+          title: 'Accounts & Wallets',
+          actionLabel: FinanceStrings.seeAll,
+          onAction: () => context.go(AppRoutes.activity),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          clipBehavior: Clip.none,
+          child: Row(
+            children: [
+              for (final s in summaries) ...[
+                _AccountCard(
+                  summary: s,
+                  onTap: () {
+                    ref
+                        .read(transactionFilterProvider.notifier)
+                        .setPaymentMode(s.mode);
+                    context.go(AppRoutes.activity);
+                  },
+                ),
+                AppSpacing.hSm,
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AccountCard extends StatelessWidget {
+  const _AccountCard({
+    required this.summary,
+    required this.onTap,
+  });
+
+  final PaymentModeSummary summary;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final t = context.text;
+
+    final accent = switch (summary.mode) {
+      PaymentMode.cash => AppAccents.green,
+      PaymentMode.card => AppAccents.purple,
+      PaymentMode.bankTransfer => AppAccents.blue,
+      PaymentMode.wallet => AppAccents.amber,
+    };
+
+    return SizedBox(
+      width: 220,
+      child: AppCard(
+        onTap: onTap,
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                AccentIconBox(icon: summary.mode.icon, accent: accent, size: 38),
+                AppSpacing.hSm,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        summary.mode.label,
+                        style: t.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        'Sum: ${Formatters.money(summary.allTimeBalance)}',
+                        style: t.bodySmall?.copyWith(
+                          color: summary.allTimeBalance >= 0
+                              ? c.textPrimary
+                              : AppAccents.coral.color,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            AppSpacing.vMd,
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
+              ),
+              decoration: BoxDecoration(
+                color: c.surfaceElevated,
+                borderRadius: AppRadius.smAll,
+                border: Border.all(color: c.border.withOpacity(0.6)),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.south_west, size: 12, color: AppAccents.green.color),
+                          const SizedBox(width: 4),
+                          Text('Income', style: t.bodySmall?.copyWith(fontSize: 11)),
+                        ],
+                      ),
+                      Text(
+                        '+${Formatters.money(summary.income)}',
+                        style: t.labelSmall?.copyWith(
+                          color: AppAccents.green.color,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.north_east, size: 12, color: AppAccents.coral.color),
+                          const SizedBox(width: 4),
+                          Text('Expense', style: t.bodySmall?.copyWith(fontSize: 11)),
+                        ],
+                      ),
+                      Text(
+                        '-${Formatters.money(summary.expense)}',
+                        style: t.labelSmall?.copyWith(
+                          color: AppAccents.coral.color,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

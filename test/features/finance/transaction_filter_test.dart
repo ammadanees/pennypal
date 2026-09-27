@@ -46,4 +46,23 @@ void main() {
     expect(f.apply(all).single.description, 'Bus pass');
     expect(f.isActive, isTrue);
   });
+
+  test('paymentMode filter isolates payment mode and updates isActive', () {
+    final modeTxs = [
+      expense(500, ExpenseCategory.food, DateTime(2026, 9, 20), paymentMode: PaymentMode.cash),
+      expense(1500, ExpenseCategory.shopping, DateTime(2026, 9, 21), paymentMode: PaymentMode.card),
+      income(20000, DateTime(2026, 9, 1), paymentMode: PaymentMode.bankTransfer),
+    ];
+
+    final cashFilter = const TransactionFilter(paymentMode: PaymentMode.cash);
+    expect(cashFilter.isActive, isTrue);
+    expect(cashFilter.apply(modeTxs), hasLength(1));
+    expect(cashFilter.apply(modeTxs).single.amount, 500);
+
+    final cardFilter = const TransactionFilter(paymentMode: PaymentMode.card);
+    expect(cardFilter.apply(modeTxs).single.amount, 1500);
+
+    final bankFilter = const TransactionFilter(paymentMode: PaymentMode.bankTransfer);
+    expect(bankFilter.apply(modeTxs).single.amount, 20000);
+  });
 }

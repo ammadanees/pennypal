@@ -25,19 +25,19 @@ class HeroCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF0E4D38),
-            Color(0xFF072B1F),
-            Color(0xFF021610),
+            Color(0xFF241C5A),
+            Color(0xFF15103A),
+            Color(0xFF0C0922),
           ],
         ),
         borderRadius: AppRadius.xlAll,
         border: Border.all(
-          color: const Color(0xFF2EE6A6).withOpacity(0.35),
+          color: const Color(0xFF818CF8).withOpacity(0.38),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF00B074).withOpacity(0.28),
+            color: (glow ?? const Color(0xFF4F46E5)).withOpacity(0.28),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

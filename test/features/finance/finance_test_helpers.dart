@@ -6,6 +6,7 @@ FinanceTransaction expense(
   ExpenseCategory category,
   DateTime date, {
   String description = '',
+  PaymentMode? paymentMode,
 }) =>
     FinanceTransaction(
       id: 'e-${date.microsecondsSinceEpoch}-$amount',
@@ -15,9 +16,15 @@ FinanceTransaction expense(
       createdAt: date,
       category: category,
       description: description,
+      paymentMode: paymentMode,
     );
 
-FinanceTransaction income(double amount, DateTime date, {String source = 'Allowance'}) =>
+FinanceTransaction income(
+  double amount,
+  DateTime date, {
+  String source = 'Allowance',
+  PaymentMode? paymentMode,
+}) =>
     FinanceTransaction(
       id: 'i-${date.microsecondsSinceEpoch}-$amount',
       type: TransactionType.income,
@@ -25,4 +32,5 @@ FinanceTransaction income(double amount, DateTime date, {String source = 'Allowa
       date: date,
       createdAt: date,
       source: source,
+      paymentMode: paymentMode,
     );

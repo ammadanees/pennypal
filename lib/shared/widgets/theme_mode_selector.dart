@@ -11,6 +11,7 @@ class ThemeModeSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(themeModeProvider);
     return SegmentedButton<ThemeMode>(
+      showSelectedIcon: false,
       segments: const [
         ButtonSegment(
           value: ThemeMode.system,

@@ -68,6 +68,12 @@ class FirebaseAuthRepository implements AuthRepository {
     if (data == null) return _fallback(user);
     final isVerified = _locallyVerifiedUids.contains(user.uid) ||
         ((data['isEmailVerified'] as bool?) ?? user.emailVerified);
+    final rawPhoto = data['photoUrl'] as String?;
+    final photo = rawPhoto != null && rawPhoto.trim().isNotEmpty
+        ? rawPhoto.trim()
+        : (user.photoURL != null && user.photoURL!.trim().isNotEmpty
+            ? user.photoURL!.trim()
+            : null);
     return AppUser(
       uid: user.uid,
       fullName: (data['fullName'] as String?) ?? _fallback(user).fullName,
@@ -75,7 +81,7 @@ class FirebaseAuthRepository implements AuthRepository {
       mobile: (data['mobile'] as String?) ?? '',
       studentId: data['studentId'] as String?,
       role: UserRole.parse(data['role']),
-      photoUrl: data['photoUrl'] as String?,
+      photoUrl: photo,
       isEmailVerified: isVerified,
     );
   }
@@ -89,6 +95,9 @@ class FirebaseAuthRepository implements AuthRepository {
       email: user.email ?? '',
       mobile: '',
       role: UserRole.student,
+      photoUrl: user.photoURL != null && user.photoURL!.trim().isNotEmpty
+          ? user.photoURL!.trim()
+          : null,
       isEmailVerified: isVerified,
     );
   }
@@ -312,12 +321,17 @@ class FirebaseAuthRepository implements AuthRepository {
     if (user == null) throw const AppFailure(AppStrings.authNoSession);
     try {
       await user.updateDisplayName(fullName.trim());
+      if (photoUrl != null && photoUrl.trim().isNotEmpty) {
+        try {
+          await user.updatePhotoURL(photoUrl.trim());
+        } catch (_) {}
+      }
       await _users.doc(user.uid).set(
         {
           'fullName': fullName.trim(),
           'mobile': mobile.trim(),
           if (studentId != null) 'studentId': studentId.trim(),
-          if (photoUrl != null) 'photoUrl': photoUrl,
+          if (photoUrl != null) 'photoUrl': photoUrl.trim(),
         },
         SetOptions(merge: true),
       );

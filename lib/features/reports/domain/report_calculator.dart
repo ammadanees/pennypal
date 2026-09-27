@@ -70,12 +70,28 @@ class CategoryShare {
   final double share;
 }
 
+class PaymentModeShare {
+  const PaymentModeShare({
+    required this.mode,
+    required this.income,
+    required this.expense,
+  });
+
+  final PaymentMode mode;
+  final double income;
+  final double expense;
+
+  double get net => income - expense;
+  bool get hasActivity => income > 0 || expense > 0;
+}
+
 class PeriodReport {
   const PeriodReport({
     required this.income,
     required this.expense,
     required this.categories,
     required this.transactionCount,
+    this.paymentModes = const [],
   });
 
   final double income;
@@ -84,6 +100,7 @@ class PeriodReport {
   /// Largest first. Only categories with spending.
   final List<CategoryShare> categories;
   final int transactionCount;
+  final List<PaymentModeShare> paymentModes;
 
   double get net => income - expense;
 
@@ -111,14 +128,19 @@ abstract final class ReportCalculator {
     var expense = 0.0;
     var count = 0;
     final byCategory = <ExpenseCategory, double>{};
+    final modeIn = <PaymentMode, double>{};
+    final modeEx = <PaymentMode, double>{};
 
     for (final t in all) {
       if (!range.contains(t.date)) continue;
       count++;
+      final mode = t.paymentMode ?? PaymentMode.cash;
       if (t.isIncome) {
         income += t.amount;
+        modeIn[mode] = (modeIn[mode] ?? 0.0) + t.amount;
       } else {
         expense += t.amount;
+        modeEx[mode] = (modeEx[mode] ?? 0.0) + t.amount;
         final category = t.category ?? ExpenseCategory.miscellaneous;
         byCategory[category] = (byCategory[category] ?? 0) + t.amount;
       }
@@ -133,11 +155,20 @@ abstract final class ReportCalculator {
         ),
     ]..sort((a, b) => b.amount.compareTo(a.amount));
 
+    final paymentModes = PaymentMode.values.map((m) {
+      return PaymentModeShare(
+        mode: m,
+        income: modeIn[m] ?? 0.0,
+        expense: modeEx[m] ?? 0.0,
+      );
+    }).toList();
+
     return PeriodReport(
       income: income,
       expense: expense,
       categories: categories,
       transactionCount: count,
+      paymentModes: paymentModes,
     );
   }
 

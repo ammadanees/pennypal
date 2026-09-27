@@ -39,6 +39,39 @@ void main() {
       expect(s.income, 0);
       expect(s.expense, 0);
     });
+
+    test('modeSummaries separates income, expense and preserves sum', () {
+      final txs = [
+        income(10000, sep, paymentMode: PaymentMode.cash),
+        income(25000, sep, paymentMode: PaymentMode.bankTransfer),
+        income(5000, sep, paymentMode: PaymentMode.card),
+        expense(2000, ExpenseCategory.food, sep, paymentMode: PaymentMode.cash),
+        expense(4000, ExpenseCategory.shopping, sep, paymentMode: PaymentMode.card),
+        expense(1000, ExpenseCategory.bills, sep, paymentMode: PaymentMode.bankTransfer),
+      ];
+
+      final summaries = FinanceCalculator.modeSummaries(txs, month: sep);
+      final cash = summaries.firstWhere((s) => s.mode == PaymentMode.cash);
+      final card = summaries.firstWhere((s) => s.mode == PaymentMode.card);
+      final bank = summaries.firstWhere((s) => s.mode == PaymentMode.bankTransfer);
+
+      expect(cash.income, 10000);
+      expect(cash.expense, 2000);
+      expect(cash.allTimeBalance, 8000);
+
+      expect(card.income, 5000);
+      expect(card.expense, 4000);
+      expect(card.allTimeBalance, 1000);
+
+      expect(bank.income, 25000);
+      expect(bank.expense, 1000);
+      expect(bank.allTimeBalance, 24000);
+
+      // Verify overall sum remains preserved
+      final sumOfBalances = summaries.fold<double>(0, (acc, s) => acc + s.allTimeBalance);
+      expect(sumOfBalances, FinanceCalculator.balance(txs));
+      expect(sumOfBalances, 33000);
+    });
   });
 
   group('BudgetCalculator', () {

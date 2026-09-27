@@ -7,7 +7,10 @@ import '../../../app/routes.dart';
 import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/finance_strings.dart';
+import '../../../core/theme/app_accents.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/app_dates.dart';
@@ -150,10 +153,13 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
               children: [
                 AppChip(
                   label: FinanceStrings.filterAll,
-                  selected: filter.type == null && filter.category == null,
+                  selected: filter.type == null &&
+                      filter.category == null &&
+                      filter.paymentMode == null,
                   onSelected: () {
                     notifier.setType(null);
                     notifier.setCategory(null);
+                    notifier.setPaymentMode(null);
                   },
                 ),
                 AppSpacing.hSm,
@@ -177,6 +183,17 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                   selected: filter.range != null,
                   onSelected: _pickRange,
                 ),
+                for (final mode in PaymentMode.values) ...[
+                  AppSpacing.hSm,
+                  AppChip(
+                    label: mode.label,
+                    icon: mode.icon,
+                    selected: filter.paymentMode == mode,
+                    onSelected: () => notifier.setPaymentMode(
+                      filter.paymentMode == mode ? null : mode,
+                    ),
+                  ),
+                ],
                 for (final category in ExpenseCategory.values) ...[
                   AppSpacing.hSm,
                   AppChip(
@@ -226,11 +243,145 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                           ),
                         );
                 }
-                return _TransactionList(transactions: list);
+                return Column(
+                  children: [
+                    _AccountSummaryCard(
+                      transactions: list,
+                      activeMode: filter.paymentMode,
+                    ),
+                    Expanded(
+                      child: _TransactionList(transactions: list),
+                    ),
+                  ],
+                );
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AccountSummaryCard extends StatelessWidget {
+  const _AccountSummaryCard({
+    required this.transactions,
+    required this.activeMode,
+  });
+
+  final List<FinanceTransaction> transactions;
+  final PaymentMode? activeMode;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final t = context.text;
+
+    final inTotal = transactions
+        .where((e) => e.isIncome)
+        .fold<double>(0, (sum, e) => sum + e.amount);
+    final exTotal = transactions
+        .where((e) => !e.isIncome)
+        .fold<double>(0, (sum, e) => sum + e.amount);
+    final netSum = inTotal - exTotal;
+
+    final title = activeMode != null
+        ? '${activeMode!.label} Overview'
+        : 'Filtered Summary';
+    final icon = activeMode?.icon ?? Icons.account_balance_wallet_outlined;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xs, bottom: AppSpacing.sm),
+      child: AppCard(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm + 2,
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 18, color: c.textSecondary),
+                AppSpacing.hSm,
+                Expanded(
+                  child: Text(
+                    title,
+                    style: t.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                Text(
+                  'Sum: ${Formatters.money(netSum)}',
+                  style: t.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: netSum >= 0 ? AppAccents.green.color : AppAccents.coral.color,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppAccents.green.color.withOpacity(0.08),
+                      borderRadius: AppRadius.smAll,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.south_west, size: 12, color: AppAccents.green.color),
+                            const SizedBox(width: 4),
+                            Text('Income', style: t.bodySmall?.copyWith(fontSize: 11)),
+                          ],
+                        ),
+                        Text(
+                          '+${Formatters.money(inTotal)}',
+                          style: t.labelSmall?.copyWith(
+                            color: AppAccents.green.color,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                AppSpacing.hSm,
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppAccents.coral.color.withOpacity(0.08),
+                      borderRadius: AppRadius.smAll,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.north_east, size: 12, color: AppAccents.coral.color),
+                            const SizedBox(width: 4),
+                            Text('Expense', style: t.bodySmall?.copyWith(fontSize: 11)),
+                          ],
+                        ),
+                        Text(
+                          '-${Formatters.money(exTotal)}',
+                          style: t.labelSmall?.copyWith(
+                            color: AppAccents.coral.color,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

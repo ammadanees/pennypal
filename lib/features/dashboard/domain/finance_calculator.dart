@@ -44,4 +44,66 @@ abstract final class FinanceCalculator {
     }
     return MonthSummary(income: income, expense: expense, byCategory: byCategory);
   }
+
+  /// Calculates income, expense, and total balance per payment mode (Cash, Card, Bank, Wallet).
+  /// If [month] is provided, income & expense are scoped to that month, while [balance] remains all-time.
+  static List<PaymentModeSummary> modeSummaries(
+    List<FinanceTransaction> all, {
+    DateTime? month,
+  }) {
+    final inMap = <PaymentMode, double>{};
+    final exMap = <PaymentMode, double>{};
+    final balanceMap = <PaymentMode, double>{};
+    final txCountMap = <PaymentMode, int>{};
+
+    for (final t in all) {
+      final mode = t.paymentMode ?? PaymentMode.cash;
+      final delta = t.isIncome ? t.amount : -t.amount;
+      balanceMap[mode] = (balanceMap[mode] ?? 0.0) + delta;
+      txCountMap[mode] = (txCountMap[mode] ?? 0) + 1;
+
+      if (month != null) {
+        if (t.date.year != month.year || t.date.month != month.month) continue;
+      }
+
+      if (t.isIncome) {
+        inMap[mode] = (inMap[mode] ?? 0.0) + t.amount;
+      } else {
+        exMap[mode] = (exMap[mode] ?? 0.0) + t.amount;
+      }
+    }
+
+    return PaymentMode.values.map((mode) {
+      return PaymentModeSummary(
+        mode: mode,
+        income: inMap[mode] ?? 0.0,
+        expense: exMap[mode] ?? 0.0,
+        allTimeBalance: balanceMap[mode] ?? 0.0,
+        transactionCount: txCountMap[mode] ?? 0,
+      );
+    }).toList();
+  }
+}
+
+class PaymentModeSummary {
+  const PaymentModeSummary({
+    required this.mode,
+    required this.income,
+    required this.expense,
+    required this.allTimeBalance,
+    this.transactionCount = 0,
+  });
+
+  final PaymentMode mode;
+  final double income;
+  final double expense;
+  final double allTimeBalance;
+  final int transactionCount;
+
+  /// Month or period net (Income minus Expense).
+  double get periodNet => income - expense;
+
+  /// Whether this payment mode has any historical transactions or current activity.
+  bool get hasActivity =>
+      transactionCount > 0 || income > 0 || expense > 0 || allTimeBalance != 0;
 }
