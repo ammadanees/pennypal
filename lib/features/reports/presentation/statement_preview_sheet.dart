@@ -16,6 +16,7 @@ import '../../../shared/widgets/app_card.dart';
 import '../../auth/data/auth_providers.dart';
 import '../../transactions/domain/finance_transaction.dart';
 import '../domain/report_calculator.dart';
+import '../domain/report_export_service.dart';
 
 class StatementPreviewSheet extends ConsumerStatefulWidget {
   const StatementPreviewSheet({
@@ -53,51 +54,124 @@ class StatementPreviewSheet extends ConsumerStatefulWidget {
 class _StatementPreviewSheetState extends ConsumerState<StatementPreviewSheet> {
   bool _isSavingToCloud = false;
   bool _savedToCloud = false;
+  bool _isExportingPdf = false;
+  bool _isExportingCsv = false;
 
-  String _generateCsv(
+  Future<void> _exportPdf(
     PeriodReport report,
     List<FinanceTransaction> inRange,
     String rangeLabel,
     String userName,
     String studentId,
-  ) {
-    final buffer = StringBuffer();
-    buffer.writeln('PennyPal Student Financial Statement');
-    buffer.writeln('Student Name,$userName');
-    buffer.writeln('Student ID,$studentId');
-    buffer.writeln('Period,$rangeLabel');
-    buffer.writeln(
-        'Generated On,${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}');
-    buffer.writeln('Currency,${Formatters.currentCurrency}');
-    buffer.writeln();
-    buffer.writeln('--- FINANCIAL SUMMARY ---');
-    buffer.writeln('Total Income,${report.income.toStringAsFixed(2)}');
-    buffer.writeln('Total Expenses,${report.expense.toStringAsFixed(2)}');
-    buffer.writeln('Net Savings,${report.net.toStringAsFixed(2)}');
-    buffer.writeln(
-        'Savings Rate,${report.keptFromIncome == null ? 'N/A' : (report.keptFromIncome! * 100).toStringAsFixed(1)}%');
-    buffer.writeln('Total Records,${report.transactionCount}');
-    buffer.writeln();
-    buffer.writeln('--- CATEGORY BREAKDOWN ---');
-    buffer.writeln('Category,Amount,Share %');
-    for (final cat in report.categories) {
-      buffer.writeln(
-          '${cat.category.label},${cat.amount.toStringAsFixed(2)},${(cat.share * 100).toStringAsFixed(1)}%');
+  ) async {
+    setState(() => _isExportingPdf = true);
+    try {
+      await ReportExportService.exportPdf(
+        report: report,
+        inRange: inRange,
+        rangeLabel: rangeLabel,
+        periodName: widget.period.label,
+        userName: userName,
+        studentId: studentId,
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.picture_as_pdf_rounded, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text('PDF statement generated and shared successfully!'),
+              ),
+            ],
+          ),
+          backgroundColor: AppAccents.green.color,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not export PDF: $e'),
+          backgroundColor: AppAccents.coral.color,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isExportingPdf = false);
     }
-    buffer.writeln();
-    buffer.writeln('--- ITEMIZED TRANSACTIONS ---');
-    buffer.writeln('Date,Type,Category,Description,Payment Mode,Amount');
-    for (final t in inRange) {
-      final dateStr = DateFormat('yyyy-MM-dd').format(t.date);
-      final typeStr = t.isIncome ? 'Income' : 'Expense';
-      final catStr =
-          t.category?.label ?? (t.isIncome ? 'Inflow' : 'Uncategorized');
-      final descStr = '"${t.description.replaceAll('"', '""')}"';
-      final modeStr = t.paymentMode?.name ?? 'cash';
-      final amountStr = t.amount.toStringAsFixed(2);
-      buffer.writeln('$dateStr,$typeStr,$catStr,$descStr,$modeStr,$amountStr');
+  }
+
+  Future<void> _printOrPreviewPdf(
+    PeriodReport report,
+    List<FinanceTransaction> inRange,
+    String rangeLabel,
+    String userName,
+    String studentId,
+  ) async {
+    try {
+      await ReportExportService.printOrPreviewPdf(
+        report: report,
+        inRange: inRange,
+        rangeLabel: rangeLabel,
+        periodName: widget.period.label,
+        userName: userName,
+        studentId: studentId,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not preview PDF: $e'),
+          backgroundColor: AppAccents.coral.color,
+        ),
+      );
     }
-    return buffer.toString();
+  }
+
+  Future<void> _exportCsv(
+    PeriodReport report,
+    List<FinanceTransaction> inRange,
+    String rangeLabel,
+    String userName,
+    String studentId,
+  ) async {
+    setState(() => _isExportingCsv = true);
+    try {
+      await ReportExportService.exportCsvFile(
+        report: report,
+        inRange: inRange,
+        rangeLabel: rangeLabel,
+        periodName: widget.period.label,
+        userName: userName,
+        studentId: studentId,
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.table_view_rounded, color: Colors.white),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text('CSV statement file exported successfully!'),
+              ),
+            ],
+          ),
+          backgroundColor: AppAccents.green.color,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not export CSV file: $e'),
+          backgroundColor: AppAccents.coral.color,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isExportingCsv = false);
+    }
   }
 
   Future<void> _copyCsv(
@@ -107,7 +181,14 @@ class _StatementPreviewSheetState extends ConsumerState<StatementPreviewSheet> {
     String userName,
     String studentId,
   ) async {
-    final csv = _generateCsv(report, inRange, rangeLabel, userName, studentId);
+    final csv = ReportExportService.generateCsv(
+      report: report,
+      inRange: inRange,
+      rangeLabel: rangeLabel,
+      periodName: widget.period.label,
+      userName: userName,
+      studentId: studentId,
+    );
     await Clipboard.setData(ClipboardData(text: csv));
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -416,15 +497,63 @@ class _StatementPreviewSheetState extends ConsumerState<StatementPreviewSheet> {
           ),
           AppSpacing.vMd,
 
-          // Action Buttons
+          // Export & Share Options
+          Text(
+            'Export & Share Statement',
+            style: t.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          AppSpacing.vSm,
           Row(
             children: [
               Expanded(
                 child: AppButton(
-                  label: 'Copy CSV',
-                  icon: Icons.copy_rounded,
+                  label: _isExportingPdf ? 'Exporting PDF...' : 'Export PDF',
+                  icon: Icons.picture_as_pdf_rounded,
+                  variant: AppButtonVariant.primary,
+                  onPressed: _isExportingPdf
+                      ? null
+                      : () => _exportPdf(
+                            report,
+                            inRange,
+                            rangeLabel,
+                            userName,
+                            studentId,
+                          ),
+                ),
+              ),
+              AppSpacing.hSm,
+              Expanded(
+                child: AppButton(
+                  label: _isExportingCsv ? 'Exporting CSV...' : 'Export CSV',
+                  icon: Icons.table_view_rounded,
                   variant: AppButtonVariant.tonal,
-                  onPressed: () => _copyCsv(
+                  onPressed: _isExportingCsv
+                      ? null
+                      : () => _exportCsv(
+                            report,
+                            inRange,
+                            rangeLabel,
+                            userName,
+                            studentId,
+                          ),
+                ),
+              ),
+            ],
+          ),
+          AppSpacing.vSm,
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.print_rounded, size: 18),
+                  label: const Text('Print / Preview'),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: AppRadius.mdAll,
+                    ),
+                  ),
+                  onPressed: () => _printOrPreviewPdf(
                     report,
                     inRange,
                     rangeLabel,
@@ -435,20 +564,36 @@ class _StatementPreviewSheetState extends ConsumerState<StatementPreviewSheet> {
               ),
               AppSpacing.hSm,
               Expanded(
-                child: AppButton(
-                  label: _savedToCloud
-                      ? 'Archived ✓'
-                      : (_isSavingToCloud ? 'Archiving...' : 'Save to Cloud'),
-                  icon: _savedToCloud
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.copy_rounded, size: 18),
+                  label: const Text('Copy CSV'),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: AppRadius.mdAll,
+                    ),
+                  ),
+                  onPressed: () => _copyCsv(
+                    report,
+                    inRange,
+                    rangeLabel,
+                    userName,
+                    studentId,
+                  ),
+                ),
+              ),
+              AppSpacing.hSm,
+              IconButton.outlined(
+                tooltip: _savedToCloud ? 'Archived to Cloud' : 'Save to Cloud',
+                icon: Icon(
+                  _savedToCloud
                       ? Icons.cloud_done_rounded
                       : Icons.cloud_upload_outlined,
-                  variant: _savedToCloud
-                      ? AppButtonVariant.tonal
-                      : AppButtonVariant.primary,
-                  onPressed: _savedToCloud || _isSavingToCloud
-                      ? null
-                      : () => _saveToReportsEntity(report, rangeLabel),
+                  color: _savedToCloud ? AppAccents.green.color : c.primary,
                 ),
+                onPressed: _savedToCloud || _isSavingToCloud
+                    ? null
+                    : () => _saveToReportsEntity(report, rangeLabel),
               ),
             ],
           ),

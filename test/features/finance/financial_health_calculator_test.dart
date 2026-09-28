@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pennypal/core/constants/app_categories.dart';
 import 'package:pennypal/features/budgets/domain/budget.dart';
 import 'package:pennypal/features/dashboard/domain/financial_health_calculator.dart';
-import 'package:pennypal/features/transactions/domain/finance_transaction.dart';
 
 import 'finance_test_helpers.dart';
 

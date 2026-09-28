@@ -37,6 +37,7 @@ import '../../savings/data/savings_repository.dart';
 import '../../transactions/data/transaction_repository.dart';
 import '../../transactions/domain/finance_transaction.dart';
 import '../domain/report_calculator.dart';
+import 'export_options_sheet.dart';
 import 'statement_preview_sheet.dart';
 
 class ReportsScreen extends ConsumerStatefulWidget {
@@ -61,7 +62,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
           IconButton(
             icon: const Icon(Icons.file_download_outlined),
             tooltip: 'Export Statement',
-            onPressed: () => StatementPreviewSheet.show(
+            onPressed: () => ExportOptionsSheet.show(
               context,
               allTransactions: all,
               period: _period,
@@ -196,7 +197,7 @@ class _ReportsBody extends StatelessWidget {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'Export CSV & archive report for ${period.label}',
+                          'Export PDF, CSV & official statement for ${period.label}',
                           style: context.text.bodySmall,
                         ),
                       ],
@@ -205,9 +206,9 @@ class _ReportsBody extends StatelessWidget {
                   AppSpacing.hSm,
                   AppButton(
                     label: 'Export',
-                    variant: AppButtonVariant.tonal,
+                    variant: AppButtonVariant.primary,
                     expand: false,
-                    onPressed: () => StatementPreviewSheet.show(
+                    onPressed: () => ExportOptionsSheet.show(
                       context,
                       allTransactions: all,
                       period: period,

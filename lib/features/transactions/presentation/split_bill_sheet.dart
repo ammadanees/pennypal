@@ -12,6 +12,8 @@ import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../domain/finance_transaction.dart';
 
+enum _TipMode { percent, amount }
+
 class SplitBillSheet extends StatefulWidget {
   const SplitBillSheet({super.key});
 
@@ -32,21 +34,32 @@ class SplitBillSheet extends StatefulWidget {
 
 class _SplitBillSheetState extends State<SplitBillSheet> {
   final _amountCtrl = TextEditingController();
+  final _tipAmountCtrl = TextEditingController();
   final _titleCtrl =
       TextEditingController(text: 'Group dinner / shared expense');
   int _peopleCount = 3;
+  _TipMode _tipMode = _TipMode.percent;
   double _tipPercent = 0.0;
 
   @override
   void dispose() {
     _amountCtrl.dispose();
+    _tipAmountCtrl.dispose();
     _titleCtrl.dispose();
     super.dispose();
   }
 
   double get _totalBill => double.tryParse(_amountCtrl.text.trim()) ?? 0.0;
 
-  double get _totalWithTip => _totalBill * (1 + (_tipPercent / 100));
+  double get _tipAmount {
+    if (_tipMode == _TipMode.percent) {
+      return _totalBill * (_tipPercent / 100);
+    } else {
+      return double.tryParse(_tipAmountCtrl.text.trim()) ?? 0.0;
+    }
+  }
+
+  double get _totalWithTip => _totalBill + _tipAmount;
 
   double get _perPersonShare =>
       _peopleCount > 0 ? (_totalWithTip / _peopleCount) : 0.0;
@@ -60,8 +73,11 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
     }
 
     final shareAmount = _perPersonShare;
+    final tipNote = _tipAmount > 0
+        ? ' (incl. ${Formatters.money(_tipAmount)} tip/extra)'
+        : '';
     final note =
-        '${_titleCtrl.text.trim()} (My share of ${Formatters.money(_totalWithTip)} split among $_peopleCount)';
+        '${_titleCtrl.text.trim()} (My share of ${Formatters.money(_totalWithTip)}$tipNote split among $_peopleCount)';
 
     Navigator.of(context).pop();
     context.push(
@@ -172,27 +188,138 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
               ],
             ),
             AppSpacing.vMd,
-            Text('Add Tip / Extra (Optional)', style: t.labelMedium),
-            AppSpacing.vXs,
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                for (final tip in [0, 5, 10, 15]) ...[
-                  if (tip > 0) AppSpacing.hSm,
-                  Expanded(
-                    child: FilterChip(
-                      label: Text('$tip%'),
-                      selected: _tipPercent == tip.toDouble(),
-                      onSelected: (_) =>
-                          setState(() => _tipPercent = tip.toDouble()),
-                    ),
+                Text('Add Tip / Extra (Optional)', style: t.labelLarge),
+                Container(
+                  decoration: BoxDecoration(
+                    color: c.surfaceElevated,
+                    borderRadius: AppRadius.pillAll,
+                    border: Border.all(color: c.border),
                   ),
-                ],
+                  padding: const EdgeInsets.all(3),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _TipModeButton(
+                        label: '% Percent',
+                        selected: _tipMode == _TipMode.percent,
+                        onTap: () =>
+                            setState(() => _tipMode = _TipMode.percent),
+                      ),
+                      _TipModeButton(
+                        label: 'Amount (${Formatters.currentCurrency})',
+                        selected: _tipMode == _TipMode.amount,
+                        onTap: () =>
+                            setState(() => _tipMode = _TipMode.amount),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
+            AppSpacing.vSm,
+            if (_tipMode == _TipMode.percent) ...[
+              Row(
+                children: [
+                  for (final tip in [0, 5, 10, 15, 20]) ...[
+                    if (tip > 0) AppSpacing.hSm,
+                    Expanded(
+                      child: FilterChip(
+                        label: Text('$tip%'),
+                        selected: _tipPercent == tip.toDouble(),
+                        onSelected: (_) =>
+                            setState(() => _tipPercent = tip.toDouble()),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              if (_tipPercent > 0 && _totalBill > 0) ...[
+                AppSpacing.vXs,
+                Text(
+                  '${_tipPercent.toInt()}% tip = ${Formatters.money(_tipAmount)}',
+                  style: t.bodySmall?.copyWith(
+                    color: c.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ] else ...[
+              AppTextField(
+                label: 'Tip / Extra Amount',
+                controller: _tipAmountCtrl,
+                prefixText: '${Formatters.currentCurrency} ',
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                onChanged: (_) => setState(() {}),
+              ),
+              AppSpacing.vXs,
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (final preset in [50, 100, 200, 500]) ...[
+                      ActionChip(
+                        label: Text('+${Formatters.currentCurrency} $preset'),
+                        onPressed: () {
+                          _tipAmountCtrl.text = preset.toString();
+                          setState(() {});
+                        },
+                      ),
+                      AppSpacing.hXs,
+                    ],
+                    if (_tipAmountCtrl.text.isNotEmpty)
+                      ActionChip(
+                        avatar: const Icon(Icons.close, size: 14),
+                        label: const Text('Clear'),
+                        onPressed: () {
+                          _tipAmountCtrl.clear();
+                          setState(() {});
+                        },
+                      ),
+                  ],
+                ),
+              ),
+            ],
             AppSpacing.vLg,
             AppCard(
               child: Column(
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Bill Amount', style: t.bodySmall),
+                      Text(
+                        Formatters.money(_totalBill),
+                        style:
+                            t.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  if (_tipAmount > 0) ...[
+                    AppSpacing.vXs,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _tipMode == _TipMode.percent
+                              ? 'Tip (${_tipPercent.toInt()}%)'
+                              : 'Tip / Extra Added',
+                          style: t.bodySmall,
+                        ),
+                        Text(
+                          '+${Formatters.money(_tipAmount)}',
+                          style: t.bodyMedium?.copyWith(
+                            color: c.income,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  const Divider(height: AppSpacing.md),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -204,7 +331,7 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
                       ),
                     ],
                   ),
-                  const Divider(height: AppSpacing.lg),
+                  const Divider(height: AppSpacing.md),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -216,7 +343,7 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
                             style: t.titleMedium?.copyWith(color: c.primary),
                           ),
                           Text(
-                            'Exact share to record',
+                            '1 of $_peopleCount people',
                             style: t.bodySmall?.copyWith(fontSize: 11),
                           ),
                         ],
@@ -246,3 +373,42 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
     );
   }
 }
+
+class _TipModeButton extends StatelessWidget {
+  const _TipModeButton({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final t = context.text;
+    return InkWell(
+      borderRadius: AppRadius.pillAll,
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: selected ? c.primary : Colors.transparent,
+          borderRadius: AppRadius.pillAll,
+        ),
+        child: Text(
+          label,
+          style: t.bodySmall?.copyWith(
+            fontWeight: selected ? FontWeight.bold : FontWeight.w500,
+            color: selected ? c.onPrimary : c.textSecondary,
+            fontSize: 11,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
