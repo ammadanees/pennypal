@@ -33,26 +33,66 @@ class CardSelectorView extends ConsumerWidget {
       ),
       error: (_, __) => const SizedBox.shrink(),
       data: (cards) {
+        final canAddMore = cards.length < CardRepository.maxCardsPerUser;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Select Card', style: t.labelLarge),
-                TextButton.icon(
-                  onPressed: () async {
-                    final created = await showAddCardSheet(context);
-                    if (created != null) {
-                      onCardSelected(created);
-                    }
-                  },
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Add Card'),
-                  style: TextButton.styleFrom(
-                    visualDensity: VisualDensity.compact,
-                  ),
+                Row(
+                  children: [
+                    Text('Select Card', style: t.labelLarge),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: cards.length >= CardRepository.maxCardsPerUser
+                            ? c.surfaceElevated
+                            : c.primary.withOpacity(0.1),
+                        borderRadius: AppRadius.pillAll,
+                        border: Border.all(
+                          color: cards.length >= CardRepository.maxCardsPerUser
+                              ? c.border
+                              : c.primary.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Text(
+                        '${cards.length}/${CardRepository.maxCardsPerUser}',
+                        style: t.bodySmall?.copyWith(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: cards.length >= CardRepository.maxCardsPerUser
+                              ? c.textMuted
+                              : c.primary,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                if (canAddMore)
+                  TextButton.icon(
+                    onPressed: () async {
+                      final created = await showAddCardSheet(context);
+                      if (created != null) {
+                        onCardSelected(created);
+                      }
+                    },
+                    icon: const Icon(Icons.add, size: 18),
+                    label: const Text('Add Card'),
+                    style: TextButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  )
+                else
+                  Text(
+                    'Limit reached (2 max)',
+                    style: t.bodySmall?.copyWith(
+                      color: c.textMuted,
+                      fontSize: 11,
+                    ),
+                  ),
               ],
             ),
             AppSpacing.vXs,
@@ -71,7 +111,7 @@ class CardSelectorView extends ConsumerWidget {
                     AppSpacing.hMd,
                     Expanded(
                       child: Text(
-                        'No cards added yet. Add your card to track card payments.',
+                        'No cards added yet. You can attach up to 2 cards to track card payments.',
                         style: t.bodySmall,
                       ),
                     ),
@@ -121,22 +161,23 @@ class CardSelectorView extends ConsumerWidget {
                       ),
                       AppSpacing.hSm,
                     ],
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        final created = await showAddCardSheet(context);
-                        if (created != null) {
-                          onCardSelected(created);
-                        }
-                      },
-                      icon: const Icon(Icons.add, size: 16),
-                      label: const Text('New Card'),
-                      style: OutlinedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: AppRadius.pillAll,
+                    if (canAddMore)
+                      OutlinedButton.icon(
+                        onPressed: () async {
+                          final created = await showAddCardSheet(context);
+                          if (created != null) {
+                            onCardSelected(created);
+                          }
+                        },
+                        icon: const Icon(Icons.add, size: 16),
+                        label: const Text('New Card'),
+                        style: OutlinedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.pillAll,
+                          ),
+                          visualDensity: VisualDensity.compact,
                         ),
-                        visualDensity: VisualDensity.compact,
                       ),
-                    ),
                   ],
                 ),
               ),

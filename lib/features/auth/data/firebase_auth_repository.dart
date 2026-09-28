@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/errors/app_failure.dart';
@@ -16,19 +17,51 @@ import 'auth_error_mapper.dart';
 /// and role. The role is read-only from the app: security rules stop a
 /// student from changing it, and admin accounts are set up by hand.
 class FirebaseAuthRepository implements AuthRepository {
-  FirebaseAuthRepository({FirebaseAuth? auth, FirebaseFirestore? firestore})
-      : _auth = auth ?? FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance;
+  FirebaseAuthRepository({
+    FirebaseAuth? auth,
+    FirebaseFirestore? firestore,
+    SharedPreferences? prefs,
+  })  : _auth = auth ?? FirebaseAuth.instance,
+        _firestore = firestore ?? FirebaseFirestore.instance,
+        _prefs = prefs {
+    _initLocalVerified();
+  }
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
+  final SharedPreferences? _prefs;
 
   CollectionReference<Map<String, dynamic>> get _users =>
       _firestore.collection('users');
 
+  static const String _verifiedUidsKey = 'verified_uids';
   static final Set<String> _locallyVerifiedUids = <String>{};
   static final Map<String, Map<String, dynamic>> _pendingProfiles = {};
   static final Map<String, ({String code, DateTime expiresAt})> _pendingOtps = {};
+
+  static void loadPersistedVerifiedUids(SharedPreferences prefs) {
+    final list = prefs.getStringList(_verifiedUidsKey);
+    if (list != null) {
+      _locallyVerifiedUids.addAll(list);
+    }
+  }
+
+  void _initLocalVerified() {
+    final list = _prefs?.getStringList(_verifiedUidsKey);
+    if (list != null) {
+      _locallyVerifiedUids.addAll(list);
+    }
+  }
+
+  Future<void> _markUidLocallyVerified(String uid) async {
+    _locallyVerifiedUids.add(uid);
+    try {
+      final prefs = _prefs ?? await SharedPreferences.getInstance();
+      await prefs.setStringList(_verifiedUidsKey, _locallyVerifiedUids.toList());
+    } catch (e) {
+      debugPrint('Could not persist verified UID: $e');
+    }
+  }
 
   @override
   bool get isDemo => false;
@@ -38,24 +71,57 @@ class FirebaseAuthRepository implements AuthRepository {
     late final StreamController<AppUser?> controller;
     StreamSubscription<User?>? authSub;
     StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? docSub;
+    Timer? fallbackTimer;
 
     controller = StreamController<AppUser?>(
       onListen: () {
         authSub = _auth.authStateChanges().listen((user) {
           docSub?.cancel();
+          fallbackTimer?.cancel();
           if (user == null) {
             controller.add(null);
             return;
           }
+
+          var hasEmitted = false;
+          // If the profile document doesn't arrive within 2 seconds (e.g. offline with empty cache),
+          // emit fallback so the app does not hang.
+          fallbackTimer = Timer(const Duration(seconds: 2), () {
+            if (!hasEmitted && !controller.isClosed) {
+              controller.add(_fallback(user));
+              hasEmitted = true;
+            }
+          });
+
           // Follow the profile document so a fresh registration picks up
           // the name and mobile as soon as they are saved.
           docSub = _users.doc(user.uid).snapshots().listen(
-                (snap) => controller.add(_fromSnapshot(user, snap)),
-                onError: (Object _) => controller.add(_fallback(user)),
-              );
+            (snap) {
+              // If the document is not in local cache yet and Firestore is still
+              // fetching from the server, don't emit a premature unverified fallback
+              // unless we already know the user is verified locally.
+              if (!snap.exists &&
+                  snap.metadata.isFromCache &&
+                  !_locallyVerifiedUids.contains(user.uid)) {
+                return;
+              }
+              fallbackTimer?.cancel();
+              hasEmitted = true;
+              if (snap.data()?['isEmailVerified'] == true) {
+                unawaited(_markUidLocallyVerified(user.uid));
+              }
+              controller.add(_fromSnapshot(user, snap));
+            },
+            onError: (Object _) {
+              fallbackTimer?.cancel();
+              hasEmitted = true;
+              controller.add(_fallback(user));
+            },
+          );
         }, onError: controller.addError);
       },
       onCancel: () async {
+        fallbackTimer?.cancel();
         await docSub?.cancel();
         await authSub?.cancel();
       },
@@ -66,8 +132,13 @@ class FirebaseAuthRepository implements AuthRepository {
   AppUser _fromSnapshot(User user, DocumentSnapshot<Map<String, dynamic>> snap) {
     final data = snap.data();
     if (data == null) return _fallback(user);
+    final isVerifiedInDoc = (data['isEmailVerified'] as bool?) ?? false;
+    if (isVerifiedInDoc && !_locallyVerifiedUids.contains(user.uid)) {
+      unawaited(_markUidLocallyVerified(user.uid));
+    }
     final isVerified = _locallyVerifiedUids.contains(user.uid) ||
-        ((data['isEmailVerified'] as bool?) ?? user.emailVerified);
+        isVerifiedInDoc ||
+        user.emailVerified;
     final rawPhoto = data['photoUrl'] as String?;
     final photo = rawPhoto != null && rawPhoto.trim().isNotEmpty
         ? rawPhoto.trim()
@@ -110,7 +181,17 @@ class FirebaseAuthRepository implements AuthRepository {
         password: password,
       );
       final uid = cred.user?.uid;
-      if (uid != null) unawaited(_touchLastLogin(uid));
+      if (uid != null) {
+        try {
+          final snap = await _users.doc(uid).get();
+          if (snap.exists && (snap.data()?['isEmailVerified'] == true)) {
+            await _markUidLocallyVerified(uid);
+          }
+        } catch (e) {
+          debugPrint('Could not pre-fetch profile on sign-in: $e');
+        }
+        unawaited(_touchLastLogin(uid));
+      }
     } on FirebaseAuthException catch (e) {
       throw mapAuthError(e);
     }
@@ -256,7 +337,7 @@ class FirebaseAuthRepository implements AuthRepository {
       throw const AppFailure('Invalid verification code. Please check and try again.');
     }
 
-    _locallyVerifiedUids.add(user.uid);
+    await _markUidLocallyVerified(user.uid);
     _pendingOtps.remove(user.uid);
 
     // Save complete user document to Firestore upon OTP verification

@@ -21,6 +21,8 @@ import '../../../shared/widgets/app_empty_state.dart';
 import '../../../shared/widgets/app_scaffold.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/async_value_view.dart';
+import '../../cards/data/card_repository.dart';
+import '../../cards/domain/payment_card.dart';
 import '../data/transaction_repository.dart';
 import '../domain/finance_transaction.dart';
 import '../domain/transaction_filter.dart';
@@ -116,6 +118,9 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
     final filter = ref.watch(transactionFilterProvider);
     final notifier = ref.read(transactionFilterProvider.notifier);
     final results = ref.watch(filteredTransactionsProvider);
+    final cards = ref.watch(cardsProvider).valueOrNull ?? const <PaymentCard>[];
+    final activeCard =
+        cards.where((c) => c.id == filter.cardId).firstOrNull;
 
     final rangeLabel = filter.range == null
         ? FinanceStrings.filterAnyDate
@@ -155,7 +160,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                   label: FinanceStrings.filterAll,
                   selected: filter.type == null &&
                       filter.category == null &&
-                      filter.paymentMode == null,
+                      filter.paymentMode == null &&
+                      filter.cardId == null,
                   onSelected: () {
                     notifier.setType(null);
                     notifier.setCategory(null);
@@ -184,15 +190,37 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                   onSelected: _pickRange,
                 ),
                 for (final mode in PaymentMode.values) ...[
-                  AppSpacing.hSm,
-                  AppChip(
-                    label: mode.label,
-                    icon: mode.icon,
-                    selected: filter.paymentMode == mode,
-                    onSelected: () => notifier.setPaymentMode(
-                      filter.paymentMode == mode ? null : mode,
+                  if (mode == PaymentMode.card && cards.length > 1) ...[
+                    for (final card in cards) ...[
+                      AppSpacing.hSm,
+                      AppChip(
+                        label: card.name,
+                        icon: Icons.credit_card,
+                        selected: filter.paymentMode == PaymentMode.card &&
+                            filter.cardId == card.id,
+                        onSelected: () {
+                          if (filter.paymentMode == PaymentMode.card &&
+                              filter.cardId == card.id) {
+                            notifier.setPaymentMode(null);
+                          } else {
+                            notifier.setPaymentMode(PaymentMode.card,
+                                cardId: card.id);
+                          }
+                        },
+                      ),
+                    ],
+                  ] else ...[
+                    AppSpacing.hSm,
+                    AppChip(
+                      label: mode.label,
+                      icon: mode.icon,
+                      selected: filter.paymentMode == mode &&
+                          filter.cardId == null,
+                      onSelected: () => notifier.setPaymentMode(
+                        filter.paymentMode == mode ? null : mode,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
                 for (final category in ExpenseCategory.values) ...[
                   AppSpacing.hSm,
@@ -248,6 +276,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                     _AccountSummaryCard(
                       transactions: list,
                       activeMode: filter.paymentMode,
+                      activeCardName: activeCard?.name,
                     ),
                     Expanded(
                       child: _TransactionList(transactions: list),
@@ -267,10 +296,12 @@ class _AccountSummaryCard extends StatelessWidget {
   const _AccountSummaryCard({
     required this.transactions,
     required this.activeMode,
+    this.activeCardName,
   });
 
   final List<FinanceTransaction> transactions;
   final PaymentMode? activeMode;
+  final String? activeCardName;
 
   @override
   Widget build(BuildContext context) {
@@ -285,10 +316,14 @@ class _AccountSummaryCard extends StatelessWidget {
         .fold<double>(0, (sum, e) => sum + e.amount);
     final netSum = inTotal - exTotal;
 
-    final title = activeMode != null
-        ? '${activeMode!.label} Overview'
-        : 'Filtered Summary';
-    final icon = activeMode?.icon ?? Icons.account_balance_wallet_outlined;
+    final title = activeCardName != null
+        ? '$activeCardName Overview'
+        : activeMode != null
+            ? '${activeMode!.label} Overview'
+            : 'Filtered Summary';
+    final icon = activeCardName != null
+        ? Icons.credit_card
+        : (activeMode?.icon ?? Icons.account_balance_wallet_outlined);
 
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.xs, bottom: AppSpacing.sm),

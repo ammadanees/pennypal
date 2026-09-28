@@ -23,6 +23,7 @@ class TransactionFilter {
     this.type,
     this.category,
     this.paymentMode,
+    this.cardId,
     this.range,
   });
 
@@ -30,6 +31,7 @@ class TransactionFilter {
   final TransactionType? type;
   final ExpenseCategory? category;
   final PaymentMode? paymentMode;
+  final String? cardId;
   final DateRange? range;
 
   bool get isActive =>
@@ -37,6 +39,7 @@ class TransactionFilter {
       type != null ||
       category != null ||
       paymentMode != null ||
+      cardId != null ||
       range != null;
 
   TransactionFilter withQuery(String value) => TransactionFilter(
@@ -44,6 +47,7 @@ class TransactionFilter {
         type: type,
         category: category,
         paymentMode: paymentMode,
+        cardId: cardId,
         range: range,
       );
 
@@ -52,6 +56,7 @@ class TransactionFilter {
         type: value,
         category: category,
         paymentMode: paymentMode,
+        cardId: cardId,
         range: range,
       );
 
@@ -60,14 +65,26 @@ class TransactionFilter {
         type: type,
         category: value,
         paymentMode: paymentMode,
+        cardId: cardId,
         range: range,
       );
 
-  TransactionFilter withPaymentMode(PaymentMode? value) => TransactionFilter(
+  TransactionFilter withPaymentMode(PaymentMode? value, {String? cardId}) =>
+      TransactionFilter(
         query: query,
         type: type,
         category: category,
         paymentMode: value,
+        cardId: cardId,
+        range: range,
+      );
+
+  TransactionFilter withCardId(String? value) => TransactionFilter(
+        query: query,
+        type: type,
+        category: category,
+        paymentMode: paymentMode,
+        cardId: value,
         range: range,
       );
 
@@ -76,6 +93,7 @@ class TransactionFilter {
         type: type,
         category: category,
         paymentMode: paymentMode,
+        cardId: cardId,
         range: value,
       );
 
@@ -87,10 +105,13 @@ class TransactionFilter {
       if (paymentMode != null && (t.paymentMode ?? PaymentMode.cash) != paymentMode) {
         return false;
       }
+      if (cardId != null && t.cardId != cardId) {
+        return false;
+      }
       if (range != null && !range!.contains(t.date)) return false;
       if (q.isNotEmpty) {
         final haystack = '${t.title} ${t.description} ${t.source ?? ''} '
-                '${t.category?.label ?? ''} ${t.paymentMode?.label ?? ''} ${t.amount}'
+                '${t.category?.label ?? ''} ${t.paymentMode?.label ?? ''} ${t.cardName ?? ''} ${t.amount}'
             .toLowerCase();
         if (!haystack.contains(q)) return false;
       }

@@ -60,12 +60,22 @@ class _AddCardSheetState extends ConsumerState<AddCardSheet> {
       createdAt: DateTime.now(),
     );
 
-    await ref.read(cardRepositoryProvider).save(card);
-    if (!mounted) return;
-    Navigator.of(context).pop(card);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Card "${card.name}" added successfully.')),
-    );
+    try {
+      await ref.read(cardRepositoryProvider).save(card);
+      if (!mounted) return;
+      Navigator.of(context).pop(card);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Card "${card.name}" added successfully.')),
+      );
+    } on CardLimitExceededException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
   }
 
   @override
@@ -97,7 +107,7 @@ class _AddCardSheetState extends ConsumerState<AddCardSheet> {
             ),
             AppSpacing.vSm,
             Text(
-              'Save your card once to use it when recording income or expenses.',
+              'Attach up to 2 cards to use when recording income or expenses.',
               style: t.bodySmall,
             ),
             AppSpacing.vMd,

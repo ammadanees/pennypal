@@ -27,7 +27,10 @@ class TransactionFilterNotifier extends Notifier<TransactionFilter> {
 
   void setRange(DateRange? range) => state = state.withRange(range);
 
-  void setPaymentMode(PaymentMode? mode) => state = state.withPaymentMode(mode);
+  void setPaymentMode(PaymentMode? mode, {String? cardId}) =>
+      state = state.withPaymentMode(mode, cardId: cardId);
+
+  void setCardId(String? cardId) => state = state.withCardId(cardId);
 
   void clear() => state = const TransactionFilter();
 }

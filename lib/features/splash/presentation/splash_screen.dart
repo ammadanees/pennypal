@@ -194,7 +194,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               progress: _outline.transform(v),
               dots: _dots.transform(v).clamp(0.0, 1.4),
               stroke: brand.onPrimary,
-              dotColor: brand.secondary,
+              dotColor: const Color(0xFFFFD166),
               radius: _hexRadius,
             ),
           ),
@@ -229,10 +229,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 offset: Offset(0, (1 - t) * 18),
                 child: Text(
                   word[i],
-                  // "Penny" in white, "Pal" in honey.
+                  // "Penny" in white, "Pal" in vibrant honey gold so the entire PennyPal wordmark is fully visible.
                   style: AppTextStyles.brand(
                     _wordSize,
-                    i >= 5 ? brand.secondary : brand.onPrimary,
+                    i >= 5 ? const Color(0xFFFFD166) : brand.onPrimary,
                   ),
                 ),
               ),

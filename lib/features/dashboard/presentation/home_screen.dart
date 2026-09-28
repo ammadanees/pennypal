@@ -37,6 +37,8 @@ import '../../budgets/data/budget_repository.dart';
 import '../../budgets/domain/budget_calculator.dart';
 import '../../insights/domain/insight_calculator.dart';
 import '../../../core/constants/app_categories.dart';
+import '../../cards/data/card_repository.dart';
+import '../../cards/domain/payment_card.dart';
 import '../../notifications/data/notification_repository.dart';
 import '../../savings/data/savings_repository.dart';
 import '../../transactions/data/transaction_repository.dart';
@@ -646,20 +648,23 @@ class _GoalSection extends ConsumerWidget {
   }
 }
 
-class _RecentSection extends StatelessWidget {
+class _RecentSection extends ConsumerWidget {
   const _RecentSection({required this.items});
 
   final List<FinanceTransaction> items;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
           title: FinanceStrings.sectionRecent,
           actionLabel: FinanceStrings.seeAll,
-          onAction: () => context.go(AppRoutes.activity),
+          onAction: () {
+            ref.read(transactionFilterProvider.notifier).clear();
+            context.go(AppRoutes.activity);
+          },
         ),
         AppCard(
           padding: const EdgeInsets.symmetric(
@@ -728,11 +733,11 @@ class _CtaCard extends StatelessWidget {
   }
 }
 
-class _QuickShortcutsSection extends StatelessWidget {
+class _QuickShortcutsSection extends ConsumerWidget {
   const _QuickShortcutsSection();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final t = context.text;
 
@@ -749,7 +754,10 @@ class _QuickShortcutsSection extends StatelessWidget {
         label: 'History',
         subtitle: 'All records',
         accent: AppAccents.blue,
-        onTap: () => context.go(AppRoutes.activity),
+        onTap: () {
+          ref.read(transactionFilterProvider.notifier).clear();
+          context.go(AppRoutes.activity);
+        },
       ),
       (
         icon: Icons.school_outlined,
@@ -855,6 +863,7 @@ class _AccountsBreakdownSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final summaries = FinanceCalculator.modeSummaries(all, month: now);
+    final cards = ref.watch(cardsProvider).valueOrNull ?? const <PaymentCard>[];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -862,7 +871,10 @@ class _AccountsBreakdownSection extends ConsumerWidget {
         SectionHeader(
           title: 'Accounts & Wallets',
           actionLabel: FinanceStrings.seeAll,
-          onAction: () => context.go(AppRoutes.activity),
+          onAction: () {
+            ref.read(transactionFilterProvider.notifier).clear();
+            context.go(AppRoutes.activity);
+          },
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -870,16 +882,64 @@ class _AccountsBreakdownSection extends ConsumerWidget {
           child: Row(
             children: [
               for (final s in summaries) ...[
-                _AccountCard(
-                  summary: s,
-                  onTap: () {
-                    ref
-                        .read(transactionFilterProvider.notifier)
-                        .setPaymentMode(s.mode);
-                    context.go(AppRoutes.activity);
-                  },
-                ),
-                AppSpacing.hSm,
+                if (s.mode == PaymentMode.card && cards.length > 1) ...[
+                  for (var i = 0; i < cards.length; i++) ...[
+                    () {
+                      final card = cards[i];
+                      var cardIncome = 0.0;
+                      var cardExpense = 0.0;
+                      var cardBalance = 0.0;
+                      for (final t in all) {
+                        if (t.paymentMode != PaymentMode.card) continue;
+                        final matches = (t.cardId != null && t.cardId == card.id) ||
+                            (t.cardName != null &&
+                                (t.cardName == card.name ||
+                                    t.cardName == card.displayName));
+                        if (!matches) continue;
+                        cardBalance += t.isIncome ? t.amount : -t.amount;
+                        if (t.date.year == now.year && t.date.month == now.month) {
+                          if (t.isIncome) {
+                            cardIncome += t.amount;
+                          } else {
+                            cardExpense += t.amount;
+                          }
+                        }
+                      }
+                      final cardAccent =
+                          i == 0 ? AppAccents.purple : AppAccents.coral;
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _IndividualCardAccountCard(
+                            card: card,
+                            income: cardIncome,
+                            expense: cardExpense,
+                            balance: cardBalance,
+                            accent: cardAccent,
+                            onTap: () {
+                              ref
+                                  .read(transactionFilterProvider.notifier)
+                                  .setPaymentMode(PaymentMode.card, cardId: card.id);
+                              context.go(AppRoutes.activity);
+                            },
+                          ),
+                          AppSpacing.hSm,
+                        ],
+                      );
+                    }(),
+                  ],
+                ] else ...[
+                  _AccountCard(
+                    summary: s,
+                    onTap: () {
+                      ref
+                          .read(transactionFilterProvider.notifier)
+                          .setPaymentMode(s.mode);
+                      context.go(AppRoutes.activity);
+                    },
+                  ),
+                  AppSpacing.hSm,
+                ],
               ],
             ],
           ),
@@ -992,6 +1052,135 @@ class _AccountCard extends StatelessWidget {
                       ),
                       Text(
                         '-${Formatters.money(summary.expense)}',
+                        style: t.labelSmall?.copyWith(
+                          color: AppAccents.coral.color,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _IndividualCardAccountCard extends StatelessWidget {
+  const _IndividualCardAccountCard({
+    required this.card,
+    required this.income,
+    required this.expense,
+    required this.balance,
+    required this.accent,
+    required this.onTap,
+  });
+
+  final PaymentCard card;
+  final double income;
+  final double expense;
+  final double balance;
+  final AppAccent accent;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final t = context.text;
+
+    return SizedBox(
+      width: 220,
+      child: AppCard(
+        onTap: onTap,
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                AccentIconBox(icon: Icons.credit_card_outlined, accent: accent, size: 38),
+                AppSpacing.hSm,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        card.name,
+                        style: t.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        card.last4 != null && card.last4!.isNotEmpty
+                            ? '•••• ${card.last4} (${card.cardType})'
+                            : card.cardType,
+                        style: t.bodySmall?.copyWith(fontSize: 10, color: c.textMuted),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        'Sum: ${Formatters.money(balance)}',
+                        style: t.bodySmall?.copyWith(
+                          color: balance >= 0
+                              ? c.textPrimary
+                              : AppAccents.coral.color,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            AppSpacing.vMd,
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
+              ),
+              decoration: BoxDecoration(
+                color: c.surfaceElevated,
+                borderRadius: AppRadius.smAll,
+                border: Border.all(color: c.border.withOpacity(0.6)),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.south_west, size: 12, color: AppAccents.green.color),
+                          const SizedBox(width: 4),
+                          Text('Income', style: t.bodySmall?.copyWith(fontSize: 11)),
+                        ],
+                      ),
+                      Text(
+                        '+${Formatters.money(income)}',
+                        style: t.labelSmall?.copyWith(
+                          color: AppAccents.green.color,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.north_east, size: 12, color: AppAccents.coral.color),
+                          const SizedBox(width: 4),
+                          Text('Expense', style: t.bodySmall?.copyWith(fontSize: 11)),
+                        ],
+                      ),
+                      Text(
+                        '-${Formatters.money(expense)}',
                         style: t.labelSmall?.copyWith(
                           color: AppAccents.coral.color,
                           fontWeight: FontWeight.w700,

@@ -23,7 +23,8 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  final backend = await _createBackend();
+  FirebaseAuthRepository.loadPersistedVerifiedUids(prefs);
+  final backend = await _createBackend(prefs);
 
   runApp(
     ProviderScope(
@@ -52,7 +53,7 @@ class _Backend {
 /// an in-memory demo (with sample data for the demo student) so the app can
 /// run before Firebase is set up. A release build with broken Firebase
 /// configuration fails loudly instead.
-Future<_Backend> _createBackend() async {
+Future<_Backend> _createBackend(SharedPreferences prefs) async {
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     // Keep an on-device copy so expenses can be entered offline. Changes are
@@ -61,7 +62,7 @@ Future<_Backend> _createBackend() async {
       persistenceEnabled: true,
       cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
     );
-    return _Backend(FirebaseAuthRepository(), FirestoreRecordStore());
+    return _Backend(FirebaseAuthRepository(prefs: prefs), FirestoreRecordStore());
   } catch (error) {
     if (kReleaseMode) rethrow;
     debugPrint('Firebase is not configured ($error). Running in demo mode.');

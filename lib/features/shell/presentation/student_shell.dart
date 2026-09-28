@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../notifications/data/notification_repository.dart';
+import '../../transactions/presentation/transaction_filter_controller.dart';
 
 import '../../../core/responsive/adaptive_scaffold.dart';
 
@@ -47,10 +48,16 @@ class StudentShell extends ConsumerWidget {
     return AdaptiveScaffold(
       destinations: _destinations,
       selectedIndex: navigationShell.currentIndex,
-      onDestinationSelected: (index) => navigationShell.goBranch(
-        index,
-        initialLocation: index == navigationShell.currentIndex,
-      ),
+      onDestinationSelected: (index) {
+        // If navigating to Activity (or leaving it), reset drill-down filters to default "All"
+        if (index == 1 || (navigationShell.currentIndex == 1 && index != 1)) {
+          ref.read(transactionFilterProvider.notifier).clear();
+        }
+        navigationShell.goBranch(
+          index,
+          initialLocation: index == navigationShell.currentIndex,
+        );
+      },
       body: navigationShell,
     );
   }
