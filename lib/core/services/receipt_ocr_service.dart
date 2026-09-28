@@ -109,9 +109,8 @@ If any field cannot be found, use null or empty string. Do not include markdown 
             }
 
             return ParsedReceipt(
-              merchantName: merchant?.trim().isNotEmpty == true
-                  ? merchant!.trim()
-                  : null,
+              merchantName:
+                  merchant?.trim().isNotEmpty == true ? merchant!.trim() : null,
               totalAmount: amount,
               date: date,
               category: category,
@@ -134,8 +133,6 @@ If any field cannot be found, use null or empty string. Do not include markdown 
       );
     }
 
-    // Smart fallback parser ensures receipt upload always auto-fills
-    // even when Gemini quota, network, or API key is unavailable.
     return _fallbackReceiptParser(fileName);
   }
 
@@ -170,41 +167,61 @@ If any field cannot be found, use null or empty string. Do not include markdown 
       merchant = 'Fast Food Restaurant';
       category = ExpenseCategory.food;
       amount = 890.0;
-    } else if (lower.contains('food') || lower.contains('lunch') || lower.contains('dinner')) {
+    } else if (lower.contains('food') ||
+        lower.contains('lunch') ||
+        lower.contains('dinner')) {
       merchant = 'Campus Dining';
       category = ExpenseCategory.food;
       amount = 380.0;
-    } else if (lower.contains('uber') || lower.contains('careem') || lower.contains('lyft') || lower.contains('taxi')) {
+    } else if (lower.contains('uber') ||
+        lower.contains('careem') ||
+        lower.contains('lyft') ||
+        lower.contains('taxi')) {
       merchant = 'Ride Sharing (Transit)';
       category = ExpenseCategory.transport;
       amount = 420.0;
-    } else if (lower.contains('fuel') || lower.contains('petrol') || lower.contains('gas') || lower.contains('shell')) {
+    } else if (lower.contains('fuel') ||
+        lower.contains('petrol') ||
+        lower.contains('gas') ||
+        lower.contains('shell')) {
       merchant = 'Shell Fuel Station';
       category = ExpenseCategory.transport;
       amount = 1500.0;
-    } else if (lower.contains('book') || lower.contains('stationery') || lower.contains('tuition') || lower.contains('course')) {
+    } else if (lower.contains('book') ||
+        lower.contains('stationery') ||
+        lower.contains('tuition') ||
+        lower.contains('course')) {
       merchant = 'University Bookstore';
       category = ExpenseCategory.education;
       amount = 950.0;
-    } else if (lower.contains('netflix') || lower.contains('spotify') || lower.contains('cinema') || lower.contains('movie')) {
+    } else if (lower.contains('netflix') ||
+        lower.contains('spotify') ||
+        lower.contains('cinema') ||
+        lower.contains('movie')) {
       merchant = 'Entertainment Subscription';
       category = ExpenseCategory.entertainment;
       amount = 1200.0;
-    } else if (lower.contains('bill') || lower.contains('wifi') || lower.contains('electric') || lower.contains('utility')) {
+    } else if (lower.contains('bill') ||
+        lower.contains('wifi') ||
+        lower.contains('electric') ||
+        lower.contains('utility')) {
       merchant = 'Utility Provider';
       category = ExpenseCategory.bills;
       amount = 2500.0;
-    } else if (lower.contains('mart') || lower.contains('grocery') || lower.contains('walmart')) {
+    } else if (lower.contains('mart') ||
+        lower.contains('grocery') ||
+        lower.contains('walmart')) {
       merchant = 'Grocery Mart';
       category = ExpenseCategory.food;
       amount = 1450.0;
-    } else if (lower.contains('store') || lower.contains('shopping') || lower.contains('amazon')) {
+    } else if (lower.contains('store') ||
+        lower.contains('shopping') ||
+        lower.contains('amazon')) {
       merchant = 'Retail Store';
       category = ExpenseCategory.shopping;
       amount = 1100.0;
     }
 
-    // Try extracting any explicit number from the filename (e.g. receipt_500.png)
     final numbers = RegExp(r'(\d+(?:\.\d{1,2})?)').allMatches(lower);
     for (final m in numbers) {
       final parsedNum = double.tryParse(m.group(1) ?? '');
@@ -223,4 +240,3 @@ If any field cannot be found, use null or empty string. Do not include markdown 
     );
   }
 }
-

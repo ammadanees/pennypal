@@ -13,8 +13,6 @@ import '../../core/services/cloudinary_service.dart';
 import 'app_button.dart';
 import 'app_inline_message.dart';
 
-/// Pick an image, upload it to Cloudinary, and hand back the hosted URL.
-/// Shows its own progress and error state so callers stay simple.
 class ImageUploadButton extends ConsumerStatefulWidget {
   const ImageUploadButton({
     super.key,
@@ -63,13 +61,15 @@ class _ImageUploadButtonState extends ConsumerState<ImageUploadButton> {
               ListTile(
                 leading: const Icon(Icons.camera_alt_outlined),
                 title: const Text('Take Photo (Camera)'),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
                 onTap: () => Navigator.of(ctx).pop(ImageSource.camera),
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library_outlined),
                 title: const Text('Choose from Gallery'),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
                 onTap: () => Navigator.of(ctx).pop(ImageSource.gallery),
               ),
               AppSpacing.vSm,
@@ -101,8 +101,6 @@ class _ImageUploadButtonState extends ConsumerState<ImageUploadButton> {
     try {
       final Uint8List bytes = await file.readAsBytes();
 
-      // 1. Run receipt parsing immediately on image bytes so fields auto-fill
-      // without waiting on external cloud image hosting.
       if (widget.onReceiptParsed != null) {
         try {
           final parsed = await ReceiptOcrService.parseReceiptImage(
@@ -117,16 +115,15 @@ class _ImageUploadButtonState extends ConsumerState<ImageUploadButton> {
         }
       }
 
-      // 2. Upload image to Cloudinary for persistence
       try {
         final url = await ref
             .read(cloudinaryServiceProvider)
             .uploadImage(bytes, fileName: file.name);
         if (mounted) widget.onUploaded(url);
       } catch (uploadError) {
-        debugPrint('[ImageUploadButton] Cloudinary upload notice: $uploadError');
-        // Even if Cloudinary image hosting is unreachable or fails,
-        // provide a local data URI so receipt image preview still displays
+        debugPrint(
+            '[ImageUploadButton] Cloudinary upload notice: $uploadError');
+
         final dataUri = 'data:image/jpeg;base64,${base64Encode(bytes)}';
         if (mounted) widget.onUploaded(dataUri);
       }

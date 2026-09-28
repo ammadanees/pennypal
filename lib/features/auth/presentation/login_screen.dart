@@ -43,7 +43,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         .read(authControllerProvider.notifier)
         .signIn(email: _email.text, password: _password.text);
     if (mounted && error != null) setState(() => _error = error);
-    // On success the router redirects to the right home by itself.
   }
 
   @override

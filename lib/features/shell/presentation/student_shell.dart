@@ -7,8 +7,6 @@ import '../../transactions/presentation/transaction_filter_controller.dart';
 
 import '../../../core/responsive/adaptive_scaffold.dart';
 
-/// Signed-in student navigation: bottom bar, rail or sidebar by screen size.
-/// Each tab keeps its own navigation state.
 class StudentShell extends ConsumerWidget {
   const StudentShell({super.key, required this.navigationShell});
 
@@ -49,7 +47,6 @@ class StudentShell extends ConsumerWidget {
       destinations: _destinations,
       selectedIndex: navigationShell.currentIndex,
       onDestinationSelected: (index) {
-        // If navigating to Activity (or leaving it), reset drill-down filters to default "All"
         if (index == 1 || (navigationShell.currentIndex == 1 && index != 1)) {
           ref.read(transactionFilterProvider.notifier).clear();
         }

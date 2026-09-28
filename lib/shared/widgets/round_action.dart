@@ -4,7 +4,6 @@ import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Circular icon button with a label, for use on dark hero cards.
 class RoundAction extends StatelessWidget {
   const RoundAction({
     super.key,

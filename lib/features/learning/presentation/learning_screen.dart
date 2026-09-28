@@ -32,13 +32,15 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final allLessons = ref.watch(allLessonsProvider).valueOrNull ?? bundledLessons;
+    final allLessons =
+        ref.watch(allLessonsProvider).valueOrNull ?? bundledLessons;
     final read = ref.watch(readLessonsProvider).valueOrNull ?? const <String>{};
     final visible = [
       for (final l in allLessons)
         if (_topic == null || l.topic == _topic) l,
     ];
-    final firstUnread = allLessons.where((l) => !read.contains(l.id)).firstOrNull;
+    final firstUnread =
+        allLessons.where((l) => !read.contains(l.id)).firstOrNull;
 
     return AppScaffold(
       title: LearningStrings.title,
@@ -53,7 +55,8 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                 total: allLessons.length,
                 onStart: firstUnread == null
                     ? null
-                    : () => context.push('${AppRoutes.lessonBase}/${firstUnread.id}'),
+                    : () => context
+                        .push('${AppRoutes.lessonBase}/${firstUnread.id}'),
               ),
               AppSpacing.vMd,
               SingleChildScrollView(
@@ -91,7 +94,8 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
                   columns: columns,
                   children: [
                     for (final lesson in visible)
-                      _LessonCard(lesson: lesson, isRead: read.contains(lesson.id)),
+                      _LessonCard(
+                          lesson: lesson, isRead: read.contains(lesson.id)),
                   ],
                 ),
               Text(LearningStrings.disclaimer, style: context.text.bodySmall),

@@ -74,8 +74,9 @@ class _AdminSupportScreenState extends ConsumerState<AdminSupportScreen> {
                 message: AdminStrings.noQueriesMessage,
               ),
               data: (list) {
-                final filtered =
-                    _filter == null ? list : list.where((q) => q.status == _filter).toList();
+                final filtered = _filter == null
+                    ? list
+                    : list.where((q) => q.status == _filter).toList();
                 if (filtered.isEmpty) {
                   return const AppEmptyState(
                     icon: Icons.support_agent_outlined,
@@ -84,7 +85,8 @@ class _AdminSupportScreenState extends ConsumerState<AdminSupportScreen> {
                   );
                 }
                 return ListView.separated(
-                  padding: const EdgeInsets.only(bottom: AppDimensions.bottomNavClearance),
+                  padding: const EdgeInsets.only(
+                      bottom: AppDimensions.bottomNavClearance),
                   itemCount: filtered.length,
                   separatorBuilder: (_, __) => AppSpacing.vSm,
                   itemBuilder: (context, i) => _QueryCard(query: filtered[i]),
@@ -108,7 +110,8 @@ class _QueryCard extends ConsumerStatefulWidget {
 }
 
 class _QueryCardState extends ConsumerState<_QueryCard> {
-  late final _reply = TextEditingController(text: widget.query.adminResponse ?? '');
+  late final _reply =
+      TextEditingController(text: widget.query.adminResponse ?? '');
   bool _sending = false;
 
   @override
@@ -121,10 +124,12 @@ class _QueryCardState extends ConsumerState<_QueryCard> {
     if (_reply.text.trim().isEmpty) return;
     setState(() => _sending = true);
     try {
-      await ref.read(adminRepositoryProvider).replyToQuery(widget.query.id, _reply.text);
+      await ref
+          .read(adminRepositoryProvider)
+          .replyToQuery(widget.query.id, _reply.text);
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text(AdminStrings.replySent)));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text(AdminStrings.replySent)));
       }
     } finally {
       if (mounted) setState(() => _sending = false);
@@ -132,12 +137,15 @@ class _QueryCardState extends ConsumerState<_QueryCard> {
   }
 
   Future<void> _toggleClosed() async {
-    final next =
-        widget.query.status == SupportStatus.closed ? SupportStatus.answered : SupportStatus.closed;
-    await ref.read(adminRepositoryProvider).setQueryStatus(widget.query.id, next);
+    final next = widget.query.status == SupportStatus.closed
+        ? SupportStatus.answered
+        : SupportStatus.closed;
+    await ref
+        .read(adminRepositoryProvider)
+        .setQueryStatus(widget.query.id, next);
     if (mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text(AdminStrings.statusUpdated)));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text(AdminStrings.statusUpdated)));
     }
   }
 
@@ -160,10 +168,13 @@ class _QueryCardState extends ConsumerState<_QueryCard> {
             children: [
               Expanded(child: Text(q.subject, style: t.titleMedium)),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm + 2, vertical: AppSpacing.xs),
-                decoration: BoxDecoration(color: accent.color, borderRadius: AppRadius.pillAll),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.sm + 2, vertical: AppSpacing.xs),
+                decoration: BoxDecoration(
+                    color: accent.color, borderRadius: AppRadius.pillAll),
                 child: Text(label,
-                    style: t.labelSmall?.copyWith(color: accent.onColor, fontWeight: FontWeight.w800)),
+                    style: t.labelSmall?.copyWith(
+                        color: accent.onColor, fontWeight: FontWeight.w800)),
               ),
             ],
           ),

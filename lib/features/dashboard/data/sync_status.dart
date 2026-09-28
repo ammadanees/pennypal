@@ -4,7 +4,6 @@ import '../../budgets/data/budget_repository.dart';
 import '../../savings/data/savings_repository.dart';
 import '../../transactions/data/transaction_repository.dart';
 
-/// How many saved changes are still waiting to reach the cloud.
 final pendingWriteCountProvider = Provider<int>((ref) {
   final transactions = ref.watch(transactionsProvider).valueOrNull ?? const [];
   final budgets = ref.watch(budgetsProvider).valueOrNull ?? const [];

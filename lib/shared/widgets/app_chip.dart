@@ -5,8 +5,6 @@ import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Selectable pill for filters and option pickers. Selected is solid brand
-/// colour so the active choice is obvious at a glance.
 class AppChip extends StatelessWidget {
   const AppChip({
     super.key,

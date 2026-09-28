@@ -12,7 +12,6 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../auth/domain/app_user.dart';
 import '../../auth/presentation/auth_controller.dart';
 
-/// Bottom sheet for changing name and mobile. Pops `true` when saved.
 class EditProfileSheet extends ConsumerStatefulWidget {
   const EditProfileSheet({super.key, required this.user});
 
@@ -42,9 +41,7 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _error = null);
-    final error = await ref
-        .read(authControllerProvider.notifier)
-        .updateProfile(
+    final error = await ref.read(authControllerProvider.notifier).updateProfile(
           fullName: _name.text,
           studentId: _studentId.text,
           mobile: _mobile.text,
@@ -117,9 +114,13 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
                 prefixIcon: Icon(Icons.school_outlined),
               ),
               items: const [
-                DropdownMenuItem(value: 'Full-time', child: Text('Full-time Student')),
-                DropdownMenuItem(value: 'Part-time', child: Text('Part-time Student')),
-                DropdownMenuItem(value: 'Exchange', child: Text('Exchange / Semester Abroad')),
+                DropdownMenuItem(
+                    value: 'Full-time', child: Text('Full-time Student')),
+                DropdownMenuItem(
+                    value: 'Part-time', child: Text('Part-time Student')),
+                DropdownMenuItem(
+                    value: 'Exchange',
+                    child: Text('Exchange / Semester Abroad')),
               ],
               onChanged: (val) {
                 if (val != null) setState(() => _status = val);
@@ -130,7 +131,8 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
               AppInlineMessage(message: _error!),
               AppSpacing.vMd,
             ],
-            AppButton(label: AppStrings.save, isLoading: busy, onPressed: _save),
+            AppButton(
+                label: AppStrings.save, isLoading: busy, onPressed: _save),
           ],
         ),
       ),

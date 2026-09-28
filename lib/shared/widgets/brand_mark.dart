@@ -7,7 +7,6 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Logo tile plus wordmark. Use [onPrimary] on brand-coloured backgrounds.
 class BrandMark extends StatelessWidget {
   const BrandMark({super.key, this.showName = true, this.onPrimary = false});
 
@@ -31,7 +30,8 @@ class BrandMark extends StatelessWidget {
             width: AppDimensions.brandTile,
             height: AppDimensions.brandTile,
             alignment: Alignment.center,
-            decoration: BoxDecoration(color: tile, borderRadius: AppRadius.smAll),
+            decoration:
+                BoxDecoration(color: tile, borderRadius: AppRadius.smAll),
             child: Text(
               AppStrings.appName.substring(0, 1),
               style: context.text.titleLarge?.copyWith(color: glyph),

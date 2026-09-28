@@ -33,12 +33,14 @@ class AdminDashboardScreen extends ConsumerWidget {
     final queries = ref.watch(adminSupportQueriesProvider);
     final feedback = ref.watch(adminFeedbackProvider);
 
-    final openCount =
-        queries.valueOrNull?.where((q) => q.status == SupportStatus.open).length;
+    final openCount = queries.valueOrNull
+        ?.where((q) => q.status == SupportStatus.open)
+        .length;
     final feedbackList = feedback.valueOrNull;
     final avgRating = (feedbackList == null || feedbackList.isEmpty)
         ? null
-        : feedbackList.fold<int>(0, (s, f) => s + f.rating) / feedbackList.length;
+        : feedbackList.fold<int>(0, (s, f) => s + f.rating) /
+            feedbackList.length;
 
     return AppScaffold(
       title: AdminStrings.portalTitle,
@@ -85,7 +87,8 @@ class AdminDashboardScreen extends ConsumerWidget {
                     icon: Icons.star_outline,
                     accent: AppAccents.amber,
                     label: AdminStrings.avgRating,
-                    value: avgRating == null ? null : avgRating.toStringAsFixed(1),
+                    value:
+                        avgRating == null ? null : avgRating.toStringAsFixed(1),
                     onTap: () => context.go(AppRoutes.adminFeedback),
                   ),
                   _StatCard(
@@ -182,9 +185,12 @@ class _StudentRow extends StatelessWidget {
             width: AppDimensions.leadingIcon,
             height: AppDimensions.leadingIcon,
             alignment: Alignment.center,
-            decoration: BoxDecoration(color: c.primarySoft, shape: BoxShape.circle),
+            decoration:
+                BoxDecoration(color: c.primarySoft, shape: BoxShape.circle),
             child: Text(
-              student.fullName.isEmpty ? '?' : student.fullName[0].toUpperCase(),
+              student.fullName.isEmpty
+                  ? '?'
+                  : student.fullName[0].toUpperCase(),
               style: t.titleMedium?.copyWith(color: c.primary),
             ),
           ),

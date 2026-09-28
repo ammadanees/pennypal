@@ -13,8 +13,6 @@ import '../../../shared/widgets/money_display.dart';
 import '../../../shared/widgets/progress_ring.dart';
 import '../../../shared/widgets/transaction_tile.dart';
 
-/// Illustrations are built from the app's own components so the welcome
-/// screens show what PennyPal really looks like. Amounts are sample data.
 class WelcomeIllustration extends StatelessWidget {
   const WelcomeIllustration({super.key, required this.page});
 
@@ -29,7 +27,8 @@ class WelcomeIllustration extends StatelessWidget {
       2 => const _SavingsIllustration(),
       _ => const _LearnIllustration(),
     };
-    final accent = AppAccents.welcomePalette[page % AppAccents.welcomePalette.length];
+    final accent =
+        AppAccents.welcomePalette[page % AppAccents.welcomePalette.length];
     return Container(
       height: AppDimensions.illustrationHeight,
       width: double.infinity,

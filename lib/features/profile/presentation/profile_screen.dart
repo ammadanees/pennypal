@@ -75,12 +75,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _changePhoto(AppUser user) async {
     final picker = ImagePicker();
-    final file = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80, maxWidth: 800, maxHeight: 800);
+    final file = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+        maxWidth: 800,
+        maxHeight: 800);
     if (file == null) return;
     setState(() => _uploadingPhoto = true);
     try {
       final bytes = await file.readAsBytes();
-      final url = await ref.read(cloudinaryServiceProvider).uploadImage(bytes, fileName: file.name);
+      final url = await ref
+          .read(cloudinaryServiceProvider)
+          .uploadImage(bytes, fileName: file.name);
       await ref.read(authControllerProvider.notifier).updateProfile(
             fullName: user.fullName,
             mobile: user.mobile,
@@ -101,7 +107,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(authStateProvider).valueOrNull;
     if (user == null) {
-      // Signing out: the router is already sending the student to sign in.
       return const Scaffold(body: AppLoading());
     }
     final c = context.colors;
@@ -154,7 +159,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 _InfoRow(
                   icon: Icons.badge_outlined,
                   label: AppStrings.labelStudentId,
-                  value: (user.studentId != null && user.studentId!.trim().isNotEmpty)
+                  value: (user.studentId != null &&
+                          user.studentId!.trim().isNotEmpty)
                       ? user.studentId!
                       : 'Not added',
                 ),
@@ -281,7 +287,8 @@ class _CurrencyPreferenceTile extends ConsumerWidget {
     );
   }
 
-  void _pickCurrency(BuildContext context, WidgetRef ref, String selectedSymbol) {
+  void _pickCurrency(
+      BuildContext context, WidgetRef ref, String selectedSymbol) {
     showModalBottomSheet<void>(
       context: context,
       useRootNavigator: true,

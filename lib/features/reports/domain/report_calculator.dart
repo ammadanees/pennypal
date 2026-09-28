@@ -34,7 +34,6 @@ enum ReportPeriod {
     }
   }
 
-  /// The equally long stretch just before this one (same day span).
   DateRange previousRange(DateTime now) {
     final r = range(now);
     final shift = switch (this) {
@@ -50,7 +49,6 @@ enum ReportPeriod {
     );
   }
 
-  /// The month whose budget the report shows.
   DateTime budgetMonth(DateTime now) => this == ReportPeriod.lastMonth
       ? AppDates.addMonths(AppDates.startOfMonth(now), -1)
       : AppDates.startOfMonth(now);
@@ -66,7 +64,6 @@ class CategoryShare {
   final ExpenseCategory category;
   final double amount;
 
-  /// 0.0 to 1.0 of total expenses in the period.
   final double share;
 }
 
@@ -97,14 +94,12 @@ class PeriodReport {
   final double income;
   final double expense;
 
-  /// Largest first. Only categories with spending.
   final List<CategoryShare> categories;
   final int transactionCount;
   final List<PaymentModeShare> paymentModes;
 
   double get net => income - expense;
 
-  /// Share of income not spent, or null when there was no income.
   double? get keptFromIncome => income <= 0 ? null : net / income;
 
   CategoryShare? get topCategory => categories.firstOrNull;
@@ -172,7 +167,6 @@ abstract final class ReportCalculator {
     );
   }
 
-  /// Totals for [months] months ending at [endMonth], oldest first.
   static List<MonthTotal> monthlyTotals(
     List<FinanceTransaction> all,
     DateTime endMonth, {
@@ -199,8 +193,6 @@ abstract final class ReportCalculator {
     return MonthTotal(month: month, income: income, expense: expense);
   }
 
-  /// Spending over time for a sparkline: one value per day, or per week
-  /// for long periods. Only days that have already happened.
   static List<double> spendingSeries(
     List<FinanceTransaction> all,
     DateRange range,
@@ -212,13 +204,13 @@ abstract final class ReportCalculator {
     final buckets = List<double>.filled((days / bucket).ceil(), 0);
     for (final t in all) {
       if (t.isIncome || !range.contains(t.date)) continue;
-      final index = AppDates.dateOnly(t.date).difference(start).inDays ~/ bucket;
+      final index =
+          AppDates.dateOnly(t.date).difference(start).inDays ~/ bucket;
       if (index >= 0 && index < buckets.length) buckets[index] += t.amount;
     }
     return buckets;
   }
 
-  /// Days of the range that have already happened (at least 1).
   static int daysCovered(DateRange range, DateTime now) {
     final start = AppDates.dateOnly(range.start);
     final today = AppDates.dateOnly(now);

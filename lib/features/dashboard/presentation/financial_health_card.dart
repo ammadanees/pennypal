@@ -10,7 +10,6 @@ import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../domain/financial_health_calculator.dart';
 
-/// State-of-the-art Financial Health Score & Predictive Burn Rate Card
 class FinancialHealthCard extends StatelessWidget {
   const FinancialHealthCard({
     super.key,
@@ -39,7 +38,6 @@ class FinancialHealthCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              // Score Radial Badge
               Container(
                 width: 52,
                 height: 52,
@@ -47,7 +45,8 @@ class FinancialHealthCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: tierColor.withOpacity(0.12),
-                  border: Border.all(color: tierColor.withOpacity(0.4), width: 2),
+                  border:
+                      Border.all(color: tierColor.withOpacity(0.4), width: 2),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -101,7 +100,6 @@ class FinancialHealthCard extends StatelessWidget {
             ],
           ),
           AppSpacing.vMd,
-          // Pillar mini progress indicators
           Row(
             children: [
               Expanded(
@@ -133,7 +131,6 @@ class FinancialHealthCard extends StatelessWidget {
             ],
           ),
           AppSpacing.vMd,
-          // Predictive Burn Rate & Cashflow Runway Pill
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.md,
@@ -253,7 +250,8 @@ class FinancialHealthCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.lightbulb_outline, size: 18, color: c.primary),
+                          Icon(Icons.lightbulb_outline,
+                              size: 18, color: c.primary),
                           AppSpacing.hSm,
                           Text(
                             'AI Smart Coach Tip',
@@ -303,8 +301,11 @@ class _PillarMetric extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label, style: t.bodySmall?.copyWith(fontSize: 10, color: c.textMuted)),
-            Text('$score/$max', style: t.bodySmall?.copyWith(fontSize: 10, fontWeight: FontWeight.w600)),
+            Text(label,
+                style: t.bodySmall?.copyWith(fontSize: 10, color: c.textMuted)),
+            Text('$score/$max',
+                style: t.bodySmall
+                    ?.copyWith(fontSize: 10, fontWeight: FontWeight.w600)),
           ],
         ),
         const SizedBox(height: 4),
@@ -352,22 +353,27 @@ class _ScoreDetailRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: t.labelMedium?.copyWith(fontWeight: FontWeight.w700)),
+                Text(title,
+                    style:
+                        t.labelMedium?.copyWith(fontWeight: FontWeight.w700)),
                 const SizedBox(height: 2),
-                Text(description, style: t.bodySmall?.copyWith(color: c.textSecondary)),
+                Text(description,
+                    style: t.bodySmall?.copyWith(color: c.textSecondary)),
               ],
             ),
           ),
           AppSpacing.hSm,
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm, vertical: 4),
             decoration: BoxDecoration(
               color: color.withOpacity(0.12),
               borderRadius: AppRadius.smAll,
             ),
             child: Text(
               points,
-              style: t.labelSmall?.copyWith(color: color, fontWeight: FontWeight.w800),
+              style: t.labelSmall
+                  ?.copyWith(color: color, fontWeight: FontWeight.w800),
             ),
           ),
         ],

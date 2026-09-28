@@ -12,7 +12,6 @@ class TransactionFilterNotifier extends Notifier<TransactionFilter> {
   void setQuery(String query) => state = state.withQuery(query);
 
   void setType(TransactionType? type) {
-    // A category only makes sense for expenses.
     state = state
         .withType(type)
         .withCategory(type == TransactionType.income ? null : state.category);

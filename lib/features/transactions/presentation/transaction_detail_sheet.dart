@@ -74,15 +74,16 @@ class TransactionDetailSheet extends ConsumerWidget {
     }
 
     final rows = <(String, String)>[
-      (FinanceStrings.labelDate, DateFormat('EEE, d MMM y, h:mm a').format(tx.date)),
+      (
+        FinanceStrings.labelDate,
+        DateFormat('EEE, d MMM y, h:mm a').format(tx.date)
+      ),
       if (tx.isIncome) ...[
         (FinanceStrings.labelSource, tx.source ?? ''),
-        if (paymentLabel != null)
-          ('Received via', paymentLabel),
+        if (paymentLabel != null) ('Received via', paymentLabel),
       ] else ...[
         (FinanceStrings.labelCategory, tx.category?.label ?? ''),
-        if (paymentLabel != null)
-          (FinanceStrings.labelPaidWith, paymentLabel),
+        if (paymentLabel != null) (FinanceStrings.labelPaidWith, paymentLabel),
       ],
       if (tx.description.isNotEmpty && tx.description != tx.title)
         (FinanceStrings.labelNote, tx.description),
@@ -124,7 +125,8 @@ class TransactionDetailSheet extends ConsumerWidget {
                     height: 140,
                     color: c.surfaceElevated,
                     alignment: Alignment.center,
-                    child: Icon(Icons.broken_image_outlined, color: c.textMuted),
+                    child:
+                        Icon(Icons.broken_image_outlined, color: c.textMuted),
                   ),
                 ),
               ),

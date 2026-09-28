@@ -1,11 +1,9 @@
-/// All user-facing copy lives here so wording stays consistent.
 abstract final class AppStrings {
   static const String appName = 'PennyPal';
   static const String tagline = 'Make Every Penny Count';
   static const String splashFootnote = 'Personal finance for students';
   static const String defaultCurrency = 'Rs.';
 
-  // Actions
   static const String tryAgain = 'Try again';
   static const String addExpense = 'Add expense';
   static const String createBudget = 'Create budget';
@@ -16,7 +14,6 @@ abstract final class AppStrings {
   static const String save = 'Save changes';
   static const String back = 'Back';
 
-  // Welcome (first launch only)
   static const String welcomeCreateAccount = 'Create account';
   static const String welcomeHaveAccount = 'I already have an account';
   static const List<String> welcomeTitles = [
@@ -36,7 +33,6 @@ abstract final class AppStrings {
         'here is educational, not financial advice.',
   ];
 
-  // Auth
   static const String loginTitle = 'Welcome back';
   static const String loginSubtitle = 'Sign in to pick up where you left off.';
   static const String registerTitle = 'Create your account';
@@ -76,14 +72,14 @@ abstract final class AppStrings {
     'Learn money habits that stick',
   ];
 
-  // Auth errors (never show raw exceptions)
   static const String authInvalidCredentials =
       'Email or password is incorrect.';
   static const String authEmailInUse =
       'An account with this email already exists. Try signing in instead.';
   static const String authWeakPassword =
       'Choose a stronger password with at least 8 characters.';
-  static const String authInvalidEmail = 'That email address doesn\'t look right.';
+  static const String authInvalidEmail =
+      'That email address doesn\'t look right.';
   static const String authUserDisabled =
       'This account has been disabled. Contact support for help.';
   static const String authTooManyRequests =
@@ -92,7 +88,6 @@ abstract final class AppStrings {
       'No connection. Check your internet and try again.';
   static const String authNoSession = 'Please sign in again to continue.';
 
-  // Profile
   static const String profileTitle = 'Profile';
   static const String editProfile = 'Edit profile';
   static const String appearance = 'Appearance';
@@ -102,7 +97,6 @@ abstract final class AppStrings {
       'Your data stays saved. Sign back in any time.';
   static const String profileSaved = 'Profile updated.';
 
-  // About
   static const String aboutTitle = 'About PennyPal';
   static const String aboutPurpose =
       'PennyPal helps students record spending, plan monthly budgets, '
@@ -115,7 +109,6 @@ abstract final class AppStrings {
   static const String comingSoonMessage =
       'This part of PennyPal is being built and will appear in an update.';
 
-  // Empty states
   static const String emptyTransactionsTitle = 'Your money story starts here.';
   static const String emptyTransactionsMessage =
       'Add your first expense or income and it will show up here.';
@@ -126,12 +119,10 @@ abstract final class AppStrings {
   static const String emptyGoalsMessage =
       'Saving for a laptop or a trip? Track it here.';
 
-  // Errors
   static const String errorGenericTitle = 'Something went wrong';
   static const String errorGenericMessage =
       'We could not load this right now. Check your connection and try again.';
 
-  // Budget status
   static const String budgetOnTrack = 'On track';
   static const String budgetNearing = 'Nearing your limit';
   static const String budgetOver = 'Over budget';

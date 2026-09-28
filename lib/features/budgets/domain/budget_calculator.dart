@@ -5,12 +5,12 @@ import 'budget.dart';
 enum BudgetLevel { onTrack, nearing, over }
 
 class CategoryUsage {
-  const CategoryUsage({required this.category, required this.spent, this.limit});
+  const CategoryUsage(
+      {required this.category, required this.spent, this.limit});
 
   final ExpenseCategory category;
   final double spent;
 
-  /// Null when the student set no limit for this category.
   final double? limit;
 
   double get ratio => (limit == null || limit! <= 0) ? 0 : spent / limit!;

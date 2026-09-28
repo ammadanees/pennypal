@@ -15,7 +15,6 @@ import '../../../shared/widgets/brand_mark.dart';
 import 'onboarding_controller.dart';
 import 'welcome_illustrations.dart';
 
-/// First-launch introduction. The router skips it once it has been seen.
 class WelcomeScreen extends ConsumerStatefulWidget {
   const WelcomeScreen({super.key});
 

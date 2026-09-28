@@ -6,9 +6,12 @@ import 'finance_calculator.dart';
 
 enum HealthTier {
   master('Financial Master', 'Outstanding budgeting & savings discipline'),
-  disciplined('Disciplined Saver', 'Healthy positive cashflow and habit tracking'),
-  building('Building Habits', 'Making steady progress, watch discretionary expenses'),
-  needsAttention('Needs Attention', 'Expenses are outpacing savings or budget limits');
+  disciplined(
+      'Disciplined Saver', 'Healthy positive cashflow and habit tracking'),
+  building('Building Habits',
+      'Making steady progress, watch discretionary expenses'),
+  needsAttention(
+      'Needs Attention', 'Expenses are outpacing savings or budget limits');
 
   const HealthTier(this.title, this.description);
   final String title;
@@ -28,20 +31,17 @@ class FinancialHealthScore {
     required this.recommendation,
   });
 
-  /// Composite health score 0 - 100
   final int score;
   final HealthTier tier;
 
-  /// Pillar sub-scores
-  final int budgetScore; // max 40
-  final int savingsScore; // max 30
-  final int consistencyScore; // max 30
+  final int budgetScore;
+  final int savingsScore;
+  final int consistencyScore;
 
-  /// Predictive cashflow runway analytics
-  final double burnRate; // Average daily spend this month
-  final double projectedSpend; // Projected total spend by end of month
-  final int runwayDays; // Days of balance remaining at current burn rate
-  final String recommendation; // Tailored advice to level up
+  final double burnRate;
+  final double projectedSpend;
+  final int runwayDays;
+  final String recommendation;
 }
 
 abstract final class FinancialHealthCalculator {
@@ -60,14 +60,12 @@ abstract final class FinancialHealthCalculator {
     final monthExpense = summary.expense;
     final allTimeBalance = FinanceCalculator.balance(transactions);
 
-    // 1. Burn Rate & Cashflow Runway
     final burnRate = monthExpense > 0 ? (monthExpense / daysElapsed) : 0.0;
     final projectedSpend = monthExpense + (burnRate * daysRemaining);
     final runwayDays = burnRate > 0 && allTimeBalance > 0
         ? (allTimeBalance / burnRate).floor()
         : (allTimeBalance > 0 ? 999 : 0);
 
-    // 2. Budget Score (0 to 40)
     int budgetScore = 25;
     if (budget != null && budget.totalAmount > 0) {
       final paceRatio = daysElapsed / totalDaysInMonth;
@@ -76,8 +74,8 @@ abstract final class FinancialHealthCalculator {
       if (monthExpense <= expectedSpendToDate) {
         budgetScore = 40;
       } else if (monthExpense <= budget.totalAmount) {
-        final overPaceFraction =
-            (monthExpense - expectedSpendToDate) / (budget.totalAmount - expectedSpendToDate + 1);
+        final overPaceFraction = (monthExpense - expectedSpendToDate) /
+            (budget.totalAmount - expectedSpendToDate + 1);
         budgetScore = math.max(20, (40 - (overPaceFraction * 20)).round());
       } else {
         final overBudgetAmount = monthExpense - budget.totalAmount;
@@ -90,26 +88,28 @@ abstract final class FinancialHealthCalculator {
       } else if (monthIncome > 0 && monthExpense <= monthIncome) {
         budgetScore = 25;
       } else {
-        budgetScore = math.max(10, 20 - ((monthExpense / (monthIncome == 0 ? 1000 : monthIncome)) * 10).round());
+        budgetScore = math.max(
+            10,
+            20 -
+                ((monthExpense / (monthIncome == 0 ? 1000 : monthIncome)) * 10)
+                    .round());
       }
     }
 
-    // 3. Savings Score (0 to 30)
     int savingsScore = 15;
     if (monthIncome > 0) {
       final savingsRate = (monthIncome - monthExpense) / monthIncome;
       if (savingsRate >= 0.25) {
-        savingsScore = 30; // Saving 25%+ of income
+        savingsScore = 30;
       } else if (savingsRate > 0) {
         savingsScore = math.max(5, (savingsRate / 0.25 * 30).round());
       } else {
-        savingsScore = 0; // Deficit spending
+        savingsScore = 0;
       }
     } else {
       savingsScore = monthExpense == 0 ? 15 : 5;
     }
 
-    // 4. Habit Consistency Score (0 to 30)
     final distinctDays = transactions
         .where((t) => t.date.year == now.year && t.date.month == now.month)
         .map((t) => t.date.day)
@@ -120,7 +120,6 @@ abstract final class FinancialHealthCalculator {
     if (hasSavingsGoal) consistencyScore += 10;
     consistencyScore = consistencyScore.clamp(0, 30);
 
-    // Composite Score
     final compositeScore =
         (budgetScore + savingsScore + consistencyScore).clamp(0, 100);
 
@@ -131,9 +130,10 @@ abstract final class FinancialHealthCalculator {
       _ => HealthTier.needsAttention,
     };
 
-    // Tailored Recommendation
     String recommendation;
-    if (budget != null && budget.totalAmount > 0 && projectedSpend > budget.totalAmount) {
+    if (budget != null &&
+        budget.totalAmount > 0 &&
+        projectedSpend > budget.totalAmount) {
       final targetDaily = daysRemaining > 0
           ? math.max(0.0, (budget.totalAmount - monthExpense) / daysRemaining)
           : 0.0;

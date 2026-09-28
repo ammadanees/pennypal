@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-/// 4-pt spacing scale.
 abstract final class AppSpacing {
   static const double xs = 4;
   static const double sm = 8;
@@ -9,7 +8,6 @@ abstract final class AppSpacing {
   static const double xl = 32;
   static const double xxl = 48;
 
-  // Ready-made gaps so screens never write SizedBox(height: 13).
   static const SizedBox vXs = SizedBox(height: xs);
   static const SizedBox vSm = SizedBox(height: sm);
   static const SizedBox vMd = SizedBox(height: md);

@@ -6,7 +6,6 @@ import 'app_radius.dart';
 import 'app_spacing.dart';
 import 'app_text_styles.dart';
 
-/// Builds ThemeData from the tokens. Change a token, the whole app follows.
 abstract final class AppTheme {
   static ThemeData get light => _build(AppColors.light, Brightness.light);
   static ThemeData get dark => _build(AppColors.dark, Brightness.dark);
@@ -121,9 +120,8 @@ abstract final class AppTheme {
           side: WidgetStatePropertyAll(BorderSide(color: c.border)),
           textStyle: WidgetStatePropertyAll(textTheme.labelLarge),
           backgroundColor: WidgetStateProperty.resolveWith(
-            (states) => states.contains(WidgetState.selected)
-                ? c.primary
-                : c.surface,
+            (states) =>
+                states.contains(WidgetState.selected) ? c.primary : c.surface,
           ),
           foregroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.selected)

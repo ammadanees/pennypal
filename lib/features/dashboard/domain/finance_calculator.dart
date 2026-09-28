@@ -16,7 +16,6 @@ class MonthSummary {
 }
 
 abstract final class FinanceCalculator {
-  /// All-time income minus all-time expenses.
   static double balance(List<FinanceTransaction> all) {
     var total = 0.0;
     for (final t in all) {
@@ -42,11 +41,10 @@ abstract final class FinanceCalculator {
         byCategory[category] = (byCategory[category] ?? 0) + t.amount;
       }
     }
-    return MonthSummary(income: income, expense: expense, byCategory: byCategory);
+    return MonthSummary(
+        income: income, expense: expense, byCategory: byCategory);
   }
 
-  /// Calculates income, expense, and total balance per payment mode (Cash, Card, Bank, Wallet).
-  /// If [month] is provided, income & expense are scoped to that month, while [balance] remains all-time.
   static List<PaymentModeSummary> modeSummaries(
     List<FinanceTransaction> all, {
     DateTime? month,
@@ -100,10 +98,8 @@ class PaymentModeSummary {
   final double allTimeBalance;
   final int transactionCount;
 
-  /// Month or period net (Income minus Expense).
   double get periodNet => income - expense;
 
-  /// Whether this payment mode has any historical transactions or current activity.
   bool get hasActivity =>
       transactionCount > 0 || income > 0 || expense > 0 || allTimeBalance != 0;
 }

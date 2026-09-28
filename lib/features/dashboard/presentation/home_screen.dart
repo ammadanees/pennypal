@@ -85,8 +85,10 @@ class _HomeContent extends ConsumerWidget {
     final pending = ref.watch(pendingWriteCountProvider);
     final now = DateTime.now();
     final summary = FinanceCalculator.monthSummary(all, now);
-    final budget =
-        ref.watch(budgetsProvider).valueOrNull?.forMonth(AppDates.startOfMonth(now));
+    final budget = ref
+        .watch(budgetsProvider)
+        .valueOrNull
+        ?.forMonth(AppDates.startOfMonth(now));
     final hasSavings =
         (ref.watch(savingsGoalsProvider).valueOrNull?.length ?? 0) > 0;
     final healthScore = FinancialHealthCalculator.calculate(
@@ -131,7 +133,10 @@ class _HomeContent extends ConsumerWidget {
               ),
             ),
           )
-        : _BalanceHero(balance: FinanceCalculator.balance(all), net: summary.net, now: now);
+        : _BalanceHero(
+            balance: FinanceCalculator.balance(all),
+            net: summary.net,
+            now: now);
 
     final summaryRow = all.isEmpty
         ? const SizedBox.shrink()
@@ -185,13 +190,16 @@ class _HomeContent extends ConsumerWidget {
       ],
     );
 
-    final ribbon = summary.expense > 0 ? _SpendingRibbon(summary: summary) : const SizedBox.shrink();
+    final ribbon = summary.expense > 0
+        ? _SpendingRibbon(summary: summary)
+        : const SizedBox.shrink();
     final accountsSection = all.isEmpty
         ? const SizedBox.shrink()
         : _AccountsBreakdownSection(all: all, now: now);
     const budgetSection = _BudgetSection();
     const goals = _GoalSection();
-    final recent = all.isEmpty ? null : _RecentSection(items: all.take(5).toList());
+    final recent =
+        all.isEmpty ? null : _RecentSection(items: all.take(5).toList());
 
     const quickShortcuts = _QuickShortcutsSection();
 
@@ -221,7 +229,11 @@ class _HomeContent extends ConsumerWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [budgetSection, goals, if (recent != null) recent],
+                      children: [
+                        budgetSection,
+                        goals,
+                        if (recent != null) recent
+                      ],
                     ),
                   ),
                 ],
@@ -280,7 +292,9 @@ class _HomeHeader extends ConsumerWidget {
             children: [
               Text(greeting, style: t.bodySmall),
               Text(currentUser?.firstName ?? 'there',
-                  style: t.titleLarge, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  style: t.titleLarge,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis),
             ],
           ),
         ),
@@ -350,28 +364,121 @@ class _HeaderButton extends StatelessWidget {
   }
 }
 
-class _BalanceHero extends StatelessWidget {
-  const _BalanceHero({required this.balance, required this.net, required this.now});
+class _BalanceHero extends StatefulWidget {
+  const _BalanceHero(
+      {required this.balance, required this.net, required this.now});
 
   final double balance;
   final double net;
   final DateTime now;
 
   @override
+  State<_BalanceHero> createState() => _BalanceHeroState();
+}
+
+class _BalanceHeroState extends State<_BalanceHero> {
+  bool _hideBalance = false;
+
+  @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final t = context.text;
-    final up = net >= 0;
+    final up = widget.net >= 0;
+
     return HeroCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.12),
+                  borderRadius: AppRadius.pillAll,
+                  border: Border.all(color: Colors.white.withOpacity(0.18)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF2EE6A6),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Student Smart Wallet',
+                      style: t.labelSmall?.copyWith(
+                        color: Colors.white.withOpacity(0.92),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 11,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    tooltip: _hideBalance ? 'Show balance' : 'Hide balance',
+                    icon: Icon(
+                      _hideBalance
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: Colors.white.withOpacity(0.85),
+                      size: 20,
+                    ),
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () =>
+                        setState(() => _hideBalance = !_hideBalance),
+                  ),
+                  const SizedBox(width: 12),
+                  Icon(
+                    Icons.contactless_rounded,
+                    color: Colors.white.withOpacity(0.65),
+                    size: 20,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          AppSpacing.vMd,
           Text(
             FinanceStrings.availableBalance,
-            style: t.labelLarge?.copyWith(color: c.onInk.withOpacity(0.75)),
+            style: t.labelMedium?.copyWith(
+              color: Colors.white.withOpacity(0.72),
+              letterSpacing: 0.3,
+            ),
           ),
-          AppSpacing.vSm,
-          MoneyDisplay(amount: balance, size: MoneySize.hero, color: c.onInk),
+          AppSpacing.vXs,
+          if (_hideBalance)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                'Rs. • • • • • •',
+                style: t.headlineLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 2.0,
+                ),
+              ),
+            )
+          else
+            MoneyDisplay(
+              amount: widget.balance,
+              size: MoneySize.hero,
+              color: c.onInk,
+            ),
           AppSpacing.vSm,
           Container(
             padding: const EdgeInsets.symmetric(
@@ -379,10 +486,12 @@ class _BalanceHero extends StatelessWidget {
               vertical: AppSpacing.xs + 2,
             ),
             decoration: BoxDecoration(
-              color: (up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B)).withOpacity(0.18),
+              color: (up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B))
+                  .withOpacity(0.18),
               borderRadius: AppRadius.pillAll,
               border: Border.all(
-                color: (up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B)).withOpacity(0.45),
+                color: (up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B))
+                    .withOpacity(0.45),
                 width: 1.0,
               ),
             ),
@@ -396,9 +505,10 @@ class _BalanceHero extends StatelessWidget {
                 ),
                 AppSpacing.hXs,
                 Text(
-                  '${up ? '+' : '-'}${Formatters.money(net.abs())} ${FinanceStrings.balanceNote}',
+                  '${up ? '+' : '-'}${Formatters.money(widget.net.abs())} ${FinanceStrings.balanceNote}',
                   style: t.labelMedium?.copyWith(
-                    color: up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B),
+                    color:
+                        up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -410,33 +520,37 @@ class _BalanceHero extends StatelessWidget {
             children: [
               Expanded(
                 child: RoundAction(
-                  icon: Icons.south_west,
+                  icon: Icons.south_west_rounded,
                   label: FinanceStrings.quickAddIncome,
                   accentColor: const Color(0xFF2EE6A6),
-                  onTap: () => context.push(AppRoutes.transactionNew,
-                      extra: TransactionType.income),
+                  onTap: () => context.push(
+                    AppRoutes.transactionNew,
+                    extra: TransactionType.income,
+                  ),
                 ),
               ),
               Expanded(
                 child: RoundAction(
-                  icon: Icons.north_east,
+                  icon: Icons.north_east_rounded,
                   label: FinanceStrings.quickAddExpense,
                   accentColor: const Color(0xFFFF6B6B),
-                  onTap: () => context.push(AppRoutes.transactionNew,
-                      extra: TransactionType.expense),
+                  onTap: () => context.push(
+                    AppRoutes.transactionNew,
+                    extra: TransactionType.expense,
+                  ),
                 ),
               ),
               Expanded(
                 child: RoundAction(
-                  icon: Icons.pie_chart_outline,
+                  icon: Icons.pie_chart_rounded,
                   label: FinanceStrings.quickBudget,
-                  accentColor: const Color(0xFF60A5FA),
+                  accentColor: const Color(0xFF818CF8),
                   onTap: () => context.go(AppRoutes.budget),
                 ),
               ),
               Expanded(
                 child: RoundAction(
-                  icon: Icons.savings_outlined,
+                  icon: Icons.savings_rounded,
                   label: FinanceStrings.quickSavings,
                   accentColor: const Color(0xFFFBBF24),
                   onTap: () => context.go(AppRoutes.savings),
@@ -556,7 +670,8 @@ class _BudgetSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final month = AppDates.startOfMonth(DateTime.now());
-    final transactions = ref.watch(transactionsProvider).valueOrNull ?? const [];
+    final transactions =
+        ref.watch(transactionsProvider).valueOrNull ?? const [];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -578,7 +693,8 @@ class _BudgetSection extends ConsumerWidget {
                     title: AppStrings.emptyBudgetTitle,
                     message: AppStrings.emptyBudgetMessage,
                     actionLabel: AppStrings.createBudget,
-                    onAction: () => context.push(AppRoutes.budgetEdit, extra: month),
+                    onAction: () =>
+                        context.push(AppRoutes.budgetEdit, extra: month),
                   );
                 }
                 final status = BudgetCalculator.status(
@@ -647,7 +763,8 @@ class _GoalSection extends ConsumerWidget {
                   onTap: () => context.go(AppRoutes.savings),
                   child: Row(
                     children: [
-                      const AccentIconBox(icon: Icons.flag_outlined, accent: AppAccents.amber),
+                      const AccentIconBox(
+                          icon: Icons.flag_outlined, accent: AppAccents.amber),
                       AppSpacing.hMd,
                       Expanded(
                         child: SavingsProgress(
@@ -842,7 +959,8 @@ class _QuickShortcutsSection extends ConsumerWidget {
                               AppSpacing.vSm,
                               Text(
                                 shortcuts[i].label,
-                                style: t.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+                                style: t.labelMedium
+                                    ?.copyWith(fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.center,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -910,13 +1028,15 @@ class _AccountsBreakdownSection extends ConsumerWidget {
                       var cardBalance = 0.0;
                       for (final t in all) {
                         if (t.paymentMode != PaymentMode.card) continue;
-                        final matches = (t.cardId != null && t.cardId == card.id) ||
-                            (t.cardName != null &&
-                                (t.cardName == card.name ||
-                                    t.cardName == card.displayName));
+                        final matches =
+                            (t.cardId != null && t.cardId == card.id) ||
+                                (t.cardName != null &&
+                                    (t.cardName == card.name ||
+                                        t.cardName == card.displayName));
                         if (!matches) continue;
                         cardBalance += t.isIncome ? t.amount : -t.amount;
-                        if (t.date.year == now.year && t.date.month == now.month) {
+                        if (t.date.year == now.year &&
+                            t.date.month == now.month) {
                           if (t.isIncome) {
                             cardIncome += t.amount;
                           } else {
@@ -938,7 +1058,8 @@ class _AccountsBreakdownSection extends ConsumerWidget {
                             onTap: () {
                               ref
                                   .read(transactionFilterProvider.notifier)
-                                  .setPaymentMode(PaymentMode.card, cardId: card.id);
+                                  .setPaymentMode(PaymentMode.card,
+                                      cardId: card.id);
                               context.go(AppRoutes.activity);
                             },
                           ),
@@ -999,7 +1120,8 @@ class _AccountCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                AccentIconBox(icon: summary.mode.icon, accent: accent, size: 38),
+                AccentIconBox(
+                    icon: summary.mode.icon, accent: accent, size: 38),
                 AppSpacing.hSm,
                 Expanded(
                   child: Column(
@@ -1007,7 +1129,8 @@ class _AccountCard extends StatelessWidget {
                     children: [
                       Text(
                         summary.mode.label,
-                        style: t.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+                        style: t.labelMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -1044,9 +1167,11 @@ class _AccountCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.south_west, size: 12, color: AppAccents.green.color),
+                          Icon(Icons.south_west,
+                              size: 12, color: AppAccents.green.color),
                           const SizedBox(width: 4),
-                          Text('Income', style: t.bodySmall?.copyWith(fontSize: 11)),
+                          Text('Income',
+                              style: t.bodySmall?.copyWith(fontSize: 11)),
                         ],
                       ),
                       Text(
@@ -1064,9 +1189,11 @@ class _AccountCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.north_east, size: 12, color: AppAccents.coral.color),
+                          Icon(Icons.north_east,
+                              size: 12, color: AppAccents.coral.color),
                           const SizedBox(width: 4),
-                          Text('Expense', style: t.bodySmall?.copyWith(fontSize: 11)),
+                          Text('Expense',
+                              style: t.bodySmall?.copyWith(fontSize: 11)),
                         ],
                       ),
                       Text(
@@ -1120,7 +1247,8 @@ class _IndividualCardAccountCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                AccentIconBox(icon: Icons.credit_card_outlined, accent: accent, size: 38),
+                AccentIconBox(
+                    icon: Icons.credit_card_outlined, accent: accent, size: 38),
                 AppSpacing.hSm,
                 Expanded(
                   child: Column(
@@ -1128,7 +1256,8 @@ class _IndividualCardAccountCard extends StatelessWidget {
                     children: [
                       Text(
                         card.name,
-                        style: t.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+                        style: t.labelMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -1136,7 +1265,8 @@ class _IndividualCardAccountCard extends StatelessWidget {
                         card.last4 != null && card.last4!.isNotEmpty
                             ? '•••• ${card.last4} (${card.cardType})'
                             : card.cardType,
-                        style: t.bodySmall?.copyWith(fontSize: 10, color: c.textMuted),
+                        style: t.bodySmall
+                            ?.copyWith(fontSize: 10, color: c.textMuted),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -1173,9 +1303,11 @@ class _IndividualCardAccountCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.south_west, size: 12, color: AppAccents.green.color),
+                          Icon(Icons.south_west,
+                              size: 12, color: AppAccents.green.color),
                           const SizedBox(width: 4),
-                          Text('Income', style: t.bodySmall?.copyWith(fontSize: 11)),
+                          Text('Income',
+                              style: t.bodySmall?.copyWith(fontSize: 11)),
                         ],
                       ),
                       Text(
@@ -1193,9 +1325,11 @@ class _IndividualCardAccountCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.north_east, size: 12, color: AppAccents.coral.color),
+                          Icon(Icons.north_east,
+                              size: 12, color: AppAccents.coral.color),
                           const SizedBox(width: 4),
-                          Text('Expense', style: t.bodySmall?.copyWith(fontSize: 11)),
+                          Text('Expense',
+                              style: t.bodySmall?.copyWith(fontSize: 11)),
                         ],
                       ),
                       Text(
@@ -1216,4 +1350,3 @@ class _IndividualCardAccountCard extends StatelessWidget {
     );
   }
 }
-

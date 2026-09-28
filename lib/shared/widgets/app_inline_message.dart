@@ -8,7 +8,6 @@ import '../../core/theme/app_text_styles.dart';
 
 enum InlineMessageKind { error, success, info }
 
-/// Inline banner for form feedback. Icon + text, never colour alone.
 class AppInlineMessage extends StatelessWidget {
   const AppInlineMessage({
     super.key,

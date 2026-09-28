@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-/// Centralized service handling system-level push & top-banner notifications.
 abstract final class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -13,7 +12,6 @@ abstract final class LocalNotificationService {
 
   static bool _initialized = false;
 
-  /// Initializes the local notification engine and sets up notification channels.
   static Future<void> initialize() async {
     if (_initialized) return;
 
@@ -39,7 +37,6 @@ abstract final class LocalNotificationService {
         },
       );
 
-      // Create Android Notification Channel
       final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>();
       if (androidPlugin != null) {
@@ -60,7 +57,6 @@ abstract final class LocalNotificationService {
     }
   }
 
-  /// Requests notification permission on Android 13+ (API 33) and iOS.
   static Future<bool> requestPermissions() async {
     try {
       final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
@@ -85,7 +81,6 @@ abstract final class LocalNotificationService {
     return false;
   }
 
-  /// Displays an immediate high-priority top banner notification.
   static Future<void> showNotification({
     int id = 1,
     required String title,
@@ -132,7 +127,6 @@ abstract final class LocalNotificationService {
     }
   }
 
-  /// Fires a budget alert banner (e.g. 80% threshold or over budget).
   static Future<void> showBudgetAlert({
     required String category,
     required double percentSpent,
@@ -152,7 +146,6 @@ abstract final class LocalNotificationService {
     );
   }
 
-  /// Fires a savings milestone celebration banner.
   static Future<void> showSavingsMilestone({
     required String goalName,
     required int milestone,
@@ -160,7 +153,8 @@ abstract final class LocalNotificationService {
     await showNotification(
       id: goalName.hashCode,
       title: '🎉 Goal Milestone Unlocked!',
-      body: 'Congratulations! You reached $milestone% of your "$goalName" savings goal!',
+      body:
+          'Congratulations! You reached $milestone% of your "$goalName" savings goal!',
       payload: 'savings_milestone',
     );
   }

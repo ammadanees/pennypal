@@ -2,7 +2,6 @@ import '../../../core/constants/app_categories.dart';
 import '../../../core/utils/app_dates.dart';
 import '../../../data/record_store.dart';
 
-/// One budget per month. The id is the month key, for example "2026-09".
 class Budget {
   const Budget({
     required this.month,
@@ -17,7 +16,6 @@ class Budget {
   final double totalAmount;
   final Map<ExpenseCategory, double> categoryLimits;
 
-  /// Fraction of a limit at which the student is warned (0.5 to 1.0).
   final double alertThreshold;
   final DateTime createdAt;
   final bool pending;
@@ -43,7 +41,8 @@ class Budget {
       for (final entry in raw.entries) {
         final category = ExpenseCategory.parse(entry.key);
         final value = entry.value;
-        if (category != null && value is num) limits[category] = value.toDouble();
+        if (category != null && value is num)
+          limits[category] = value.toDouble();
       }
     }
     return Budget(

@@ -3,9 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/errors/app_failure.dart';
 
-/// Turns Firebase error codes into friendly messages.
-/// Wrong password and unknown email share one message so the app never
-/// reveals which emails have accounts.
 AppFailure mapAuthError(FirebaseAuthException e) {
   switch (e.code) {
     case 'invalid-email':

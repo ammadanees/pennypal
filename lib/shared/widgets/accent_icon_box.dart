@@ -4,7 +4,6 @@ import '../../core/theme/app_accents.dart';
 import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_radius.dart';
 
-/// Rounded square with a vivid fill and a white (or dark) icon.
 class AccentIconBox extends StatelessWidget {
   const AccentIconBox({
     super.key,

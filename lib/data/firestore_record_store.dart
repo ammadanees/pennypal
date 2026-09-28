@@ -5,10 +5,6 @@ import 'package:flutter/foundation.dart';
 
 import 'record_store.dart';
 
-/// Firestore with its built-in offline cache turned on. While offline,
-/// writes land in the on-device cache immediately and are sent in order
-/// when the connection returns. Records live under `users/{uid}/...` so the
-/// security rules can isolate each student's data.
 class FirestoreRecordStore implements RecordStore {
   FirestoreRecordStore([FirebaseFirestore? firestore])
       : _firestore = firestore ?? FirebaseFirestore.instance;
@@ -44,8 +40,6 @@ class FirestoreRecordStore implements RecordStore {
     String id,
     Map<String, dynamic> data,
   ) async {
-    // Do not await the server: while offline that future only completes
-    // after reconnecting. The local snapshot updates straight away.
     unawaited(
       _collection(uid, collection)
           .doc(id)
@@ -66,7 +60,8 @@ class FirestoreRecordStore implements RecordStore {
   }
 
   @override
-  Stream<List<StoredRecord>> watchShared(String collection, {required String userId}) {
+  Stream<List<StoredRecord>> watchShared(String collection,
+      {required String userId}) {
     return _firestore
         .collection(collection)
         .where('userId', isEqualTo: userId)
@@ -138,7 +133,9 @@ class FirestoreRecordStore implements RecordStore {
   Future<StoredRecord?> getUserProfile(String uid) async {
     final snap = await _firestore.collection('users').doc(uid).get();
     final data = snap.data();
-    return data == null ? null : StoredRecord(id: uid, data: _fromFirestore(data));
+    return data == null
+        ? null
+        : StoredRecord(id: uid, data: _fromFirestore(data));
   }
 
   static Map<String, dynamic> _toFirestore(Map<String, dynamic> data) => {

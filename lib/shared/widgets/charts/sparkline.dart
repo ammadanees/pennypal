@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_durations.dart';
 
-/// Smooth line with a soft fill, for trends on dark hero cards.
 class Sparkline extends StatelessWidget {
   const Sparkline({
     super.key,
@@ -28,7 +27,8 @@ class Sparkline extends StatelessWidget {
           duration: AppDurations.slow,
           curve: Curves.easeOutCubic,
           builder: (_, t, __) => CustomPaint(
-            painter: _SparklinePainter(values: values, color: color, progress: t),
+            painter:
+                _SparklinePainter(values: values, color: color, progress: t),
           ),
         ),
       ),
@@ -70,7 +70,8 @@ class _SparklinePainter extends CustomPainter {
         (points[i - 1].dx + points[i].dx) / 2,
         (points[i - 1].dy + points[i].dy) / 2,
       );
-      line.quadraticBezierTo(points[i - 1].dx, points[i - 1].dy, mid.dx, mid.dy);
+      line.quadraticBezierTo(
+          points[i - 1].dx, points[i - 1].dy, mid.dx, mid.dy);
     }
     line.lineTo(points.last.dx, points.last.dy);
 

@@ -7,8 +7,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import 'app_button.dart';
 
-/// Friendly error view. Deliberately takes no exception: raw errors are
-/// never shown to students.
 class AppErrorState extends StatelessWidget {
   const AppErrorState({
     super.key,

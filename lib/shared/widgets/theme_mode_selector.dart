@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/theme_provider.dart';
 
-/// System / Light / Dark switch backed by the persisted theme provider.
 class ThemeModeSelector extends ConsumerWidget {
   const ThemeModeSelector({super.key});
 

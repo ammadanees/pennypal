@@ -6,8 +6,6 @@ import '../../../data/record_store_provider.dart';
 import '../../auth/data/auth_providers.dart';
 import '../domain/support_query.dart';
 
-/// Feedback and support queries. Both live in top-level collections so
-/// admins can read them; rules let a student read only their own.
 class SupportRepository {
   SupportRepository(this._store, this._uid);
 
@@ -21,7 +19,8 @@ class SupportRepository {
         return list;
       });
 
-  Future<void> submitQuery({required String subject, required String message}) =>
+  Future<void> submitQuery(
+          {required String subject, required String message}) =>
       _store.upsertShared('supportQueries', IdGenerator.next(), {
         'userId': _uid,
         'subject': subject.trim(),

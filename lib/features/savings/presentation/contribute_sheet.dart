@@ -25,7 +25,6 @@ Future<void> showContributeSheet(BuildContext context, SavingsGoal goal) {
   );
 }
 
-/// Adds money to a goal. Reaching the target completes and archives it.
 class ContributeSheet extends ConsumerStatefulWidget {
   const ContributeSheet({super.key, required this.goal});
 
@@ -111,14 +110,16 @@ class _ContributeSheetState extends ConsumerState<ContributeSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(FinanceStrings.contributeTitle, style: context.text.titleLarge),
+            Text(FinanceStrings.contributeTitle,
+                style: context.text.titleLarge),
             Text(widget.goal.name, style: context.text.bodySmall),
             AppSpacing.vMd,
             AppTextField(
               label: FinanceStrings.labelAmount,
               controller: _amount,
               prefixText: 'Rs. ',
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
               validator: Validators.amount,
               onSubmitted: (_) => _save(),

@@ -29,7 +29,6 @@ import '../../budgets/data/budget_repository.dart';
 import '../../budgets/domain/budget_calculator.dart';
 import '../../dashboard/domain/finance_calculator.dart';
 
-/// Add or edit an income or expense. Works fully offline.
 class TransactionFormScreen extends ConsumerStatefulWidget {
   const TransactionFormScreen({
     super.key,
@@ -80,7 +79,9 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     _receiptUrl = e?.receiptImageUrl;
     _amount = TextEditingController(
       text: e != null
-          ? (e.amount % 1 == 0 ? e.amount.toInt().toString() : e.amount.toString())
+          ? (e.amount % 1 == 0
+              ? e.amount.toInt().toString()
+              : e.amount.toString())
           : (widget.initialAmount != null
               ? (widget.initialAmount! % 1 == 0
                   ? widget.initialAmount!.toInt().toString()
@@ -92,7 +93,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       text: e?.description ?? (widget.initialDescription ?? ''),
     );
     if (widget.initialDescription != null && _category == null && !_isIncome) {
-      _category = ExpenseCategorizer.predictCategory(widget.initialDescription!);
+      _category =
+          ExpenseCategorizer.predictCategory(widget.initialDescription!);
       if (_category != null) {
         _isAutoCategorized = true;
       }
@@ -117,7 +119,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     );
     if (picked == null) return;
     setState(() {
-      _date = DateTime(picked.year, picked.month, picked.day, _date.hour, _date.minute);
+      _date = DateTime(
+          picked.year, picked.month, picked.day, _date.hour, _date.minute);
     });
   }
 
@@ -148,12 +151,16 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       final user = ref.read(authStateProvider).valueOrNull;
       if (user?.notificationsEnabled ?? true) {
         final budgets = ref.read(budgetsProvider).valueOrNull;
-        final monthBudget = budgets?.forMonth(AppDates.startOfMonth(transaction.date));
+        final monthBudget =
+            budgets?.forMonth(AppDates.startOfMonth(transaction.date));
         if (monthBudget != null) {
-          final txs = (ref.read(transactionsProvider).valueOrNull ?? <FinanceTransaction>[])
+          final txs = (ref.read(transactionsProvider).valueOrNull ??
+                  <FinanceTransaction>[])
               .where((t) => t.id != transaction.id)
-              .toList()..add(transaction);
-          final summary = FinanceCalculator.monthSummary(txs, AppDates.startOfMonth(transaction.date));
+              .toList()
+            ..add(transaction);
+          final summary = FinanceCalculator.monthSummary(
+              txs, AppDates.startOfMonth(transaction.date));
           final status = BudgetCalculator.status(monthBudget, summary);
 
           final categoryLimit = monthBudget.categoryLimits[_category];
@@ -266,7 +273,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               label: FinanceStrings.labelAmount,
               controller: _amount,
               prefixText: 'Rs. ',
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
               textInputAction: TextInputAction.next,
               validator: Validators.amount,
@@ -300,7 +308,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                   Text(FinanceStrings.labelCategory, style: t.labelLarge),
                   if (_isAutoCategorized && _category != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: c.primarySoft,
                         borderRadius: AppRadius.pillAll,
@@ -374,7 +383,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               onChanged: (text) {
                 if (!_isIncome && text.trim().isNotEmpty) {
                   final predicted = ExpenseCategorizer.predictCategory(text);
-                  if (predicted != null && (_category == null || _isAutoCategorized)) {
+                  if (predicted != null &&
+                      (_category == null || _isAutoCategorized)) {
                     setState(() {
                       _category = predicted;
                       _isAutoCategorized = true;
@@ -435,7 +445,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                           height: 160,
                           color: c.surfaceElevated,
                           alignment: Alignment.center,
-                          child: Icon(Icons.broken_image_outlined, color: c.textMuted),
+                          child: Icon(Icons.broken_image_outlined,
+                              color: c.textMuted),
                         ),
                       ),
                     ),
@@ -482,7 +493,8 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                       SnackBar(
                         content: Row(
                           children: [
-                            const Icon(Icons.auto_awesome, color: Colors.amber, size: 20),
+                            const Icon(Icons.auto_awesome,
+                                color: Colors.amber, size: 20),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Full-screen, pinch-to-zoom view of a receipt photo.
 Future<void> showReceiptViewer(BuildContext context, String url) {
   return Navigator.of(context).push(
     PageRouteBuilder<void>(

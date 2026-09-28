@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Universal user avatar with smooth network/file rendering, fallback initials,
-/// elegant border, and optional tap interaction.
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
     super.key,
@@ -40,7 +38,8 @@ class UserAvatar extends StatelessWidget {
     Widget imageContent;
     if (!hasPhoto || cleanUrl == null) {
       imageContent = _fallbackInitials(context, c, t);
-    } else if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+    } else if (cleanUrl.startsWith('http://') ||
+        cleanUrl.startsWith('https://')) {
       imageContent = Image.network(
         cleanUrl,
         width: size,

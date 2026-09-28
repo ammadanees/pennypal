@@ -105,7 +105,8 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
         children: [
           Row(
             children: [
-              const AccentIconBox(icon: Icons.favorite, accent: AppAccents.pink),
+              const AccentIconBox(
+                  icon: Icons.favorite, accent: AppAccents.pink),
               AppSpacing.hMd,
               Expanded(
                 child: Text(Step5Strings.feedbackSubtitle,
@@ -158,8 +159,12 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                               _ratingMissing = false;
                             }),
                             icon: Icon(
-                              i <= _rating ? Icons.star_rounded : Icons.star_outline_rounded,
-                              color: i <= _rating ? AppAccents.amber.color : c.textMuted,
+                              i <= _rating
+                                  ? Icons.star_rounded
+                                  : Icons.star_outline_rounded,
+                              color: i <= _rating
+                                  ? AppAccents.amber.color
+                                  : c.textMuted,
                             ),
                           ),
                         ),
@@ -174,7 +179,8 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                     controller: _comments,
                     maxLines: 5,
                     validator: (v) =>
-                        Validators.required(v, 'comments') ?? Validators.maxLength(v, 1000),
+                        Validators.required(v, 'comments') ??
+                        Validators.maxLength(v, 1000),
                   ),
                   AppSpacing.vMd,
                   if (_error != null) ...[

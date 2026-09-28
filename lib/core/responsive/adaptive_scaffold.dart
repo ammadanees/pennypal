@@ -19,7 +19,6 @@ class AdaptiveDestination {
   final IconData selectedIcon;
 }
 
-/// Bottom bar on phones, rail on tablets, extended sidebar on wide screens.
 class AdaptiveScaffold extends StatelessWidget {
   const AdaptiveScaffold({
     super.key,
@@ -103,7 +102,8 @@ class _AnchoredNavBar extends StatelessWidget {
     final isDark = brightness == Brightness.dark;
 
     final navBg = isDark ? const Color(0xFF0F141C) : Colors.white;
-    final navBorder = isDark ? const Color(0x26FFFFFF) : const Color(0x14000000);
+    final navBorder =
+        isDark ? const Color(0x26FFFFFF) : const Color(0x14000000);
 
     return Container(
       decoration: BoxDecoration(

@@ -8,9 +8,6 @@ import '../../learning/data/lessons.dart';
 import '../domain/admin_feedback_entry.dart';
 import '../domain/admin_student.dart';
 
-/// Everything the admin portal reads and writes. Security rules are the
-/// real gate: a student's private transactions, budgets and goals are never
-/// exposed here, even to an admin account.
 class AdminRepository {
   AdminRepository(this._store);
 
@@ -67,11 +64,11 @@ class AdminRepository {
       _store.delete('', 'learningContent', id);
 }
 
-final adminRepositoryProvider =
-    Provider<AdminRepository>((ref) => AdminRepository(ref.watch(recordStoreProvider)));
+final adminRepositoryProvider = Provider<AdminRepository>(
+    (ref) => AdminRepository(ref.watch(recordStoreProvider)));
 
-final adminStudentsProvider =
-    StreamProvider<List<AdminStudent>>((ref) => ref.watch(adminRepositoryProvider).watchStudents());
+final adminStudentsProvider = StreamProvider<List<AdminStudent>>(
+    (ref) => ref.watch(adminRepositoryProvider).watchStudents());
 
 final adminSupportQueriesProvider = StreamProvider<List<SupportQuery>>(
   (ref) => ref.watch(adminRepositoryProvider).watchAllSupportQueries(),
@@ -84,4 +81,3 @@ final adminFeedbackProvider = StreamProvider<List<AdminFeedbackEntry>>(
 final adminLessonsProvider = StreamProvider<List<Lesson>>(
   (ref) => ref.watch(adminRepositoryProvider).watchLearningContent(),
 );
-

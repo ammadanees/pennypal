@@ -7,7 +7,8 @@ import '../domain/payment_card.dart';
 
 class CardLimitExceededException implements Exception {
   const CardLimitExceededException([
-    this.message = 'Maximum of 2 cards allowed per user. Please delete an existing card first.',
+    this.message =
+        'Maximum of 2 cards allowed per user. Please delete an existing card first.',
   ]);
 
   final String message;

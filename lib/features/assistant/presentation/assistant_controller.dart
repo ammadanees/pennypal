@@ -16,7 +16,6 @@ import '../domain/assistant_engine.dart';
 final assistantServiceProvider =
     Provider<AssistantService>((ref) => const GeminiAssistantService());
 
-/// The numbers the assistant can refer to, taken from the student's data.
 final assistantContextProvider = Provider<AssistantContext>((ref) {
   final now = DateTime.now();
   final transactions = ref.watch(transactionsProvider).valueOrNull ?? const [];
@@ -29,17 +28,20 @@ final assistantContextProvider = Provider<AssistantContext>((ref) {
   String? topLabel;
   double? topShare;
   if (summary.byCategory.isNotEmpty && summary.expense > 0) {
-    final top = summary.byCategory.entries.reduce((a, b) => a.value >= b.value ? a : b);
+    final top =
+        summary.byCategory.entries.reduce((a, b) => a.value >= b.value ? a : b);
     topLabel = top.key.label;
     topShare = top.value / summary.expense;
   }
 
-  final spentMonths = ReportCalculator.monthlyTotals(transactions, now, months: 3)
-      .where((m) => m.expense > 0)
-      .toList();
+  final spentMonths =
+      ReportCalculator.monthlyTotals(transactions, now, months: 3)
+          .where((m) => m.expense > 0)
+          .toList();
   final avg = spentMonths.isEmpty
       ? null
-      : spentMonths.fold<double>(0, (s, m) => s + m.expense) / spentMonths.length;
+      : spentMonths.fold<double>(0, (s, m) => s + m.expense) /
+          spentMonths.length;
 
   final active = goals.where((g) => !g.isCompleted).toList()
     ..sort((a, b) => b.currentAmount.compareTo(a.currentAmount));
@@ -50,9 +52,8 @@ final assistantContextProvider = Provider<AssistantContext>((ref) {
     monthIncome: summary.income,
     monthExpense: summary.expense,
     budgetTotal: budget?.totalAmount,
-    budgetSpent: budget == null
-        ? null
-        : BudgetCalculator.status(budget, summary).spent,
+    budgetSpent:
+        budget == null ? null : BudgetCalculator.status(budget, summary).spent,
     topCategoryLabel: topLabel,
     topCategoryShare: topShare,
     avgMonthlyExpense: avg,
@@ -122,7 +123,10 @@ class AssistantController extends Notifier<AssistantState> {
     final question = failed.retryQuestion;
     if (question == null || state.isTyping) return;
     state = state.copyWith(
-      messages: [for (final m in state.messages) if (m.id != failed.id) m],
+      messages: [
+        for (final m in state.messages)
+          if (m.id != failed.id) m
+      ],
     );
     await _ask(question);
   }
@@ -137,7 +141,8 @@ class AssistantController extends Notifier<AssistantState> {
         isTyping: false,
         messages: [
           ...state.messages,
-          ChatMessage(id: IdGenerator.next(), text: reply.text, fromUser: false),
+          ChatMessage(
+              id: IdGenerator.next(), text: reply.text, fromUser: false),
         ],
         suggestions: reply.suggestions,
       );
@@ -163,4 +168,5 @@ class AssistantController extends Notifier<AssistantState> {
 }
 
 final assistantControllerProvider =
-    NotifierProvider<AssistantController, AssistantState>(AssistantController.new);
+    NotifierProvider<AssistantController, AssistantState>(
+        AssistantController.new);

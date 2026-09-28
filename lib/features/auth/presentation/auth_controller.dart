@@ -4,8 +4,6 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/errors/app_failure.dart';
 import '../data/auth_providers.dart';
 
-/// Runs auth actions for the forms. State is "busy". Each action returns a
-/// friendly error message, or null on success, so widgets stay thin.
 class AuthController extends Notifier<bool> {
   @override
   bool build() => false;

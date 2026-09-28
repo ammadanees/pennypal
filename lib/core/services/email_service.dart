@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import '../config/email_config.dart';
 
 abstract final class EmailService {
-  static final ValueNotifier<String?> lastSentOtp = ValueNotifier<String?>(null);
+  static final ValueNotifier<String?> lastSentOtp =
+      ValueNotifier<String?>(null);
 
   static Future<void> sendVerificationOtp({
     required String email,
@@ -41,7 +42,6 @@ abstract final class EmailService {
         );
         debugPrint('[EmailService] Resend response: ${res.statusCode}');
       } else {
-        // Brevo (Sendinblue) API
         final uri = Uri.parse('https://api.brevo.com/v3/smtp/email');
         final res = await http.post(
           uri,
@@ -66,7 +66,8 @@ abstract final class EmailService {
         if (res.statusCode >= 400) {
           debugPrint('[EmailService] ⚠️ Brevo Error Response: ${res.body}');
         } else {
-          debugPrint('[EmailService] ✅ Email dispatched successfully to $email');
+          debugPrint(
+              '[EmailService] ✅ Email dispatched successfully to $email');
         }
       }
     } catch (e) {

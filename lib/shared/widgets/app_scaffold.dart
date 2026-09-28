@@ -4,8 +4,6 @@ import '../../core/responsive/app_breakpoints.dart';
 import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_spacing.dart';
 
-/// Standard page: optional app bar, centered content with a max width,
-/// and responsive side gutters.
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
     super.key,
@@ -31,9 +29,8 @@ class AppScaffold extends StatelessWidget {
         floatingActionButtonLocation ?? FloatingActionButtonLocation.endFloat;
 
     return Scaffold(
-      appBar: title == null
-          ? null
-          : AppBar(title: Text(title!), actions: actions),
+      appBar:
+          title == null ? null : AppBar(title: Text(title!), actions: actions),
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: effectiveFabLocation,
       body: SafeArea(

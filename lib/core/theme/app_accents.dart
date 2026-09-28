@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_categories.dart';
 
-/// A vivid fill with a text/icon colour that stays readable on it.
 class AppAccent {
   const AppAccent(this.color, this.onColor);
 
@@ -10,8 +9,6 @@ class AppAccent {
   final Color onColor;
 }
 
-/// The vibrant palette. Each expense category owns one colour, and it is
-/// the same colour everywhere: cards, icons, donut and legend.
 abstract final class AppAccents {
   static const Color _white = Color(0xFFFFFFFF);
 
@@ -24,10 +21,18 @@ abstract final class AppAccents {
   static const AppAccent cyan = AppAccent(Color(0xFF0B7F92), _white);
   static const AppAccent slate = AppAccent(Color(0xFF5B6B85), _white);
 
-  static const List<AppAccent> goalPalette = [amber, blue, coral, purple, green, pink];
+  static const List<AppAccent> goalPalette = [
+    amber,
+    blue,
+    coral,
+    purple,
+    green,
+    pink
+  ];
   static const List<AppAccent> welcomePalette = [blue, coral, amber, purple];
 
-  static AppAccent forIndex(int index) => goalPalette[index % goalPalette.length];
+  static AppAccent forIndex(int index) =>
+      goalPalette[index % goalPalette.length];
 
   static AppAccent forCategory(ExpenseCategory category) => switch (category) {
         ExpenseCategory.food => coral,

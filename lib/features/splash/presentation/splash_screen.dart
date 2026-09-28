@@ -13,12 +13,6 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../shared/widgets/hex_pattern.dart';
 import '../../auth/data/auth_providers.dart';
 
-/// One orchestrated moment: a honey coin drops in, spins to reveal the P,
-/// a honeycomb hexagon draws around it, then the wordmark rises letter by
-/// letter. The honeycomb grid blooms outward behind it all.
-///
-/// The splash always uses the light brand colours so the first impression
-/// is identical in light and dark mode.
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
@@ -32,7 +26,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   static const _holdAfter = Duration(milliseconds: 400);
   static const _authTimeout = Duration(seconds: 4);
 
-  // Timeline, as fractions of the whole animation.
   static const _grid = Interval(0.0, 0.6, curve: Curves.easeOutCubic);
   static const _drop = Interval(0.05, 0.34, curve: Curves.bounceOut);
   static const _spin = Interval(0.34, 0.62, curve: Curves.easeInOutCubic);
@@ -75,8 +68,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       await Future<void>.delayed(_holdAfter);
     }
     if (!mounted) return;
-    // The router's redirect decides where this really goes: welcome on the
-    // first launch, sign in when signed out, or the right home when signed in.
+
     context.go(AppRoutes.welcome);
   }
 
@@ -141,8 +133,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                           opacity: _fade(v, _taglineStart + 0.04, 0.16),
                           child: Text(
                             AppStrings.splashFootnote,
-                            style: context.text.bodySmall
-                                ?.copyWith(color: brand.onPrimary.withOpacity(0.65)),
+                            style: context.text.bodySmall?.copyWith(
+                                color: brand.onPrimary.withOpacity(0.65)),
                           ),
                         ),
                       ),
@@ -173,7 +165,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         alignment: Alignment.center,
         clipBehavior: Clip.none,
         children: [
-          // Ground shadow grows as the coin lands.
           Align(
             alignment: const Alignment(0, 0.78),
             child: Opacity(
@@ -229,7 +220,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 offset: Offset(0, (1 - t) * 18),
                 child: Text(
                   word[i],
-                  // "Penny" in white, "Pal" in vibrant honey gold so the entire PennyPal wordmark is fully visible.
                   style: AppTextStyles.brand(
                     _wordSize,
                     i >= 5 ? const Color(0xFFFFD166) : brand.onPrimary,
@@ -292,7 +282,6 @@ class _Coin extends StatelessWidget {
   }
 }
 
-/// A hexagon that draws itself, then pops a dot on each corner.
 class _HexOutlinePainter extends CustomPainter {
   const _HexOutlinePainter({
     required this.progress,

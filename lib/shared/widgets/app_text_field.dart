@@ -68,8 +68,7 @@ class _AppTextFieldState extends State<AppTextField> {
         hintText: widget.hint,
         helperText: widget.helperText,
         prefixText: widget.prefixText,
-        prefixIcon:
-            widget.prefixIcon == null ? null : Icon(widget.prefixIcon),
+        prefixIcon: widget.prefixIcon == null ? null : Icon(widget.prefixIcon),
         suffixIcon: widget.obscureText
             ? IconButton(
                 tooltip: _hidden ? 'Show password' : 'Hide password',

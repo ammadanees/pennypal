@@ -1,6 +1,4 @@
-/// Copy for the Home, Activity, Budget and Savings tabs.
 abstract final class FinanceStrings {
-  // Home
   static const String greetingMorning = 'Good morning';
   static const String greetingAfternoon = 'Good afternoon';
   static const String greetingEvening = 'Good evening';
@@ -29,7 +27,6 @@ abstract final class FinanceStrings {
       ? '1 change is saved on this device and will sync when you are back online.'
       : '$count changes are saved on this device and will sync when you are back online.';
 
-  // Activity
   static const String activityTitle = 'Activity';
   static const String add = 'Add';
   static const String searchLabel = 'Search transactions';
@@ -43,7 +40,6 @@ abstract final class FinanceStrings {
       'Try a different search or clear the filters.';
   static const String chooseType = 'What would you like to add?';
 
-  // Transaction form and details
   static const String newExpense = 'New expense';
   static const String newIncome = 'New income';
   static const String editExpense = 'Edit expense';
@@ -69,7 +65,6 @@ abstract final class FinanceStrings {
   static const String paymentNote =
       'Only a note for your records. PennyPal never moves money.';
 
-  // Budget
   static const String budgetTitle = 'Budget';
   static const String budgetTotal = 'Total budget';
   static const String budgetSpent = 'Spent';
@@ -99,7 +94,6 @@ abstract final class FinanceStrings {
   static String nearingBudgetMessage(String percent) =>
       'You have used $percent of this month\'s budget.';
 
-  // Savings
   static const String savingsTitle = 'Savings';
   static const String newGoal = 'New goal';
   static const String goalHistory = 'Goal history';
@@ -133,7 +127,6 @@ abstract final class FinanceStrings {
       'To finish by $date, save about $amount a month.';
   static String milestone(int percent) => '$percent%';
 
-  /// Shown by progress: [0-25), [25-50), [50-75), [75-100), 100.
   static const List<String> goalMessages = [
     'Every rupee counts. You have started, and that is the hardest part.',
     'A quarter of the way there. Keep the habit going.',

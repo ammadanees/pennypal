@@ -13,7 +13,6 @@ class TransactionRepository {
   final RecordStore _store;
   final String _uid;
 
-  /// Newest first.
   Stream<List<FinanceTransaction>> watchAll() =>
       _store.watch(_uid, _collection).map((records) {
         final list = records.map(FinanceTransaction.fromRecord).toList()

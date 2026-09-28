@@ -30,7 +30,6 @@ import 'transaction_detail_sheet.dart';
 import 'transaction_display.dart';
 import 'transaction_filter_controller.dart';
 
-/// Transaction history with search and filters.
 class ActivityScreen extends ConsumerStatefulWidget {
   const ActivityScreen({super.key});
 
@@ -86,7 +85,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                   color: context.colors.expense.withOpacity(0.12),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.north_east, size: 20, color: context.colors.expense),
+                child: Icon(Icons.north_east,
+                    size: 20, color: context.colors.expense),
               ),
               title: const Text(FinanceStrings.quickAddExpense),
               onTap: () {
@@ -103,7 +103,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                   color: context.colors.income.withOpacity(0.12),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.south_west, size: 20, color: context.colors.income),
+                child: Icon(Icons.south_west,
+                    size: 20, color: context.colors.income),
               ),
               title: const Text(FinanceStrings.quickAddIncome),
               onTap: () {
@@ -120,7 +121,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                   color: context.colors.primary.withOpacity(0.12),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.call_split_rounded, size: 20, color: context.colors.primary),
+                child: Icon(Icons.call_split_rounded,
+                    size: 20, color: context.colors.primary),
               ),
               title: const Text('Split Bill with Roommates'),
               subtitle: const Text('Calculate per-person share & tip'),
@@ -142,8 +144,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
     final notifier = ref.read(transactionFilterProvider.notifier);
     final results = ref.watch(filteredTransactionsProvider);
     final cards = ref.watch(cardsProvider).valueOrNull ?? const <PaymentCard>[];
-    final activeCard =
-        cards.where((c) => c.id == filter.cardId).firstOrNull;
+    final activeCard = cards.where((c) => c.id == filter.cardId).firstOrNull;
 
     final rangeLabel = filter.range == null
         ? FinanceStrings.filterAnyDate
@@ -237,8 +238,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                     AppChip(
                       label: mode.label,
                       icon: mode.icon,
-                      selected: filter.paymentMode == mode &&
-                          filter.cardId == null,
+                      selected:
+                          filter.paymentMode == mode && filter.cardId == null,
                       onSelected: () => notifier.setPaymentMode(
                         filter.paymentMode == mode ? null : mode,
                       ),
@@ -381,7 +382,8 @@ class _AccountSummaryCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm, vertical: 4),
                     decoration: BoxDecoration(
                       color: c.income.withOpacity(0.08),
                       borderRadius: AppRadius.smAll,
@@ -393,7 +395,8 @@ class _AccountSummaryCard extends StatelessWidget {
                           children: [
                             Icon(Icons.south_west, size: 12, color: c.income),
                             const SizedBox(width: 4),
-                            Text('Income', style: t.bodySmall?.copyWith(fontSize: 11)),
+                            Text('Income',
+                                style: t.bodySmall?.copyWith(fontSize: 11)),
                           ],
                         ),
                         Text(
@@ -410,7 +413,8 @@ class _AccountSummaryCard extends StatelessWidget {
                 AppSpacing.hSm,
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm, vertical: 4),
                     decoration: BoxDecoration(
                       color: c.expense.withOpacity(0.08),
                       borderRadius: AppRadius.smAll,
@@ -422,7 +426,8 @@ class _AccountSummaryCard extends StatelessWidget {
                           children: [
                             Icon(Icons.north_east, size: 12, color: c.expense),
                             const SizedBox(width: 4),
-                            Text('Expense', style: t.bodySmall?.copyWith(fontSize: 11)),
+                            Text('Expense',
+                                style: t.bodySmall?.copyWith(fontSize: 11)),
                           ],
                         ),
                         Text(
@@ -499,7 +504,8 @@ class _TransactionList extends StatelessWidget {
                     if (i > 0) const Divider(),
                     TransactionListTile(
                       transaction: group.items[i],
-                      onTap: () => showTransactionDetail(context, group.items[i]),
+                      onTap: () =>
+                          showTransactionDetail(context, group.items[i]),
                     ),
                   ],
                 ],

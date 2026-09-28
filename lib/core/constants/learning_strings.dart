@@ -1,7 +1,8 @@
 abstract final class LearningStrings {
   static const String title = 'Learn';
   static const String allTopics = 'All';
-  static const String startNudge = 'Start learning one small money habit today.';
+  static const String startNudge =
+      'Start learning one small money habit today.';
   static const String startHere = 'Start here';
   static const String progressTitle = 'Your progress';
   static const String markRead = 'Mark as read';
@@ -17,6 +18,7 @@ abstract final class LearningStrings {
       'Lessons are general education, not financial advice. Your situation '
       'may be different.';
 
-  static String readCount(int read, int total) => '$read of $total lessons read';
+  static String readCount(int read, int total) =>
+      '$read of $total lessons read';
   static String minutes(int m) => '$m min read';
 }

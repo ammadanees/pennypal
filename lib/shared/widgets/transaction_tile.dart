@@ -26,7 +26,6 @@ class TransactionTile extends StatelessWidget {
   final MoneyKind kind;
   final IconData icon;
 
-  /// Icon colour. Defaults to green for income and red for expenses.
   final AppAccent? accent;
   final VoidCallback? onTap;
 
@@ -41,7 +40,8 @@ class TransactionTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: AppDimensions.touchTarget),
+          constraints:
+              const BoxConstraints(minHeight: AppDimensions.touchTarget),
           child: Row(
             children: [
               AccentIconBox(icon: icon, accent: resolved),

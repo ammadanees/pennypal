@@ -31,7 +31,8 @@ import '../domain/budget_calculator.dart';
 class BudgetScreen extends ConsumerWidget {
   const BudgetScreen({super.key});
 
-  Future<void> _delete(BuildContext context, WidgetRef ref, Budget budget) async {
+  Future<void> _delete(
+      BuildContext context, WidgetRef ref, Budget budget) async {
     final ok = await confirmAction(
       context,
       title: FinanceStrings.budgetDeleteTitle,
@@ -50,7 +51,8 @@ class BudgetScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final month = ref.watch(selectedBudgetMonthProvider);
     final budgets = ref.watch(budgetsProvider);
-    final transactions = ref.watch(transactionsProvider).valueOrNull ?? const [];
+    final transactions =
+        ref.watch(transactionsProvider).valueOrNull ?? const [];
     final current = budgets.valueOrNull?.forMonth(month);
 
     return AppScaffold(
@@ -83,7 +85,8 @@ class BudgetScreen extends ConsumerWidget {
                     icon: Icons.pie_chart_outline,
                     title: month == AppDates.startOfMonth(DateTime.now())
                         ? AppStrings.emptyBudgetTitle
-                        : FinanceStrings.noBudgetFor(AppDates.monthLabel(month)),
+                        : FinanceStrings.noBudgetFor(
+                            AppDates.monthLabel(month)),
                     message: AppStrings.emptyBudgetMessage,
                     actionLabel: AppStrings.createBudget,
                     onAction: () =>
@@ -201,7 +204,8 @@ class _BudgetContent extends StatelessWidget {
               child: CategoryCard(
                 category: usage.category,
                 spent: usage.spent,
-                shareOfSpend: status.spent <= 0 ? 0 : usage.spent / status.spent,
+                shareOfSpend:
+                    status.spent <= 0 ? 0 : usage.spent / status.spent,
                 limit: usage.limit,
                 alertThreshold: status.alertThreshold,
               ),

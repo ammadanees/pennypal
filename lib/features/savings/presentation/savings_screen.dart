@@ -121,9 +121,7 @@ class _GoalCard extends ConsumerWidget {
     final c = context.colors;
     final t = context.text;
     final p = SavingsCalculator.progress(goal);
-    final messageIndex = p.ratio >= 1
-        ? 4
-        : (p.ratio * 4).floor().clamp(0, 3);
+    final messageIndex = p.ratio >= 1 ? 4 : (p.ratio * 4).floor().clamp(0, 3);
 
     return AppCard(
       child: Column(
@@ -186,7 +184,8 @@ class _GoalCard extends ConsumerWidget {
             ],
           ),
           AppSpacing.vMd,
-          SavingsProgress(current: goal.currentAmount, target: goal.targetAmount),
+          SavingsProgress(
+              current: goal.currentAmount, target: goal.targetAmount),
           AppSpacing.vMd,
           Row(
             children: [
@@ -220,14 +219,18 @@ class _GoalCard extends ConsumerWidget {
               Row(
                 children: [
                   Icon(
-                    p.onTrack! ? Icons.check_circle_outline : Icons.warning_amber_outlined,
+                    p.onTrack!
+                        ? Icons.check_circle_outline
+                        : Icons.warning_amber_outlined,
                     size: AppDimensions.iconSm,
                     color: p.onTrack! ? c.success : c.warning,
                   ),
                   AppSpacing.hXs,
                   Expanded(
                     child: Text(
-                      p.onTrack! ? FinanceStrings.onTrack : FinanceStrings.behind,
+                      p.onTrack!
+                          ? FinanceStrings.onTrack
+                          : FinanceStrings.behind,
                       style: t.bodySmall,
                     ),
                   ),
@@ -295,16 +298,20 @@ class _Milestones extends StatelessWidget {
         for (final m in SavingsCalculator.milestones)
           Expanded(
             child: Semantics(
-              label: '$m percent milestone ${reached.contains(m) ? 'reached' : 'not reached'}',
+              label:
+                  '$m percent milestone ${reached.contains(m) ? 'reached' : 'not reached'}',
               excludeSemantics: true,
               child: Column(
                 children: [
                   Icon(
-                    reached.contains(m) ? Icons.check_circle : Icons.circle_outlined,
+                    reached.contains(m)
+                        ? Icons.check_circle
+                        : Icons.circle_outlined,
                     size: AppDimensions.iconMd,
                     color: reached.contains(m) ? c.savings : c.textMuted,
                   ),
-                  Text(FinanceStrings.milestone(m), style: context.text.bodySmall),
+                  Text(FinanceStrings.milestone(m),
+                      style: context.text.bodySmall),
                 ],
               ),
             ),

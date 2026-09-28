@@ -192,7 +192,8 @@ class _ReportsBody extends StatelessWidget {
                       children: [
                         Text(
                           'Official Student Statement',
-                          style: context.text.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                          style: context.text.titleSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         Text(
                           'Export CSV & archive report for ${period.label}',
@@ -252,11 +253,14 @@ class _StatsGrid extends StatelessWidget {
         ),
         _Stat(
           label: ReportStrings.statSavingsRate,
-          text: kept == null ? ReportStrings.notAvailable : Formatters.percent(kept),
+          text: kept == null
+              ? ReportStrings.notAvailable
+              : Formatters.percent(kept),
         ),
         _Stat(
           label: ReportStrings.statDailyAverage,
-          child: MoneyDisplay(amount: report.expense / days, size: MoneySize.body),
+          child:
+              MoneyDisplay(amount: report.expense / days, size: MoneySize.body),
         ),
         _Stat(
           label: ReportStrings.statTopCategory,
@@ -354,7 +358,8 @@ class _IncomeVsExpense extends StatelessWidget {
       return const _ChartEmpty(ReportStrings.emptyPeriod);
     }
     final c = context.colors;
-    final maxValue = report.income > report.expense ? report.income : report.expense;
+    final maxValue =
+        report.income > report.expense ? report.income : report.expense;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -456,7 +461,8 @@ class _CategoryBreakdown extends StatelessWidget {
     final t = context.text;
     final segments = [
       for (final share in report.categories)
-        DonutSegment(share.amount, AppChartColors.forCategory(context, share.category)),
+        DonutSegment(
+            share.amount, AppChartColors.forCategory(context, share.category)),
     ];
     final summary = report.categories
         .map((s) => '${s.category.label} ${Formatters.percent(s.share)}')
@@ -492,7 +498,8 @@ class _CategoryBreakdown extends StatelessWidget {
                   ),
                 ),
                 AppSpacing.hSm,
-                Expanded(child: Text(share.category.label, style: t.bodyMedium)),
+                Expanded(
+                    child: Text(share.category.label, style: t.bodyMedium)),
                 Text(Formatters.money(share.amount), style: t.labelLarge),
                 AppSpacing.hSm,
                 SizedBox(
@@ -525,7 +532,8 @@ class _MonthlySpending extends StatelessWidget {
     }
     final currentMonth = AppDates.startOfMonth(now);
     final summary = totals
-        .map((m) => '${DateFormat('MMMM').format(m.month)} ${Formatters.money(m.expense)}')
+        .map((m) =>
+            '${DateFormat('MMMM').format(m.month)} ${Formatters.money(m.expense)}')
         .join(', ');
     return MonthlyBarChart(
       color: context.colors.expense,
@@ -613,13 +621,15 @@ class _SavingsSummary extends ConsumerWidget {
             if (active.isEmpty && completed == 0) {
               return const _ChartEmpty(ReportStrings.noGoals);
             }
-            final saved = active.fold<double>(0, (sum, g) => sum + g.currentAmount);
+            final saved =
+                active.fold<double>(0, (sum, g) => sum + g.currentAmount);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (active.isNotEmpty)
                   Text(
-                    ReportStrings.savedAcross(Formatters.money(saved), active.length),
+                    ReportStrings.savedAcross(
+                        Formatters.money(saved), active.length),
                     style: context.text.labelLarge,
                   ),
                 if (completed > 0)

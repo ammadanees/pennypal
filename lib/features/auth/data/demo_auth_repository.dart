@@ -7,9 +7,6 @@ import '../../../core/services/email_service.dart';
 import '../domain/app_user.dart';
 import '../domain/auth_repository.dart';
 
-/// In-memory stand-in used ONLY when Firebase is not configured in debug
-/// builds, so the UI can be run and reviewed immediately. Nothing is
-/// persisted and it is never used in release builds.
 class DemoAuthRepository implements AuthRepository {
   DemoAuthRepository({this.latency = const Duration(milliseconds: 500)}) {
     _accounts[studentEmail] = _Account(
@@ -137,15 +134,18 @@ class DemoAuthRepository implements AuthRepository {
 
     final record = _demoOtps[key];
     if (record == null) {
-      throw const AppFailure('No active verification code found. Please tap Resend Code.');
+      throw const AppFailure(
+          'No active verification code found. Please tap Resend Code.');
     }
 
     if (DateTime.now().isAfter(record.expiresAt)) {
-      throw const AppFailure('This verification code has expired. Please tap Resend Code.');
+      throw const AppFailure(
+          'This verification code has expired. Please tap Resend Code.');
     }
 
     if (record.code != cleanOtp) {
-      throw const AppFailure('Invalid verification code. Please check and try again.');
+      throw const AppFailure(
+          'Invalid verification code. Please check and try again.');
     }
 
     _demoOtps.remove(key);
@@ -155,8 +155,7 @@ class DemoAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> sendPasswordReset(String email) =>
-      Future<void>.delayed(latency);
+  Future<void> sendPasswordReset(String email) => Future<void>.delayed(latency);
 
   @override
   Future<void> signOut() async => _set(null);

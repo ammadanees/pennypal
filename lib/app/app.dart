@@ -20,7 +20,6 @@ class PennyPalApp extends ConsumerWidget {
       darkTheme: AppTheme.dark,
       themeMode: ref.watch(themeModeProvider),
       routerConfig: ref.watch(routerProvider),
-      // Device Preview (web only) simulates the chosen device's screen.
       locale: devicePreviewEnabled ? DevicePreview.locale(context) : null,
       builder: devicePreviewEnabled ? DevicePreview.appBuilder : null,
     );

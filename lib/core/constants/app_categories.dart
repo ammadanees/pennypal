@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Default expense categories from the SRS.
 enum ExpenseCategory {
   food('Food', Icons.restaurant_outlined),
   transport('Transport', Icons.directions_bus_outlined),
@@ -20,8 +19,6 @@ enum ExpenseCategory {
       ExpenseCategory.values.where((e) => e.name == value).firstOrNull;
 }
 
-/// How an expense was paid. This is only a note on the record: PennyPal
-/// never moves money.
 enum PaymentMode {
   cash('Cash', Icons.payments_outlined),
   card('Card', Icons.credit_card_outlined),

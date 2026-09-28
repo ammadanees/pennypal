@@ -21,8 +21,6 @@ class MonthBar {
   final bool highlighted;
 }
 
-/// Pill-shaped bars in a soft track. The highlighted bar uses the full
-/// accent colour; the others are quieter.
 class MonthlyBarChart extends StatelessWidget {
   const MonthlyBarChart({
     super.key,
@@ -64,9 +62,12 @@ class MonthlyBarChart extends StatelessWidget {
                         child: Text(
                           Formatters.compact(bar.value),
                           style: context.text.labelSmall?.copyWith(
-                            color: bar.highlighted ? c.textPrimary : c.textSecondary,
-                            fontWeight:
-                                bar.highlighted ? FontWeight.w800 : FontWeight.w500,
+                            color: bar.highlighted
+                                ? c.textPrimary
+                                : c.textSecondary,
+                            fontWeight: bar.highlighted
+                                ? FontWeight.w800
+                                : FontWeight.w500,
                           ),
                         ),
                       ),
@@ -92,7 +93,9 @@ class MonthlyBarChart extends StatelessWidget {
                                 ? 0
                                 : math.max(_barWidth, barAreaHeight * fraction),
                             decoration: BoxDecoration(
-                              color: bar.highlighted ? color : color.withOpacity(0.38),
+                              color: bar.highlighted
+                                  ? color
+                                  : color.withOpacity(0.38),
                               borderRadius: AppRadius.pillAll,
                             ),
                           ),
@@ -104,9 +107,12 @@ class MonthlyBarChart extends StatelessWidget {
                         child: Text(
                           bar.label,
                           style: context.text.labelSmall?.copyWith(
-                            color: bar.highlighted ? c.textPrimary : c.textSecondary,
-                            fontWeight:
-                                bar.highlighted ? FontWeight.w800 : FontWeight.w500,
+                            color: bar.highlighted
+                                ? c.textPrimary
+                                : c.textSecondary,
+                            fontWeight: bar.highlighted
+                                ? FontWeight.w800
+                                : FontWeight.w500,
                           ),
                         ),
                       ),

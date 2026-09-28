@@ -27,7 +27,9 @@ class SupportQuery {
       id: record.id,
       subject: (d['subject'] as String?) ?? '',
       message: (d['message'] as String?) ?? '',
-      status: SupportStatus.values.where((s) => s.name == d['status']).firstOrNull ??
+      status: SupportStatus.values
+              .where((s) => s.name == d['status'])
+              .firstOrNull ??
           SupportStatus.open,
       submittedOn: (d['submittedOn'] as DateTime?) ?? DateTime.now(),
       adminResponse: d['adminResponse'] as String?,

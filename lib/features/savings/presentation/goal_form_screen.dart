@@ -16,7 +16,6 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../data/savings_repository.dart';
 import '../domain/savings_goal.dart';
 
-/// Create or edit a savings goal.
 class GoalFormScreen extends ConsumerStatefulWidget {
   const GoalFormScreen({super.key, this.existing});
 
@@ -45,10 +44,14 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
     super.initState();
     final e = widget.existing;
     _name = TextEditingController(text: e?.name ?? '');
-    _target = TextEditingController(text: e == null ? '' : _plain(e.targetAmount));
-    _current = TextEditingController(text: e == null ? '' : _plain(e.currentAmount));
+    _target =
+        TextEditingController(text: e == null ? '' : _plain(e.targetAmount));
+    _current =
+        TextEditingController(text: e == null ? '' : _plain(e.currentAmount));
     _monthly = TextEditingController(
-      text: (e == null || e.monthlyContribution <= 0) ? '' : _plain(e.monthlyContribution),
+      text: (e == null || e.monthlyContribution <= 0)
+          ? ''
+          : _plain(e.monthlyContribution),
     );
     _targetDate = e?.targetDate;
   }
@@ -108,7 +111,8 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
   Widget build(BuildContext context) {
     final t = context.text;
     return AppScaffold(
-      title: _isEditing ? FinanceStrings.goalFormEdit : FinanceStrings.goalFormNew,
+      title:
+          _isEditing ? FinanceStrings.goalFormEdit : FinanceStrings.goalFormNew,
       body: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -121,14 +125,16 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
               prefixIcon: Icons.flag_outlined,
               textInputAction: TextInputAction.next,
               validator: (v) =>
-                  Validators.required(v, 'goal name') ?? Validators.maxLength(v, 40),
+                  Validators.required(v, 'goal name') ??
+                  Validators.maxLength(v, 40),
             ),
             AppSpacing.vMd,
             AppTextField(
               label: FinanceStrings.labelGoalTarget,
               controller: _target,
               prefixText: 'Rs. ',
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
               textInputAction: TextInputAction.next,
               validator: Validators.amount,
@@ -138,7 +144,8 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
               label: FinanceStrings.labelGoalCurrent,
               controller: _current,
               prefixText: 'Rs. ',
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
               textInputAction: TextInputAction.next,
               validator: Validators.optionalAmount,
@@ -164,7 +171,8 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
               label: FinanceStrings.labelGoalMonthly,
               controller: _monthly,
               prefixText: 'Rs. ',
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
               textInputAction: TextInputAction.done,
               validator: Validators.optionalAmount,

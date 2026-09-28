@@ -25,7 +25,8 @@ class LessonScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allLessons = ref.watch(allLessonsProvider).valueOrNull ?? bundledLessons;
+    final allLessons =
+        ref.watch(allLessonsProvider).valueOrNull ?? bundledLessons;
     final index = allLessons.indexWhere((l) => l.id == lessonId);
     if (index < 0) {
       return AppScaffold(
@@ -42,7 +43,9 @@ class LessonScreen extends ConsumerWidget {
 
     final lesson = allLessons[index];
     final next = index + 1 < allLessons.length ? allLessons[index + 1] : null;
-    final isRead = ref.watch(readLessonsProvider).valueOrNull?.contains(lesson.id) ?? false;
+    final isRead =
+        ref.watch(readLessonsProvider).valueOrNull?.contains(lesson.id) ??
+            false;
     final t = context.text;
     final c = context.colors;
 
@@ -53,7 +56,8 @@ class LessonScreen extends ConsumerWidget {
         children: [
           _LessonHeader(lesson: lesson),
           AppSpacing.vMd,
-          Semantics(header: true, child: Text(lesson.title, style: t.headlineMedium)),
+          Semantics(
+              header: true, child: Text(lesson.title, style: t.headlineMedium)),
           AppSpacing.vXs,
           Text(
             '${lesson.level.label}, ${LearningStrings.minutes(lesson.readMinutes)}',
@@ -64,7 +68,9 @@ class LessonScreen extends ConsumerWidget {
               style: t.bodyLarge?.copyWith(color: c.textSecondary)),
           for (final section in lesson.sections) ...[
             AppSpacing.vLg,
-            Semantics(header: true, child: Text(section.heading, style: t.titleLarge)),
+            Semantics(
+                header: true,
+                child: Text(section.heading, style: t.titleLarge)),
             AppSpacing.vSm,
             _SectionBody(text: section.body),
           ],
@@ -74,7 +80,8 @@ class LessonScreen extends ConsumerWidget {
           ],
           AppSpacing.vLg,
           AppButton(
-            label: isRead ? LearningStrings.markedRead : LearningStrings.markRead,
+            label:
+                isRead ? LearningStrings.markedRead : LearningStrings.markRead,
             icon: isRead ? Icons.check_circle : Icons.check_circle_outline,
             variant: isRead ? AppButtonVariant.tonal : AppButtonVariant.primary,
             onPressed: () => ref
@@ -117,14 +124,16 @@ class _LessonHeader extends StatelessWidget {
         children: [
           Positioned.fill(
             child: CustomPaint(
-              painter: HexPatternPainter(color: c.primary, opacity: 0.12, cell: 24),
+              painter:
+                  HexPatternPainter(color: c.primary, opacity: 0.12, cell: 24),
             ),
           ),
           Container(
             width: AppDimensions.emptyIllustration,
             height: AppDimensions.emptyIllustration,
             decoration: BoxDecoration(color: c.surface, shape: BoxShape.circle),
-            child: Icon(lesson.topic.icon, size: AppDimensions.iconLg, color: c.primary),
+            child: Icon(lesson.topic.icon,
+                size: AppDimensions.iconLg, color: c.primary),
           ),
         ],
       ),
@@ -149,7 +158,6 @@ class _LessonHeader extends StatelessWidget {
   }
 }
 
-/// Renders paragraphs and "- " bullet lines.
 class _SectionBody extends StatelessWidget {
   const _SectionBody({required this.text});
 
@@ -177,7 +185,8 @@ class _SectionBody extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top: AppSpacing.sm),
+                                padding:
+                                    const EdgeInsets.only(top: AppSpacing.sm),
                                 child: Container(
                                   width: AppSpacing.xs + 2,
                                   height: AppSpacing.xs + 2,
@@ -190,7 +199,9 @@ class _SectionBody extends StatelessWidget {
                               AppSpacing.hSm,
                               Expanded(
                                 child: Text(
-                                  line.startsWith('- ') ? line.substring(2) : line,
+                                  line.startsWith('- ')
+                                      ? line.substring(2)
+                                      : line,
                                   style: t.bodyMedium,
                                 ),
                               ),

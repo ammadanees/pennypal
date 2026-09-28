@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Single source of truth for every colour in PennyPal.
-/// Screens read colours via `context.colors`; never use raw Color values.
 @immutable
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({
@@ -48,7 +46,6 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color error;
   final Color info;
 
-  /// Dark hero surfaces (balance card, budget summary).
   final Color ink;
   final Color onInk;
 
@@ -100,7 +97,6 @@ class AppColors extends ThemeExtension<AppColors> {
     onInk: Color(0xFFFFFFFF),
   );
 
-  /// Vibrant gradients for fintech elements and cards
   static const LinearGradient heroGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

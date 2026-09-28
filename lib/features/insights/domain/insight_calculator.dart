@@ -16,8 +16,6 @@ class Insight {
   final String message;
 }
 
-/// Friendly one-line observations about this month, based on the student's
-/// own numbers. General information only, never advice.
 abstract final class InsightCalculator {
   static List<Insight> forMonth(
     List<FinanceTransaction> all, {
@@ -29,7 +27,6 @@ abstract final class InsightCalculator {
     final summary = FinanceCalculator.monthSummary(all, today);
     final insights = <Insight>[];
 
-    // Compared with the same stretch of last month.
     final lastStart = AppDates.addMonths(monthStart, -1);
     final lastSameSpan = _expenseIn(
       all,
@@ -48,7 +45,8 @@ abstract final class InsightCalculator {
 
     if (budget != null) {
       final status = BudgetCalculator.status(budget, summary);
-      final daysLeft = DateTime(today.year, today.month + 1, 0).day - today.day + 1;
+      final daysLeft =
+          DateTime(today.year, today.month + 1, 0).day - today.day + 1;
       if (status.level == BudgetLevel.over) {
         insights.add(Insight(InsightKind.watch,
             'You are ${Formatters.money(status.overBy)} over budget this month.'));
@@ -77,11 +75,9 @@ abstract final class InsightCalculator {
     return total;
   }
 
-  /// Exposed for reports: total expense in a range.
   static double expenseIn(List<FinanceTransaction> all, DateRange range) =>
       _expenseIn(all, range);
 
-  /// Unused categories helper kept for tests.
   static ExpenseCategory? topCategory(MonthSummary s) => s.byCategory.isEmpty
       ? null
       : s.byCategory.entries.reduce((a, b) => a.value >= b.value ? a : b).key;

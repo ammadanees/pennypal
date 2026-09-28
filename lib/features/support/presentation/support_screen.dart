@@ -74,7 +74,8 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
         children: [
           Text(Step5Strings.supportSubtitle,
-              style: t.bodyMedium?.copyWith(color: context.colors.textSecondary)),
+              style:
+                  t.bodyMedium?.copyWith(color: context.colors.textSecondary)),
           AppSpacing.vMd,
           AppCard(
             child: Form(
@@ -89,7 +90,8 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
                     prefixIcon: Icons.subject,
                     textInputAction: TextInputAction.next,
                     validator: (v) =>
-                        Validators.required(v, 'subject') ?? Validators.maxLength(v, 80),
+                        Validators.required(v, 'subject') ??
+                        Validators.maxLength(v, 80),
                   ),
                   AppSpacing.vMd,
                   AppTextField(
@@ -97,7 +99,8 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
                     controller: _message,
                     maxLines: 5,
                     validator: (v) =>
-                        Validators.required(v, 'message') ?? Validators.maxLength(v, 1000),
+                        Validators.required(v, 'message') ??
+                        Validators.maxLength(v, 1000),
                   ),
                   AppSpacing.vMd,
                   if (_sent) ...[
@@ -181,7 +184,8 @@ class _QueryCard extends StatelessWidget {
           Text(Formatters.relativeTime(query.submittedOn), style: t.bodySmall),
           AppSpacing.vSm,
           Text(query.message, style: t.bodyMedium),
-          if (query.adminResponse != null && query.adminResponse!.isNotEmpty) ...[
+          if (query.adminResponse != null &&
+              query.adminResponse!.isNotEmpty) ...[
             AppSpacing.vMd,
             Container(
               width: double.infinity,

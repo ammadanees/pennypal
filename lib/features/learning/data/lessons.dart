@@ -15,8 +15,6 @@ final allLessonsProvider = StreamProvider<List<Lesson>>((ref) {
   });
 });
 
-/// Built-in lessons. All content is educational and general; it is not
-/// financial advice. Amounts are examples in rupees.
 const List<Lesson> bundledLessons = [
   Lesson(
     id: 'what-is-a-budget',
@@ -29,13 +27,13 @@ const List<Lesson> bundledLessons = [
       LessonSection(
         'The idea',
         'A budget is a plan that shows what money comes in, what goes out, and what is left over. It answers one question before the month begins: where should my money go?\n\n'
-        'It is not about spending less on everything. It is about choosing on purpose, so you are not surprised on the 20th.',
+            'It is not about spending less on everything. It is about choosing on purpose, so you are not surprised on the 20th.',
       ),
       LessonSection(
         'Three steps',
         '- Write down your income for the month.\n'
-        '- List your expenses, starting with the ones you must pay.\n'
-        '- Compare the two and adjust until spending is not more than income.',
+            '- List your expenses, starting with the ones you must pay.\n'
+            '- Compare the two and adjust until spending is not more than income.',
       ),
       LessonSection(
         'Why it helps',
@@ -58,8 +56,8 @@ const List<Lesson> bundledLessons = [
       LessonSection(
         'The split',
         '- 50% for needs, the things you must pay for.\n'
-        '- 30% for wants, the things that make life enjoyable.\n'
-        '- 20% for savings and goals.',
+            '- 30% for wants, the things that make life enjoyable.\n'
+            '- 20% for savings and goals.',
       ),
       LessonSection(
         'Make it fit you',
@@ -186,10 +184,10 @@ const List<Lesson> bundledLessons = [
       LessonSection(
         'Where student money comes from',
         '- Allowance from family.\n'
-        '- Scholarships or stipends.\n'
-        '- Part-time work or internships.\n'
-        '- Freelance projects.\n'
-        '- One-off gifts.',
+            '- Scholarships or stipends.\n'
+            '- Part-time work or internships.\n'
+            '- Freelance projects.\n'
+            '- One-off gifts.',
       ),
       LessonSection(
         'Regular or irregular',
@@ -216,10 +214,10 @@ const List<Lesson> bundledLessons = [
       LessonSection(
         'The usual list',
         '- Basic food and groceries.\n'
-        '- Transport to campus or work.\n'
-        '- Tuition, books and required materials.\n'
-        '- Rent and utility bills.\n'
-        '- Health costs and essential phone or internet.',
+            '- Transport to campus or work.\n'
+            '- Tuition, books and required materials.\n'
+            '- Rent and utility bills.\n'
+            '- Health costs and essential phone or internet.',
       ),
       LessonSection(
         'Pay needs first',
@@ -242,8 +240,8 @@ const List<Lesson> bundledLessons = [
       LessonSection(
         'The test',
         '- Do I need this to eat, get to class, stay healthy or study?\n'
-        '- What happens if I go without it for a month?\n'
-        '- Is there a cheaper way to meet the same need?',
+            '- What happens if I go without it for a month?\n'
+            '- Is there a cheaper way to meet the same need?',
       ),
       LessonSection(
         'The grey area',

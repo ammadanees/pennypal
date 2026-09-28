@@ -3,9 +3,6 @@ import '../core/utils/app_dates.dart';
 import '../features/auth/data/demo_auth_repository.dart';
 import 'memory_record_store.dart';
 
-/// Sample data for the demo student (Alex Khan) so every screen has
-/// something realistic to show. Totals are chosen to match the welcome
-/// screens: Rs. 50,000 in, Rs. 31,200 out, Rs. 40,000 budget.
 Future<void> seedDemoData(MemoryRecordStore store, {DateTime? now}) async {
   final today = now ?? DateTime.now();
   final monthStart = AppDates.startOfMonth(today);
@@ -66,21 +63,32 @@ Future<void> seedDemoData(MemoryRecordStore store, {DateTime? now}) async {
     'createdAt': monthStart,
   });
 
-  await expense(ExpenseCategory.food, 450, 'Lunch', daysAgo(0, 13, 20), PaymentMode.cash);
-  await expense(ExpenseCategory.food, 3200, 'Groceries', daysAgo(3, 18, 5), PaymentMode.card,
+  await expense(
+      ExpenseCategory.food, 450, 'Lunch', daysAgo(0, 13, 20), PaymentMode.cash);
+  await expense(ExpenseCategory.food, 3200, 'Groceries', daysAgo(3, 18, 5),
+      PaymentMode.card,
       cardId: 'demo-card-1', cardName: 'Meezan Visa (•••• 4128)');
-  await expense(ExpenseCategory.food, 4100, 'Family dinner', daysAgo(6, 20, 30), PaymentMode.card,
+  await expense(ExpenseCategory.food, 4100, 'Family dinner', daysAgo(6, 20, 30),
+      PaymentMode.card,
       cardId: 'demo-card-1', cardName: 'Meezan Visa (•••• 4128)');
-  await expense(ExpenseCategory.food, 2850, 'Cafeteria week', daysAgo(9, 12, 0), PaymentMode.wallet);
-  await expense(ExpenseCategory.food, 2000, 'Snacks and drinks', daysAgo(12, 16, 45), PaymentMode.cash);
-  await expense(ExpenseCategory.transport, 1200, 'Bus pass', daysAgo(2, 8, 10), PaymentMode.cash);
-  await expense(ExpenseCategory.transport, 2900, 'Ride to campus events', daysAgo(8, 17, 0), PaymentMode.wallet);
-  await expense(ExpenseCategory.entertainment, 1800, 'Movie night', daysAgo(4, 21, 15), PaymentMode.card,
+  await expense(ExpenseCategory.food, 2850, 'Cafeteria week', daysAgo(9, 12, 0),
+      PaymentMode.wallet);
+  await expense(ExpenseCategory.food, 2000, 'Snacks and drinks',
+      daysAgo(12, 16, 45), PaymentMode.cash);
+  await expense(ExpenseCategory.transport, 1200, 'Bus pass', daysAgo(2, 8, 10),
+      PaymentMode.cash);
+  await expense(ExpenseCategory.transport, 2900, 'Ride to campus events',
+      daysAgo(8, 17, 0), PaymentMode.wallet);
+  await expense(ExpenseCategory.entertainment, 1800, 'Movie night',
+      daysAgo(4, 21, 15), PaymentMode.card,
       cardId: 'demo-card-2', cardName: 'SadaPay Virtual (•••• 9942)');
-  await expense(ExpenseCategory.entertainment, 6400, 'Concert ticket', daysAgo(10, 11, 0), PaymentMode.bankTransfer);
-  await expense(ExpenseCategory.education, 3500, 'Course books', daysAgo(5, 15, 30), PaymentMode.card,
+  await expense(ExpenseCategory.entertainment, 6400, 'Concert ticket',
+      daysAgo(10, 11, 0), PaymentMode.bankTransfer);
+  await expense(ExpenseCategory.education, 3500, 'Course books',
+      daysAgo(5, 15, 30), PaymentMode.card,
       cardId: 'demo-card-1', cardName: 'Meezan Visa (•••• 4128)');
-  await expense(ExpenseCategory.bills, 2800, 'Internet bill', daysAgo(7, 10, 0), PaymentMode.bankTransfer);
+  await expense(ExpenseCategory.bills, 2800, 'Internet bill', daysAgo(7, 10, 0),
+      PaymentMode.bankTransfer);
 
   final key = AppDates.monthKey(monthStart);
   await store.upsert(uid, 'budgets', key, {

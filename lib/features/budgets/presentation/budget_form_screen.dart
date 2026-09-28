@@ -18,7 +18,6 @@ import '../../../shared/widgets/confirm_dialog.dart';
 import '../data/budget_repository.dart';
 import '../domain/budget.dart';
 
-/// Create or edit the budget for one month.
 class BudgetFormScreen extends ConsumerStatefulWidget {
   const BudgetFormScreen({super.key, required this.month, this.existing});
 
@@ -45,11 +44,14 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
   void initState() {
     super.initState();
     final e = widget.existing;
-    _total = TextEditingController(text: e == null ? '' : _plain(e.totalAmount));
+    _total =
+        TextEditingController(text: e == null ? '' : _plain(e.totalAmount));
     _limits = {
       for (final cat in ExpenseCategory.values)
         cat: TextEditingController(
-          text: e?.categoryLimits[cat] == null ? '' : _plain(e!.categoryLimits[cat]!),
+          text: e?.categoryLimits[cat] == null
+              ? ''
+              : _plain(e!.categoryLimits[cat]!),
         ),
     };
     _threshold = e?.alertThreshold ?? 0.8;
@@ -71,7 +73,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
 
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    
+
     final enteredTotal = double.tryParse(_total.text.trim());
     final limits = <ExpenseCategory, double>{
       for (final entry in _limits.entries)
@@ -80,11 +82,12 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
     };
     final sum = limits.values.fold<double>(0, (a, b) => a + b);
 
-    // If total was left empty or 0, consider the sum of all categories as total budget
-    final total = (enteredTotal == null || enteredTotal <= 0) ? sum : enteredTotal;
+    final total =
+        (enteredTotal == null || enteredTotal <= 0) ? sum : enteredTotal;
 
     if (total <= 0) {
-      setState(() => _limitError = 'Please enter a total budget or at least one category limit.');
+      setState(() => _limitError =
+          'Please enter a total budget or at least one category limit.');
       return;
     }
 
@@ -151,11 +154,13 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
             if (!_isEditing) ...[
               () {
                 final prevMonth = AppDates.addMonths(widget.month, -1);
-                final prevBudget = ref.watch(budgetsProvider).valueOrNull?.forMonth(prevMonth);
+                final prevBudget =
+                    ref.watch(budgetsProvider).valueOrNull?.forMonth(prevMonth);
                 if (prevBudget == null) return const SizedBox.shrink();
 
                 return Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.sm, bottom: AppSpacing.sm),
+                  padding: const EdgeInsets.only(
+                      top: AppSpacing.sm, bottom: AppSpacing.sm),
                   child: InkWell(
                     onTap: () {
                       _total.text = _plain(prevBudget.totalAmount);
@@ -169,14 +174,16 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Copied budget from ${AppDates.monthLabel(prevMonth)}!'),
+                          content: Text(
+                              'Copied budget from ${AppDates.monthLabel(prevMonth)}!'),
                           duration: const Duration(seconds: 2),
                         ),
                       );
                     },
                     borderRadius: BorderRadius.circular(12),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 12),
                       decoration: BoxDecoration(
                         color: c.surfaceElevated,
                         borderRadius: BorderRadius.circular(12),
@@ -186,7 +193,8 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.content_copy_outlined, size: 20, color: c.primary),
+                          Icon(Icons.content_copy_outlined,
+                              size: 20, color: c.primary),
                           AppSpacing.hSm,
                           Expanded(
                             child: Column(
@@ -201,12 +209,14 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                                 ),
                                 Text(
                                   'Auto-fill Rs. ${_plain(prevBudget.totalAmount)} and all category limits',
-                                  style: t.bodySmall?.copyWith(color: c.textMuted),
+                                  style:
+                                      t.bodySmall?.copyWith(color: c.textMuted),
                                 ),
                               ],
                             ),
                           ),
-                          Icon(Icons.arrow_forward_ios, size: 14, color: c.primary),
+                          Icon(Icons.arrow_forward_ios,
+                              size: 14, color: c.primary),
                         ],
                       ),
                     ),
@@ -223,7 +233,8 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                   : 'Leave empty to auto-sum from categories below',
               controller: _total,
               prefixText: 'Rs. ',
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
               textInputAction: TextInputAction.next,
               onChanged: (_) {
@@ -251,7 +262,8 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                 controller: _limits[cat],
                 prefixIcon: cat.icon,
                 prefixText: 'Rs. ',
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: AppInputFormatters.amount,
                 textInputAction: TextInputAction.next,
                 onChanged: (_) {
@@ -268,7 +280,8 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
             AppSpacing.vMd,
             Row(
               children: [
-                Expanded(child: Text(FinanceStrings.alertAt, style: t.titleMedium)),
+                Expanded(
+                    child: Text(FinanceStrings.alertAt, style: t.titleMedium)),
                 Text(Formatters.percent(_threshold), style: t.labelLarge),
               ],
             ),

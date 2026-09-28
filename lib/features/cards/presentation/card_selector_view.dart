@@ -46,7 +46,8 @@ class CardSelectorView extends ConsumerWidget {
                     Text('Select Card', style: t.labelLarge),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1.5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 7, vertical: 1.5),
                       decoration: BoxDecoration(
                         color: cards.length >= CardRepository.maxCardsPerUser
                             ? c.surfaceElevated
@@ -156,7 +157,9 @@ class CardSelectorView extends ConsumerWidget {
                           if (card.id == selectedCardId) {
                             onCardSelected(null);
                           }
-                          await ref.read(cardRepositoryProvider).delete(card.id);
+                          await ref
+                              .read(cardRepositoryProvider)
+                              .delete(card.id);
                         },
                       ),
                       AppSpacing.hSm,

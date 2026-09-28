@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/services/shared_preferences_provider.dart';
 
-/// Whether the first-launch welcome screens have been completed.
 final onboardingSeenProvider =
     NotifierProvider<OnboardingSeenNotifier, bool>(OnboardingSeenNotifier.new);
 

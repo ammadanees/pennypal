@@ -72,10 +72,12 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                   );
                 }
                 return ListView.separated(
-                  padding: const EdgeInsets.only(bottom: AppDimensions.bottomNavClearance),
+                  padding: const EdgeInsets.only(
+                      bottom: AppDimensions.bottomNavClearance),
                   itemCount: filtered.length,
                   separatorBuilder: (_, __) => AppSpacing.vSm,
-                  itemBuilder: (context, i) => _StudentCard(student: filtered[i]),
+                  itemBuilder: (context, i) =>
+                      _StudentCard(student: filtered[i]),
                 );
               },
             ),
@@ -102,9 +104,12 @@ class _StudentCard extends StatelessWidget {
             width: AppDimensions.avatar,
             height: AppDimensions.avatar,
             alignment: Alignment.center,
-            decoration: BoxDecoration(color: c.primarySoft, shape: BoxShape.circle),
+            decoration:
+                BoxDecoration(color: c.primarySoft, shape: BoxShape.circle),
             child: Text(
-              student.fullName.isEmpty ? '?' : student.fullName[0].toUpperCase(),
+              student.fullName.isEmpty
+                  ? '?'
+                  : student.fullName[0].toUpperCase(),
               style: t.titleLarge?.copyWith(color: c.primary),
             ),
           ),

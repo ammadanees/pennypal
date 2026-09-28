@@ -19,14 +19,14 @@ extension TransactionDisplay on FinanceTransaction {
       : AppAccents.forCategory(category ?? ExpenseCategory.miscellaneous);
 
   String get subtitle {
-    final kindLabel = isIncome ? FinanceStrings.income : (category?.label ?? '');
+    final kindLabel =
+        isIncome ? FinanceStrings.income : (category?.label ?? '');
     final when = '${Formatters.dayLabel(date)} ${Formatters.time(date)}';
     final base = kindLabel.isEmpty ? when : '$kindLabel, $when';
     return pending ? '$base, ${FinanceStrings.waitingToSync}' : base;
   }
 }
 
-/// A transaction row using the shared tile.
 class TransactionListTile extends StatelessWidget {
   const TransactionListTile({super.key, required this.transaction, this.onTap});
 

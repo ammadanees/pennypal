@@ -17,8 +17,6 @@ import '../../auth/data/auth_providers.dart';
 import '../../transactions/domain/finance_transaction.dart';
 import '../domain/report_calculator.dart';
 
-/// Interactive modal sheet to view, export to CSV, and save official financial statements
-/// complying with SRS Page 13 (Entity 7: Reports).
 class StatementPreviewSheet extends ConsumerStatefulWidget {
   const StatementPreviewSheet({
     super.key,
@@ -52,8 +50,7 @@ class StatementPreviewSheet extends ConsumerStatefulWidget {
       _StatementPreviewSheetState();
 }
 
-class _StatementPreviewSheetState
-    extends ConsumerState<StatementPreviewSheet> {
+class _StatementPreviewSheetState extends ConsumerState<StatementPreviewSheet> {
   bool _isSavingToCloud = false;
   bool _savedToCloud = false;
 
@@ -69,20 +66,23 @@ class _StatementPreviewSheetState
     buffer.writeln('Student Name,$userName');
     buffer.writeln('Student ID,$studentId');
     buffer.writeln('Period,$rangeLabel');
-    buffer.writeln('Generated On,${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}');
+    buffer.writeln(
+        'Generated On,${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}');
     buffer.writeln('Currency,${Formatters.currentCurrency}');
     buffer.writeln();
     buffer.writeln('--- FINANCIAL SUMMARY ---');
     buffer.writeln('Total Income,${report.income.toStringAsFixed(2)}');
     buffer.writeln('Total Expenses,${report.expense.toStringAsFixed(2)}');
     buffer.writeln('Net Savings,${report.net.toStringAsFixed(2)}');
-    buffer.writeln('Savings Rate,${report.keptFromIncome == null ? 'N/A' : (report.keptFromIncome! * 100).toStringAsFixed(1)}%');
+    buffer.writeln(
+        'Savings Rate,${report.keptFromIncome == null ? 'N/A' : (report.keptFromIncome! * 100).toStringAsFixed(1)}%');
     buffer.writeln('Total Records,${report.transactionCount}');
     buffer.writeln();
     buffer.writeln('--- CATEGORY BREAKDOWN ---');
     buffer.writeln('Category,Amount,Share %');
     for (final cat in report.categories) {
-      buffer.writeln('${cat.category.label},${cat.amount.toStringAsFixed(2)},${(cat.share * 100).toStringAsFixed(1)}%');
+      buffer.writeln(
+          '${cat.category.label},${cat.amount.toStringAsFixed(2)},${(cat.share * 100).toStringAsFixed(1)}%');
     }
     buffer.writeln();
     buffer.writeln('--- ITEMIZED TRANSACTIONS ---');
@@ -90,7 +90,8 @@ class _StatementPreviewSheetState
     for (final t in inRange) {
       final dateStr = DateFormat('yyyy-MM-dd').format(t.date);
       final typeStr = t.isIncome ? 'Income' : 'Expense';
-      final catStr = t.category?.label ?? (t.isIncome ? 'Inflow' : 'Uncategorized');
+      final catStr =
+          t.category?.label ?? (t.isIncome ? 'Inflow' : 'Uncategorized');
       final descStr = '"${t.description.replaceAll('"', '""')}"';
       final modeStr = t.paymentMode?.name ?? 'cash';
       final amountStr = t.amount.toStringAsFixed(2);
@@ -164,7 +165,8 @@ class _StatementPreviewSheetState
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Statement archived to cloud reports successfully!'),
+          content:
+              const Text('Statement archived to cloud reports successfully!'),
           backgroundColor: AppAccents.green.color,
         ),
       );
@@ -231,7 +233,8 @@ class _StatementPreviewSheetState
                   children: [
                     Text(
                       'Financial Statement',
-                      style: t.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                      style: t.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'PennyPal • Academic Edition',
@@ -261,7 +264,8 @@ class _StatementPreviewSheetState
                     Text('Student:', style: t.bodySmall),
                     Text(
                       userName,
-                      style: t.labelMedium?.copyWith(fontWeight: FontWeight.bold),
+                      style:
+                          t.labelMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -465,17 +469,21 @@ class _StatementPreviewSheetState
                 children: [
                   for (final cat in report.categories) ...[
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                      padding:
+                          const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                       child: Row(
                         children: [
-                          Icon(cat.category.icon, size: 20, color: c.textPrimary),
+                          Icon(cat.category.icon,
+                              size: 20, color: c.textPrimary),
                           AppSpacing.hSm,
                           Expanded(
-                            child: Text(cat.category.label, style: t.bodyMedium),
+                            child:
+                                Text(cat.category.label, style: t.bodyMedium),
                           ),
                           Text(
                             Formatters.money(cat.amount),
-                            style: t.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+                            style: t.labelMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                           AppSpacing.hSm,
                           SizedBox(
@@ -483,7 +491,8 @@ class _StatementPreviewSheetState
                             child: Text(
                               Formatters.percent(cat.share),
                               textAlign: TextAlign.end,
-                              style: t.bodySmall?.copyWith(color: c.textSecondary),
+                              style:
+                                  t.bodySmall?.copyWith(color: c.textSecondary),
                             ),
                           ),
                         ],
@@ -547,7 +556,8 @@ class _StatementPreviewSheetState
                             : inRange[i].description,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+                        style:
+                            t.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
                       ),
                       subtitle: Text(
                         '${DateFormat('d MMM yyyy').format(inRange[i].date)} • ${(inRange[i].paymentMode?.name ?? 'cash').toUpperCase()}',

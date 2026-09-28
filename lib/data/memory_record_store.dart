@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'record_store.dart';
 
-/// In-memory store used by debug demo mode and by tests.
 class MemoryRecordStore implements RecordStore {
   final Map<String, Map<String, Map<String, dynamic>>> _data = {};
   final Map<String, StreamController<List<StoredRecord>>> _controllers = {};
@@ -50,7 +49,8 @@ class MemoryRecordStore implements RecordStore {
   }
 
   @override
-  Stream<List<StoredRecord>> watchShared(String collection, {required String userId}) async* {
+  Stream<List<StoredRecord>> watchShared(String collection,
+      {required String userId}) async* {
     List<StoredRecord> mine() => [
           for (final r in _snapshot(_sharedKey(collection)))
             if (r.data['userId'] == userId) r,
@@ -94,7 +94,6 @@ class MemoryRecordStore implements RecordStore {
     return doc == null ? null : StoredRecord(id: uid, data: Map.of(doc));
   }
 
-  /// Test/demo seeding helper: writes a `users/{uid}` profile document.
   Future<void> seedUserProfile(String uid, Map<String, dynamic> data) =>
       upsertShared('users', uid, data);
 }

@@ -49,7 +49,8 @@ class AppEmptyState extends StatelessWidget {
             ),
             if (actionLabel != null) ...[
               AppSpacing.vLg,
-              AppButton(label: actionLabel!, onPressed: onAction, expand: false),
+              AppButton(
+                  label: actionLabel!, onPressed: onAction, expand: false),
             ],
           ],
         ),

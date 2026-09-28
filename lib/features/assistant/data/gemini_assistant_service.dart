@@ -7,8 +7,6 @@ import '../../../core/config/gemini_config.dart';
 import '../../../core/utils/formatters.dart';
 import '../domain/assistant_engine.dart';
 
-/// Live Gemini AI chatbot service with automatic fallback to RuleBasedAssistant
-/// when offline, unconfigured, or timed out.
 class GeminiAssistantService implements AssistantService {
   const GeminiAssistantService({
     this.fallback = const RuleBasedAssistant(),
@@ -21,7 +19,8 @@ class GeminiAssistantService implements AssistantService {
   @override
   Future<AssistantReply> ask(String question, AssistantContext ctx) async {
     if (!GeminiConfig.isConfigured) {
-      debugPrint('[GeminiAssistant] API key not configured, using offline engine.');
+      debugPrint(
+          '[GeminiAssistant] API key not configured, using offline engine.');
       return fallback.ask(question, ctx);
     }
 
@@ -89,10 +88,12 @@ Guidelines:
         }
       }
 
-      debugPrint('[GeminiAssistant] Non-200 or empty response (${response.statusCode}): ${response.body}');
+      debugPrint(
+          '[GeminiAssistant] Non-200 or empty response (${response.statusCode}): ${response.body}');
       return fallback.ask(question, ctx);
     } catch (e) {
-      debugPrint('[GeminiAssistant] Error connecting to Gemini API ($e), falling back to offline engine.');
+      debugPrint(
+          '[GeminiAssistant] Error connecting to Gemini API ($e), falling back to offline engine.');
       return fallback.ask(question, ctx);
     }
   }

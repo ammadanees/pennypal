@@ -13,9 +13,6 @@ import '../domain/app_user.dart';
 import '../domain/auth_repository.dart';
 import 'auth_error_mapper.dart';
 
-/// Firebase Auth for credentials, Firestore `users/{uid}` for the profile
-/// and role. The role is read-only from the app: security rules stop a
-/// student from changing it, and admin accounts are set up by hand.
 class FirebaseAuthRepository implements AuthRepository {
   FirebaseAuthRepository({
     FirebaseAuth? auth,
@@ -37,7 +34,8 @@ class FirebaseAuthRepository implements AuthRepository {
   static const String _verifiedUidsKey = 'verified_uids';
   static final Set<String> _locallyVerifiedUids = <String>{};
   static final Map<String, Map<String, dynamic>> _pendingProfiles = {};
-  static final Map<String, ({String code, DateTime expiresAt})> _pendingOtps = {};
+  static final Map<String, ({String code, DateTime expiresAt})> _pendingOtps =
+      {};
 
   static void loadPersistedVerifiedUids(SharedPreferences prefs) {
     final list = prefs.getStringList(_verifiedUidsKey);
@@ -57,7 +55,8 @@ class FirebaseAuthRepository implements AuthRepository {
     _locallyVerifiedUids.add(uid);
     try {
       final prefs = _prefs ?? await SharedPreferences.getInstance();
-      await prefs.setStringList(_verifiedUidsKey, _locallyVerifiedUids.toList());
+      await prefs.setStringList(
+          _verifiedUidsKey, _locallyVerifiedUids.toList());
     } catch (e) {
       debugPrint('Could not persist verified UID: $e');
     }
@@ -84,8 +83,7 @@ class FirebaseAuthRepository implements AuthRepository {
           }
 
           var hasEmitted = false;
-          // If the profile document doesn't arrive within 2 seconds (e.g. offline with empty cache),
-          // emit fallback so the app does not hang.
+
           fallbackTimer = Timer(const Duration(seconds: 2), () {
             if (!hasEmitted && !controller.isClosed) {
               controller.add(_fallback(user));
@@ -93,13 +91,8 @@ class FirebaseAuthRepository implements AuthRepository {
             }
           });
 
-          // Follow the profile document so a fresh registration picks up
-          // the name and mobile as soon as they are saved.
           docSub = _users.doc(user.uid).snapshots().listen(
             (snap) {
-              // If the document is not in local cache yet and Firestore is still
-              // fetching from the server, don't emit a premature unverified fallback
-              // unless we already know the user is verified locally.
               if (!snap.exists &&
                   snap.metadata.isFromCache &&
                   !_locallyVerifiedUids.contains(user.uid)) {
@@ -129,7 +122,8 @@ class FirebaseAuthRepository implements AuthRepository {
     return controller.stream;
   }
 
-  AppUser _fromSnapshot(User user, DocumentSnapshot<Map<String, dynamic>> snap) {
+  AppUser _fromSnapshot(
+      User user, DocumentSnapshot<Map<String, dynamic>> snap) {
     final data = snap.data();
     if (data == null) return _fallback(user);
     final isVerifiedInDoc = (data['isEmailVerified'] as bool?) ?? false;
@@ -201,9 +195,8 @@ class FirebaseAuthRepository implements AuthRepository {
 
   Future<void> _touchLastLogin(String uid) async {
     try {
-      await _users
-          .doc(uid)
-          .set({'lastLogin': FieldValue.serverTimestamp()}, SetOptions(merge: true));
+      await _users.doc(uid).set(
+          {'lastLogin': FieldValue.serverTimestamp()}, SetOptions(merge: true));
     } catch (e) {
       debugPrint('Could not record last login: $e');
     }
@@ -308,8 +301,11 @@ class FirebaseAuthRepository implements AuthRepository {
     DateTime? expiresAt;
 
     try {
-      final docSnap =
-          await _users.doc(user.uid).collection('verification').doc('otp').get();
+      final docSnap = await _users
+          .doc(user.uid)
+          .collection('verification')
+          .doc('otp')
+          .get();
       if (docSnap.exists) {
         final data = docSnap.data();
         storedCode = data?['code'] as String?;
@@ -320,7 +316,6 @@ class FirebaseAuthRepository implements AuthRepository {
       debugPrint('Could not read verification doc from Firestore: $e');
     }
 
-    // Fall back to in-memory OTP if Firestore document was missing
     if (storedCode == null && _pendingOtps.containsKey(user.uid)) {
       final pendingOtpRecord = _pendingOtps[user.uid]!;
       storedCode = pendingOtpRecord.code;
@@ -328,21 +323,23 @@ class FirebaseAuthRepository implements AuthRepository {
     }
 
     if (storedCode == null) {
-      throw const AppFailure('No active verification code found. Please tap Resend Code.');
+      throw const AppFailure(
+          'No active verification code found. Please tap Resend Code.');
     }
 
     if (expiresAt != null && DateTime.now().isAfter(expiresAt)) {
-      throw const AppFailure('This verification code has expired. Please tap Resend Code.');
+      throw const AppFailure(
+          'This verification code has expired. Please tap Resend Code.');
     }
 
     if (storedCode != cleanOtp) {
-      throw const AppFailure('Invalid verification code. Please check and try again.');
+      throw const AppFailure(
+          'Invalid verification code. Please check and try again.');
     }
 
     await _markUidLocallyVerified(user.uid);
     _pendingOtps.remove(user.uid);
 
-    // Save complete user document to Firestore upon OTP verification
     final pendingProfile = _pendingProfiles.remove(user.uid) ?? {};
     final profileUpdate = <String, dynamic>{
       'role': 'student',
@@ -384,7 +381,6 @@ class FirebaseAuthRepository implements AuthRepository {
     try {
       await _auth.sendPasswordResetEmail(email: email.trim());
     } on FirebaseAuthException catch (e) {
-      // Unknown emails look identical to known ones.
       if (e.code == 'user-not-found') return;
       throw mapAuthError(e);
     }
@@ -418,7 +414,8 @@ class FirebaseAuthRepository implements AuthRepository {
           if (studentId != null) 'studentId': studentId.trim(),
           if (photoUrl != null) 'photoUrl': photoUrl.trim(),
           if (studentStatus != null) 'studentStatus': studentStatus.trim(),
-          if (notificationsEnabled != null) 'notificationsEnabled': notificationsEnabled,
+          if (notificationsEnabled != null)
+            'notificationsEnabled': notificationsEnabled,
         },
         SetOptions(merge: true),
       );

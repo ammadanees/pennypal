@@ -41,7 +41,8 @@ class AppButton extends StatelessWidget {
       foregroundColor: fg,
       disabledBackgroundColor: isLoading ? bg : c.border,
       disabledForegroundColor: isLoading ? fg : c.textMuted,
-      minimumSize: Size(expand ? double.infinity : 0, AppDimensions.buttonHeight),
+      minimumSize:
+          Size(expand ? double.infinity : 0, AppDimensions.buttonHeight),
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       elevation: 0,
       textStyle: context.text.labelLarge,

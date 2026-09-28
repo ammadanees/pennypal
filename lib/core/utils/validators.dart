@@ -1,4 +1,3 @@
-/// Form validators. Each returns an error message, or null when valid.
 abstract final class Validators {
   static final RegExp _email = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]{2,}$');
   static final RegExp _mobile = RegExp(r'^\+?\d{10,15}$');
@@ -44,7 +43,6 @@ abstract final class Validators {
         : 'Enter a valid mobile number, for example +92 300 1234567.';
   }
 
-  /// Sign-in only checks presence; the rules apply when creating a password.
   static String? passwordPresent(String? value) =>
       (value == null || value.isEmpty) ? 'Enter your password.' : null;
 
@@ -75,7 +73,6 @@ abstract final class Validators {
     return null;
   }
 
-  /// Empty is fine; anything entered must be a valid non-negative number.
   static String? optionalAmount(String? value) {
     if (value == null || value.trim().isEmpty) return null;
     final n = double.tryParse(value.trim());

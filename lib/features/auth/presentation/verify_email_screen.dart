@@ -24,8 +24,8 @@ class VerifyEmailScreen extends ConsumerStatefulWidget {
 
 class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   static const int _otpLength = 6;
-  static const int _expirySeconds = 300; // 5 minutes
-  static const int _resendCooldownSeconds = 60; // 60 seconds
+  static const int _expirySeconds = 300;
+  static const int _resendCooldownSeconds = 60;
 
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
@@ -72,8 +72,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
     super.dispose();
   }
 
-  String get _currentOtp =>
-      _controllers.map((c) => c.text.trim()).join();
+  String get _currentOtp => _controllers.map((c) => c.text.trim()).join();
 
   String _formatTime(int totalSeconds) {
     final minutes = totalSeconds ~/ 60;
@@ -83,7 +82,6 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
 
   void _onDigitChanged(int index, String value) {
     if (value.length > 1) {
-      // Handles pasting full OTP e.g. "123456" into a box
       final digits = value.replaceAll(RegExp(r'\D'), '');
       if (digits.isNotEmpty) {
         for (var i = 0; i < _otpLength; i++) {
@@ -91,7 +89,8 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
             _controllers[i].text = digits[i];
           }
         }
-        final nextIndex = digits.length < _otpLength ? digits.length : _otpLength - 1;
+        final nextIndex =
+            digits.length < _otpLength ? digits.length : _otpLength - 1;
         _focusNodes[nextIndex].requestFocus();
         if (digits.length >= _otpLength) {
           _verify();
@@ -125,7 +124,8 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   Future<void> _verify() async {
     final otp = _currentOtp;
     if (otp.length != _otpLength) {
-      setState(() => _error = 'Please enter all $_otpLength digits of your code.');
+      setState(
+          () => _error = 'Please enter all $_otpLength digits of your code.');
       return;
     }
 
@@ -259,8 +259,6 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
             textAlign: TextAlign.center,
           ),
           AppSpacing.vLg,
-
-          // 6-digit OTP Inputs
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(_otpLength, (index) {
@@ -282,7 +280,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
                     ),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(6), // Allow paste of full 6 digits
+                      LengthLimitingTextInputFormatter(6),
                     ],
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.zero,
@@ -304,8 +302,6 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
             }),
           ),
           AppSpacing.vMd,
-
-          // Timer & Expiration Display
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -326,22 +322,17 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
               ),
             ],
           ),
-
           if (_error != null) ...[
             AppSpacing.vMd,
             AppInlineMessage(message: _error!),
           ],
           AppSpacing.vLg,
-
-          // Verify Button
           AppButton(
             label: 'Verify & Complete Sign Up',
             isLoading: _isVerifying,
             onPressed: _verify,
           ),
           AppSpacing.vMd,
-
-          // Resend Code Button with Cooldown
           Center(
             child: _resendCooldown > 0
                 ? Text(

@@ -5,8 +5,6 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../core/theme/app_spacing.dart';
 
-/// Rounded card with a soft shadow in light mode and a hairline border in
-/// dark mode.
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,

@@ -9,7 +9,6 @@ import '../../../shared/widgets/app_scaffold.dart';
 import '../../auth/data/auth_providers.dart';
 import '../../auth/presentation/auth_controller.dart';
 
-/// Landing page for administrators until the admin portal is built.
 class AdminHomeScreen extends ConsumerWidget {
   const AdminHomeScreen({super.key});
 

@@ -7,7 +7,6 @@ abstract final class Formatters {
   static final NumberFormat _whole = NumberFormat('#,##0');
   static final NumberFormat _decimal = NumberFormat('#,##0.00');
 
-  /// 52450 -> "52,450", 450.5 -> "450.50"
   static String number(double value) =>
       (value.abs() % 1 == 0 ? _whole : _decimal).format(value);
 
@@ -26,7 +25,6 @@ abstract final class Formatters {
     return DateFormat('d MMM').format(date);
   }
 
-  /// 450 -> "450", 31200 -> "31.2k", 1200000 -> "1.2M". For chart labels.
   static String compact(double value) {
     final a = value.abs();
     final String text;
@@ -45,7 +43,6 @@ abstract final class Formatters {
     return t.endsWith('.0') ? t.substring(0, t.length - 2) : t;
   }
 
-  /// "Just now", "5 min ago", "Today 1:20 PM", "Yesterday", "12 Sep".
   static String relativeTime(DateTime date, {DateTime? now}) {
     final current = now ?? DateTime.now();
     final diff = current.difference(date);

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_spacing.dart';
 
-/// Lays children out in equal-width columns, top-aligned. Cards keep their
-/// own height, so mixed content does not leave awkward gaps.
 class AdaptiveGrid extends StatelessWidget {
   const AdaptiveGrid({
     super.key,

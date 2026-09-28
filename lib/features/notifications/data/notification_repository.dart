@@ -59,8 +59,6 @@ final unreadNotificationCountProvider = Provider<int>((ref) {
   return list.where((n) => !n.read).length;
 });
 
-/// Keeps notifications in step with the student's data. Watch it once from
-/// the signed-in shell. It only adds notifications that do not exist yet.
 final notificationEngineProvider = Provider<void>((ref) {
   void run() {
     if (ref.read(currentUidProvider) == null) return;
@@ -74,7 +72,7 @@ final notificationEngineProvider = Provider<void>((ref) {
         budgets == null ||
         goals == null ||
         read == null) {
-      return; // wait until everything has loaded
+      return;
     }
 
     final existingIds = existing.map((n) => n.id).toSet();

@@ -10,8 +10,6 @@ enum MoneySize { hero, title, body }
 
 enum MoneyKind { neutral, income, expense }
 
-/// Currency + amount with a smaller prefix. Income and expense get a +/-
-/// sign as well as colour, so meaning never depends on colour alone.
 class MoneyDisplay extends ConsumerWidget {
   const MoneyDisplay({
     super.key,

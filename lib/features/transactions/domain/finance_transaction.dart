@@ -26,19 +26,16 @@ class FinanceTransaction {
   final DateTime date;
   final DateTime createdAt;
 
-  /// Expenses only.
   final ExpenseCategory? category;
   final PaymentMode? paymentMode;
   final String? cardId;
   final String? cardName;
   final String? receiptImageUrl;
 
-  /// Income only (allowance, scholarship, ...).
   final String? source;
 
   final String description;
 
-  /// True while this change has not reached the cloud yet.
   final bool pending;
 
   bool get isIncome => type == TransactionType.income;
@@ -69,7 +66,9 @@ class FinanceTransaction {
     final date = (d['date'] as DateTime?) ?? DateTime.now();
     return FinanceTransaction(
       id: record.id,
-      type: d['type'] == 'income' ? TransactionType.income : TransactionType.expense,
+      type: d['type'] == 'income'
+          ? TransactionType.income
+          : TransactionType.expense,
       amount: (d['amount'] as num?)?.toDouble() ?? 0,
       date: date,
       createdAt: (d['createdAt'] as DateTime?) ?? date,

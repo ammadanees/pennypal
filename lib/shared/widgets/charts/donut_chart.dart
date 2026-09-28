@@ -12,8 +12,6 @@ class DonutSegment {
   final Color color;
 }
 
-/// Multi-segment donut. Always pair it with a legend that shows names and
-/// amounts so the chart does not rely on colour alone.
 class DonutChart extends StatelessWidget {
   const DonutChart({
     super.key,
@@ -84,14 +82,14 @@ class _DonutPainter extends CustomPainter {
       return;
     }
 
-    // A small gap between segments keeps neighbours readable.
     final gap = segments.length > 1 ? 0.04 : 0.0;
     var start = -math.pi / 2;
     for (final segment in segments) {
       final sweep = segment.value / total * math.pi * 2 * progress;
       final drawn = math.max(0.0, sweep - gap);
       if (drawn > 0) {
-        canvas.drawArc(rect, start + gap / 2, drawn, false, paint..color = segment.color);
+        canvas.drawArc(
+            rect, start + gap / 2, drawn, false, paint..color = segment.color);
       }
       start += sweep;
     }

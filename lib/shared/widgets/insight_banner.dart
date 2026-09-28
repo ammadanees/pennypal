@@ -6,7 +6,6 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Pastel callout with a coloured icon, for friendly one-line insights.
 class InsightBanner extends StatelessWidget {
   const InsightBanner({
     super.key,
@@ -41,19 +40,20 @@ class InsightBanner extends StatelessWidget {
                 Container(
                   width: 40,
                   height: 40,
-                  decoration:
-                      BoxDecoration(color: accent.color, shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                      color: accent.color, shape: BoxShape.circle),
                   child: Icon(icon, size: 20, color: accent.onColor),
                 ),
                 AppSpacing.hMd,
                 Expanded(
                   child: Text(
                     message,
-                    style: context.text.bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w600, color: c.textPrimary),
+                    style: context.text.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600, color: c.textPrimary),
                   ),
                 ),
-                if (onTap != null) Icon(Icons.chevron_right, color: c.textMuted),
+                if (onTap != null)
+                  Icon(Icons.chevron_right, color: c.textMuted),
               ],
             ),
           ),

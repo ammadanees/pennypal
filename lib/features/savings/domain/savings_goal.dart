@@ -29,8 +29,6 @@ class SavingsGoal {
 
   bool get isCompleted => status == GoalStatus.completed;
 
-  /// Returns a copy with new numbers, completing the goal automatically
-  /// once the target is reached.
   SavingsGoal withSaved(double newCurrent, {DateTime? now}) {
     final reached = newCurrent >= targetAmount;
     return SavingsGoal(
@@ -66,7 +64,8 @@ class SavingsGoal {
       targetAmount: (d['targetAmount'] as num?)?.toDouble() ?? 0,
       currentAmount: (d['currentAmount'] as num?)?.toDouble() ?? 0,
       monthlyContribution: (d['monthlyContribution'] as num?)?.toDouble() ?? 0,
-      status: d['status'] == 'completed' ? GoalStatus.completed : GoalStatus.active,
+      status:
+          d['status'] == 'completed' ? GoalStatus.completed : GoalStatus.active,
       createdAt: (d['createdAt'] as DateTime?) ?? DateTime.now(),
       targetDate: d['targetDate'] as DateTime?,
       completedAt: d['completedAt'] as DateTime?,

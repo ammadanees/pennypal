@@ -8,7 +8,6 @@ class DateRange {
   final DateTime start;
   final DateTime end;
 
-  /// Inclusive of both days.
   bool contains(DateTime value) {
     final from = AppDates.dateOnly(start);
     final to = AppDates.dateOnly(end).add(const Duration(days: 1));
@@ -16,7 +15,6 @@ class DateRange {
   }
 }
 
-/// Search and filter state for the transaction history.
 class TransactionFilter {
   const TransactionFilter({
     this.query = '',
@@ -102,7 +100,8 @@ class TransactionFilter {
     return all.where((t) {
       if (type != null && t.type != type) return false;
       if (category != null && t.category != category) return false;
-      if (paymentMode != null && (t.paymentMode ?? PaymentMode.cash) != paymentMode) {
+      if (paymentMode != null &&
+          (t.paymentMode ?? PaymentMode.cash) != paymentMode) {
         return false;
       }
       if (cardId != null && t.cardId != cardId) {

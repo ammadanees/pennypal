@@ -4,7 +4,6 @@ import '../../../data/record_store.dart';
 import '../../../data/record_store_provider.dart';
 import '../../auth/data/auth_providers.dart';
 
-/// Which lessons a student has marked as read. Stored per student.
 class LearningProgressRepository {
   LearningProgressRepository(this._store, this._uid);
 

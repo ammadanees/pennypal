@@ -2,8 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-/// Honeycomb outline pattern (the "bee" in NextGen BudgetBee).
-/// [reveal] grows the pattern outward from the centre (0 to 1).
 class HexPatternPainter extends CustomPainter {
   const HexPatternPainter({
     required this.color,

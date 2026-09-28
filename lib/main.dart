@@ -35,7 +35,6 @@ Future<void> main() async {
         authRepositoryProvider.overrideWithValue(backend.auth),
         recordStoreProvider.overrideWithValue(backend.store),
       ],
-      // Providers sit above DevicePreview so app state survives device changes.
       child: DevicePreview(
         enabled: devicePreviewEnabled,
         builder: (context) => const PennyPalApp(),
@@ -51,20 +50,17 @@ class _Backend {
   final RecordStore store;
 }
 
-/// Uses Firebase when it is configured. In debug builds only, falls back to
-/// an in-memory demo (with sample data for the demo student) so the app can
-/// run before Firebase is set up. A release build with broken Firebase
-/// configuration fails loudly instead.
 Future<_Backend> _createBackend(SharedPreferences prefs) async {
   try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-    // Keep an on-device copy so expenses can be entered offline. Changes are
-    // sent to the cloud automatically once a connection is back.
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+
     FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: true,
       cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
     );
-    return _Backend(FirebaseAuthRepository(prefs: prefs), FirestoreRecordStore());
+    return _Backend(
+        FirebaseAuthRepository(prefs: prefs), FirestoreRecordStore());
   } catch (error) {
     if (kReleaseMode) rethrow;
     debugPrint('Firebase is not configured ($error). Running in demo mode.');

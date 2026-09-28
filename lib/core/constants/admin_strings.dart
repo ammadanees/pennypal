@@ -12,7 +12,8 @@ abstract final class AdminStrings {
   static const String feedbackCount = 'Feedback received';
   static const String recentSignups = 'Recent sign-ups';
   static const String noStudentsTitle = 'No students yet';
-  static const String noStudentsMessage = 'Registered students will appear here.';
+  static const String noStudentsMessage =
+      'Registered students will appear here.';
   static const String joined = 'Joined';
   static const String lastActive = 'Last active';
   static const String notAvailable = 'Not available';

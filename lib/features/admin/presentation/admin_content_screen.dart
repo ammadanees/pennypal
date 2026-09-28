@@ -68,7 +68,9 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  existing == null ? 'Add Learning Content' : 'Edit Learning Content',
+                  existing == null
+                      ? 'Add Learning Content'
+                      : 'Edit Learning Content',
                   style: ctx.text.titleLarge,
                 ),
                 AppSpacing.vMd,
@@ -108,7 +110,8 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
                     ),
                   ],
                   selected: {level},
-                  onSelectionChanged: (s) => setModalState(() => level = s.first),
+                  onSelectionChanged: (s) =>
+                      setModalState(() => level = s.first),
                 ),
                 AppSpacing.vMd,
                 AppTextField(
@@ -147,9 +150,12 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
                 AppButton(
                   label: existing == null ? 'Publish Lesson' : 'Save Changes',
                   onPressed: () {
-                    if (titleCtrl.text.trim().isEmpty || sectionBodyCtrl.text.trim().isEmpty) {
+                    if (titleCtrl.text.trim().isEmpty ||
+                        sectionBodyCtrl.text.trim().isEmpty) {
                       ScaffoldMessenger.of(ctx).showSnackBar(
-                        const SnackBar(content: Text('Title and content body are required.')),
+                        const SnackBar(
+                            content:
+                                Text('Title and content body are required.')),
                       );
                       return;
                     }
@@ -194,7 +200,9 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
     if (saved == true && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(existing == null ? 'Lesson published successfully!' : 'Lesson updated successfully!'),
+          content: Text(existing == null
+              ? 'Lesson published successfully!'
+              : 'Lesson updated successfully!'),
         ),
       );
     }
@@ -204,7 +212,8 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
     final ok = await confirmAction(
       context,
       title: 'Delete Lesson',
-      message: 'Are you sure you want to remove "${lesson.title}" from the Learning Hub?',
+      message:
+          'Are you sure you want to remove "${lesson.title}" from the Learning Hub?',
       confirmLabel: 'Delete',
     );
     if (!ok || !mounted) return;
@@ -267,12 +276,14 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
                   return const AppEmptyState(
                     icon: Icons.menu_book_outlined,
                     title: 'No Learning Content',
-                    message: 'No lessons found for this topic. Tap "Add Lesson" to publish one.',
+                    message:
+                        'No lessons found for this topic. Tap "Add Lesson" to publish one.',
                   );
                 }
 
                 return ListView.separated(
-                  padding: const EdgeInsets.only(bottom: AppDimensions.fabClearance),
+                  padding:
+                      const EdgeInsets.only(bottom: AppDimensions.fabClearance),
                   itemCount: filtered.length,
                   separatorBuilder: (_, __) => AppSpacing.vSm,
                   itemBuilder: (ctx, i) {
@@ -297,7 +308,8 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
                                 onPressed: () => _openLessonEditor(item),
                               ),
                               IconButton(
-                                icon: Icon(Icons.delete_outline, size: 20, color: c.error),
+                                icon: Icon(Icons.delete_outline,
+                                    size: 20, color: c.error),
                                 tooltip: 'Delete',
                                 onPressed: () => _deleteLesson(item),
                               ),
@@ -309,7 +321,8 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
                           Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: c.surfaceElevated,
                                   borderRadius: AppRadius.pillAll,
@@ -321,7 +334,8 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
                               ),
                               AppSpacing.hSm,
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
                                   color: c.primarySoft,
                                   borderRadius: AppRadius.pillAll,
@@ -338,7 +352,8 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
                               AppSpacing.hSm,
                               Text(
                                 '${item.readMinutes} min read',
-                                style: t.bodySmall?.copyWith(color: c.textSecondary, fontSize: 11),
+                                style: t.bodySmall?.copyWith(
+                                    color: c.textSecondary, fontSize: 11),
                               ),
                             ],
                           ),

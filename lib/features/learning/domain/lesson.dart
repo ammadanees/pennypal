@@ -28,8 +28,6 @@ class LessonSection {
 
   final String heading;
 
-  /// Paragraphs are separated by a blank line. Lines starting with "- "
-  /// are shown as bullets.
   final String body;
 }
 
@@ -62,8 +60,6 @@ class Lesson {
   final List<LessonSection> sections;
   final LessonExample? example;
 
-  /// Optional hosted image (for example a Cloudinary URL). Lessons without
-  /// one show a topic illustration instead.
   final String? imageUrl;
 
   Map<String, dynamic> toMap() => {
@@ -85,7 +81,9 @@ class Lesson {
     final d = record is Map<String, dynamic>
         ? record
         : (record.data as Map<String, dynamic>);
-    final id = (record is Map<String, dynamic> ? record['id'] : record.id) as String? ?? '';
+    final id = (record is Map<String, dynamic> ? record['id'] : record.id)
+            as String? ??
+        '';
     final topicStr = d['topic'] as String?;
     final levelStr = d['level'] as String?;
     final sectionsRaw = d['sections'] as List? ?? [];
@@ -122,4 +120,3 @@ class Lesson {
     );
   }
 }
-

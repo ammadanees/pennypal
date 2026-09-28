@@ -7,8 +7,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
 
-/// Solid, vivid card for one spending category: how much was spent, its
-/// share of all spending, and how much of its limit is used.
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
     super.key,
@@ -50,7 +48,8 @@ class CategoryCard extends StatelessWidget {
       excludeSemantics: true,
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(color: accent.color, borderRadius: AppRadius.xlAll),
+        decoration:
+            BoxDecoration(color: accent.color, borderRadius: AppRadius.xlAll),
         child: Column(
           children: [
             Row(
@@ -103,7 +102,8 @@ class CategoryCard extends StatelessWidget {
                       ),
                       Text(
                         detail,
-                        style: t.bodySmall?.copyWith(color: fg.withOpacity(0.9)),
+                        style:
+                            t.bodySmall?.copyWith(color: fg.withOpacity(0.9)),
                       ),
                     ],
                   ),
@@ -119,7 +119,8 @@ class CategoryCard extends StatelessWidget {
                     if (limit != null)
                       Text(
                         'of ${Formatters.money(limit!)}',
-                        style: t.bodySmall?.copyWith(color: fg.withOpacity(0.9)),
+                        style:
+                            t.bodySmall?.copyWith(color: fg.withOpacity(0.9)),
                       ),
                   ],
                 ),

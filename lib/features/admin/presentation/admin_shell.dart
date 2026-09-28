@@ -5,9 +5,6 @@ import '../../../app/routes.dart';
 import '../../../core/constants/admin_strings.dart';
 import '../../../core/responsive/adaptive_scaffold.dart';
 
-/// Admin navigation: Dashboard, Users, Support, Feedback. Same shell
-/// component as the student app, so the admin portal shares one design
-/// system with a denser layout.
 class AdminShell extends StatelessWidget {
   const AdminShell({super.key, required this.navigationShell});
 

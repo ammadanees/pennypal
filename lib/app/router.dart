@@ -44,7 +44,8 @@ import 'routes.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier<int>(0);
-  ref.listen<AsyncValue<AppUser?>>(authStateProvider, (_, __) => refresh.value++);
+  ref.listen<AsyncValue<AppUser?>>(
+      authStateProvider, (_, __) => refresh.value++);
   ref.onDispose(refresh.dispose);
 
   return GoRouter(
@@ -80,7 +81,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, __, shell) => StudentShell(navigationShell: shell),
         branches: [
           StatefulShellBranch(routes: [
-            GoRoute(path: AppRoutes.home, builder: (_, __) => const HomeScreen()),
+            GoRoute(
+                path: AppRoutes.home, builder: (_, __) => const HomeScreen()),
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
@@ -101,7 +103,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             ),
           ]),
           StatefulShellBranch(routes: [
-            GoRoute(path: AppRoutes.more, builder: (_, __) => const MoreScreen()),
+            GoRoute(
+                path: AppRoutes.more, builder: (_, __) => const MoreScreen()),
           ]),
         ],
       ),
@@ -111,7 +114,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           if (state.extra is Map<String, dynamic>) {
             final map = state.extra! as Map<String, dynamic>;
             return TransactionFormScreen(
-              initialType: (map['type'] as TransactionType?) ?? TransactionType.expense,
+              initialType:
+                  (map['type'] as TransactionType?) ?? TransactionType.expense,
               initialAmount: (map['amount'] as num?)?.toDouble(),
               initialDescription: map['description'] as String?,
             );
@@ -148,7 +152,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.goalEdit,
         builder: (_, state) => GoalFormScreen(
-          existing: state.extra is SavingsGoal ? state.extra! as SavingsGoal : null,
+          existing:
+              state.extra is SavingsGoal ? state.extra! as SavingsGoal : null,
         ),
       ),
       GoRoute(
@@ -224,11 +229,6 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-/// Central guard. The splash screen always hands off to /welcome and this
-/// decides the real destination:
-///  - signed out, first launch  -> welcome (shown once)
-///  - signed out, seen welcome  -> sign in
-///  - signed in                 -> student home or admin portal by role
 String? _redirect(Ref ref, String location) {
   if (location == AppRoutes.splash) return null;
 
@@ -250,7 +250,6 @@ String? _redirect(Ref ref, String location) {
     return seenWelcome ? AppRoutes.login : AppRoutes.welcome;
   }
 
-  // User is logged in, but must verify email before accessing the app
   if (!user.isEmailVerified) {
     return location == AppRoutes.verifyEmail ? null : AppRoutes.verifyEmail;
   }

@@ -5,8 +5,6 @@ import '../../core/theme/app_durations.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 
-/// A softly pulsing placeholder block. Static when the user prefers
-/// reduced motion.
 class SkeletonBox extends StatefulWidget {
   const SkeletonBox({super.key, this.width, required this.height});
 
@@ -47,7 +45,6 @@ class _SkeletonBoxState extends State<SkeletonBox>
   }
 }
 
-/// Default loading view: a few skeleton rows, never a blank screen.
 class AppLoading extends StatelessWidget {
   const AppLoading({super.key, this.rows = 4});
 

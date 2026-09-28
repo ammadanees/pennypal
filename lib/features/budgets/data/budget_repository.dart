@@ -39,7 +39,6 @@ final budgetsProvider = StreamProvider<List<Budget>>((ref) {
   return ref.watch(budgetRepositoryProvider).watchAll();
 });
 
-/// The month shown on the Budget tab.
 final selectedBudgetMonthProvider = StateProvider<DateTime>(
   (ref) => AppDates.startOfMonth(DateTime.now()),
 );

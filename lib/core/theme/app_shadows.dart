@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppShadows {
-  /// Subtle, crisp modern ambient shadow for cards.
   static List<BoxShadow> card(Brightness brightness) {
     if (brightness == Brightness.dark) {
       return const [
@@ -21,7 +20,6 @@ abstract final class AppShadows {
     ];
   }
 
-  /// Ambient floating shadow for modern floating navigation bar
   static List<BoxShadow> floatingNav(Brightness brightness) {
     if (brightness == Brightness.dark) {
       return const [
@@ -41,7 +39,6 @@ abstract final class AppShadows {
     ];
   }
 
-  /// Subtle tint glow under vivid cards.
   static List<BoxShadow> glow(Color color) => [
         BoxShadow(
           color: color.withOpacity(0.18),

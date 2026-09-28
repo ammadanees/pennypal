@@ -6,7 +6,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_durations.dart';
 
-/// Donut progress indicator with an optional centre widget.
 class ProgressRing extends StatelessWidget {
   const ProgressRing({
     super.key,

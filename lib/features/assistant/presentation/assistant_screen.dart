@@ -85,14 +85,17 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
               controller: _scroll,
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
               children: [
-                const _Bubble(text: Step5Strings.assistantIntro, fromUser: false),
+                const _Bubble(
+                    text: Step5Strings.assistantIntro, fromUser: false),
                 for (final m in state.messages)
                   _Bubble(
                     text: m.text,
                     fromUser: m.fromUser,
                     isError: m.isError,
                     onRetry: m.isError
-                        ? () => ref.read(assistantControllerProvider.notifier).retry(m)
+                        ? () => ref
+                            .read(assistantControllerProvider.notifier)
+                            .retry(m)
                         : null,
                   ),
                 if (state.isTyping) const _TypingBubble(),
@@ -174,7 +177,9 @@ class _Bubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final t = context.text;
-    final bg = fromUser ? c.primary : (isError ? c.error.withOpacity(0.12) : c.surface);
+    final bg = fromUser
+        ? c.primary
+        : (isError ? c.error.withOpacity(0.12) : c.surface);
     final fg = fromUser ? c.onPrimary : c.textPrimary;
 
     return Padding(
@@ -200,7 +205,9 @@ class _Bubble extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: bg,
                   borderRadius: AppRadius.lgAll,
-                  border: (!fromUser && !isError) ? Border.all(color: c.border) : null,
+                  border: (!fromUser && !isError)
+                      ? Border.all(color: c.border)
+                      : null,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,7 +234,6 @@ class _Bubble extends StatelessWidget {
   }
 }
 
-/// Three softly pulsing dots. Static when reduced motion is on.
 class _TypingBubble extends StatefulWidget {
   const _TypingBubble();
 
@@ -237,9 +243,9 @@ class _TypingBubble extends StatefulWidget {
 
 class _TypingBubbleState extends State<_TypingBubble>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 900))
-        ..repeat();
+  late final AnimationController _controller = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 900))
+    ..repeat();
 
   @override
   void dispose() {
@@ -287,7 +293,8 @@ class _TypingBubbleState extends State<_TypingBubble>
                               : 0.3 +
                                   0.7 *
                                       (((_controller.value * 3 - i) % 3) < 1
-                                          ? 1 - ((_controller.value * 3 - i) % 3)
+                                          ? 1 -
+                                              ((_controller.value * 3 - i) % 3)
                                           : 0),
                           child: Container(
                             width: 8,

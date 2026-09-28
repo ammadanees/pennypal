@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/app_strings.dart';
 
-/// Asks before a destructive action. Returns true only if confirmed.
 Future<bool> confirmAction(
   BuildContext context, {
   required String title,

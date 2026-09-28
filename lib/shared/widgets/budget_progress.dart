@@ -9,7 +9,6 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/formatters.dart';
 
-/// Spend versus limit. Status is shown as icon + text as well as colour.
 class BudgetProgress extends StatelessWidget {
   const BudgetProgress({
     super.key,
@@ -32,11 +31,16 @@ class BudgetProgress extends StatelessWidget {
     final (Color color, IconData icon, String status) = ratio >= 1
         ? (c.error, Icons.error_outline, AppStrings.budgetOver)
         : ratio >= alertThreshold
-            ? (c.warning, Icons.warning_amber_outlined, AppStrings.budgetNearing)
+            ? (
+                c.warning,
+                Icons.warning_amber_outlined,
+                AppStrings.budgetNearing
+              )
             : (c.success, Icons.check_circle_outline, AppStrings.budgetOnTrack);
 
     return Semantics(
-      label: '$label: ${Formatters.money(spent)} of ${Formatters.money(limit)}, '
+      label:
+          '$label: ${Formatters.money(spent)} of ${Formatters.money(limit)}, '
           '${Formatters.percent(ratio)} used. $status.',
       excludeSemantics: true,
       child: Column(

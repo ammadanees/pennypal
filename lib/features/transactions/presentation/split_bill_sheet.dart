@@ -32,7 +32,8 @@ class SplitBillSheet extends StatefulWidget {
 
 class _SplitBillSheetState extends State<SplitBillSheet> {
   final _amountCtrl = TextEditingController();
-  final _titleCtrl = TextEditingController(text: 'Group dinner / shared expense');
+  final _titleCtrl =
+      TextEditingController(text: 'Group dinner / shared expense');
   int _peopleCount = 3;
   double _tipPercent = 0.0;
 
@@ -59,7 +60,8 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
     }
 
     final shareAmount = _perPersonShare;
-    final note = '${_titleCtrl.text.trim()} (My share of ${Formatters.money(_totalWithTip)} split among $_peopleCount)';
+    final note =
+        '${_titleCtrl.text.trim()} (My share of ${Formatters.money(_totalWithTip)} split among $_peopleCount)';
 
     Navigator.of(context).pop();
     context.push(
@@ -126,7 +128,8 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
               label: 'Total Bill Amount',
               controller: _amountCtrl,
               prefixText: '${Formatters.currentCurrency} ',
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               onChanged: (_) => setState(() {}),
             ),
             AppSpacing.vMd,
@@ -149,10 +152,12 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
                             : null,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.xs),
                         child: Text(
                           '$_peopleCount people',
-                          style: t.labelMedium?.copyWith(fontWeight: FontWeight.bold),
+                          style: t.labelMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
                       IconButton(
@@ -194,7 +199,8 @@ class _SplitBillSheetState extends State<SplitBillSheet> {
                       Text('Total with Tip', style: t.bodyMedium),
                       Text(
                         Formatters.money(_totalWithTip),
-                        style: t.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                        style: t.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),

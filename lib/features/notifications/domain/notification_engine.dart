@@ -10,9 +10,6 @@ import '../../savings/domain/savings_goal.dart';
 import '../../transactions/domain/finance_transaction.dart';
 import 'app_notification.dart';
 
-/// Decides which notifications should exist. Ids are deterministic, so
-/// saving the same notification twice never creates a duplicate, and each
-/// event (a limit crossed, a milestone reached, a week) notifies once.
 abstract final class NotificationEngine {
   static List<AppNotification> generate({
     required List<FinanceTransaction> transactions,
@@ -41,7 +38,6 @@ abstract final class NotificationEngine {
           createdAt: now,
         );
 
-    // Budget: overall and each category with a limit.
     final budget = budgets.forMonth(month);
     if (budget != null) {
       final status = BudgetCalculator.status(
@@ -84,14 +80,14 @@ abstract final class NotificationEngine {
       }
     }
 
-    // Savings: the highest milestone reached. Old completed goals are skipped.
     for (final goal in goals) {
       if (goal.isCompleted &&
           goal.completedAt != null &&
           now.difference(goal.completedAt!).inDays > 30) {
         continue;
       }
-      final reached = SavingsCalculator.progress(goal, now: now).milestonesReached;
+      final reached =
+          SavingsCalculator.progress(goal, now: now).milestonesReached;
       if (reached.isEmpty) continue;
       final m = reached.last;
       result.add(note(
@@ -104,8 +100,8 @@ abstract final class NotificationEngine {
       ));
     }
 
-    // Learning: at most one nudge a week, while lessons remain unread.
-    final unread = lessons.where((l) => !readLessonIds.contains(l.id)).firstOrNull;
+    final unread =
+        lessons.where((l) => !readLessonIds.contains(l.id)).firstOrNull;
     if (unread != null) {
       final week = (now.difference(DateTime(now.year)).inDays ~/ 7) + 1;
       result.add(note(

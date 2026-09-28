@@ -63,7 +63,8 @@ class _FeedbackCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(entry.name.isEmpty ? 'Anonymous' : entry.name, style: t.titleMedium),
+                    Text(entry.name.isEmpty ? 'Anonymous' : entry.name,
+                        style: t.titleMedium),
                     Text(entry.email, style: t.bodySmall),
                   ],
                 ),
@@ -72,7 +73,9 @@ class _FeedbackCard extends StatelessWidget {
                 children: [
                   for (var i = 1; i <= 5; i++)
                     Icon(
-                      i <= entry.rating ? Icons.star_rounded : Icons.star_outline_rounded,
+                      i <= entry.rating
+                          ? Icons.star_rounded
+                          : Icons.star_outline_rounded,
                       size: 18,
                       color: AppAccents.amber.color,
                     ),

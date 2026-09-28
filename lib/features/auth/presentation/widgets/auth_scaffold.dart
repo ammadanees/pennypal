@@ -9,9 +9,6 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/brand_mark.dart';
 import '../../../../shared/widgets/hex_pattern.dart';
 
-/// Shared layout for sign in, register and reset password.
-/// Phones and tablets get a single centred column; wide screens get a
-/// brand panel beside the form.
 class AuthScaffold extends StatelessWidget {
   const AuthScaffold({
     super.key,

@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 
 enum ScreenSize { compact, medium, expanded }
 
-/// Compact < 600, medium 600-1024, expanded > 1024.
 abstract final class AppBreakpoints {
   static const double compact = 600;
   static const double medium = 1024;
