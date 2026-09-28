@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 import 'core/config/dev_tools.dart';
+import 'core/services/local_notification_service.dart';
 import 'core/services/shared_preferences_provider.dart';
 import 'data/demo_seed.dart';
 import 'data/firestore_record_store.dart';
@@ -24,6 +25,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   FirebaseAuthRepository.loadPersistedVerifiedUids(prefs);
+  await LocalNotificationService.initialize();
   final backend = await _createBackend(prefs);
 
   runApp(

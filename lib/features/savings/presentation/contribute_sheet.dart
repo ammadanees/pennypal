@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/finance_strings.dart';
+import '../../../core/services/local_notification_service.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/input_formatters.dart';
 import '../../../core/utils/validators.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
+import '../../auth/data/auth_providers.dart';
 import '../data/savings_repository.dart';
+import '../domain/savings_calculator.dart';
 import '../domain/savings_goal.dart';
 
 Future<void> showContributeSheet(BuildContext context, SavingsGoal goal) {
@@ -51,9 +54,32 @@ class _ContributeSheetState extends ConsumerState<ContributeSheet> {
   Future<void> _save() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     final goal = widget.goal;
+    final oldProgress = SavingsCalculator.progress(goal);
     final updated =
         goal.withSaved(goal.currentAmount + double.parse(_amount.text.trim()));
+    final newProgress = SavingsCalculator.progress(updated);
     await ref.read(savingsRepositoryProvider).save(updated);
+
+    final user = ref.read(authStateProvider).valueOrNull;
+    if (user?.notificationsEnabled ?? true) {
+      if (updated.isCompleted && !goal.isCompleted) {
+        await LocalNotificationService.showSavingsMilestone(
+          goalName: goal.name,
+          milestone: 100,
+        );
+      } else {
+        final newlyReached = newProgress.milestonesReached
+            .toSet()
+            .difference(oldProgress.milestonesReached.toSet());
+        if (newlyReached.isNotEmpty) {
+          await LocalNotificationService.showSavingsMilestone(
+            goalName: goal.name,
+            milestone: newlyReached.last,
+          );
+        }
+      }
+    }
+
     if (!mounted) return;
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(

@@ -108,9 +108,11 @@ Future<void> seedDemoData(MemoryRecordStore store, {DateTime? now}) async {
   });
   await store.upsertShared('users', uid, {
     'fullName': 'Alex Khan',
+    'studentId': 'Student1501103',
     'email': DemoAuthRepository.studentEmail,
     'mobile': '+92 300 1234567',
     'role': 'student',
+    'studentStatus': 'Full-time',
     'createdAt': AppDates.addMonths(monthStart, -4),
     'lastLogin': today,
   });

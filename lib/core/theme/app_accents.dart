@@ -19,7 +19,7 @@ abstract final class AppAccents {
   static const AppAccent purple = AppAccent(Color(0xFF6D4AE8), _white);
   static const AppAccent blue = AppAccent(Color(0xFF2563EB), _white);
   static const AppAccent green = AppAccent(Color(0xFF0F9D75), _white);
-  static const AppAccent amber = AppAccent(Color(0xFFFFB020), Color(0xFF2B1D00));
+  static const AppAccent amber = AppAccent(Color(0xFFD97706), _white);
   static const AppAccent pink = AppAccent(Color(0xFFD6337F), _white);
   static const AppAccent cyan = AppAccent(Color(0xFF0B7F92), _white);
   static const AppAccent slate = AppAccent(Color(0xFF5B6B85), _white);

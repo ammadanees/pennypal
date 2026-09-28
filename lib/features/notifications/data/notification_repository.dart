@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/services/local_notification_service.dart';
 import '../../../data/record_store.dart';
 import '../../../data/record_store_provider.dart';
 import '../../auth/data/auth_providers.dart';
@@ -86,8 +87,21 @@ final notificationEngineProvider = Provider<void>((ref) {
       readLessonIds: read,
       now: DateTime.now(),
     );
+    final user = ref.read(authStateProvider).valueOrNull;
+    final notificationsAllowed = user?.notificationsEnabled ?? true;
+
     for (final n in candidates) {
-      if (!existingIds.contains(n.id)) repo.save(n);
+      if (!existingIds.contains(n.id)) {
+        repo.save(n);
+        if (notificationsAllowed && existingIds.isNotEmpty) {
+          LocalNotificationService.showNotification(
+            id: n.id.hashCode,
+            title: n.title,
+            body: n.message,
+            payload: n.type.name,
+          );
+        }
+      }
     }
   }
 

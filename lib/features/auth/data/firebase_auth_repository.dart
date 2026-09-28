@@ -154,6 +154,8 @@ class FirebaseAuthRepository implements AuthRepository {
       role: UserRole.parse(data['role']),
       photoUrl: photo,
       isEmailVerified: isVerified,
+      studentStatus: (data['studentStatus'] as String?) ?? 'Full-time',
+      notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? true,
     );
   }
 
@@ -397,6 +399,8 @@ class FirebaseAuthRepository implements AuthRepository {
     required String mobile,
     String? studentId,
     String? photoUrl,
+    String? studentStatus,
+    bool? notificationsEnabled,
   }) async {
     final user = _auth.currentUser;
     if (user == null) throw const AppFailure(AppStrings.authNoSession);
@@ -413,6 +417,8 @@ class FirebaseAuthRepository implements AuthRepository {
           'mobile': mobile.trim(),
           if (studentId != null) 'studentId': studentId.trim(),
           if (photoUrl != null) 'photoUrl': photoUrl.trim(),
+          if (studentStatus != null) 'studentStatus': studentStatus.trim(),
+          if (notificationsEnabled != null) 'notificationsEnabled': notificationsEnabled,
         },
         SetOptions(merge: true),
       );

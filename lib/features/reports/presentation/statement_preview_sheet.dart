@@ -215,12 +215,12 @@ class _StatementPreviewSheetState
               Container(
                 padding: const EdgeInsets.all(AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: AppAccents.blue.color.withOpacity(0.12),
+                  color: c.primarySoft,
                   borderRadius: AppRadius.mdAll,
                 ),
                 child: Icon(
                   Icons.receipt_long_rounded,
-                  color: AppAccents.blue.color,
+                  color: c.primary,
                   size: 28,
                 ),
               ),

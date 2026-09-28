@@ -7,6 +7,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/finance_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/app_dates.dart';
@@ -110,27 +111,52 @@ class _MonthSwitcher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.colors;
+    final t = context.text;
     void shift(int by) => ref.read(selectedBudgetMonthProvider.notifier).state =
         AppDates.addMonths(month, by);
-    return Row(
-      children: [
-        IconButton(
-          tooltip: FinanceStrings.previousMonth,
-          icon: const Icon(Icons.chevron_left),
-          onPressed: () => shift(-1),
-        ),
-        Expanded(
-          child: Center(
-            child: Text(AppDates.monthLabel(month),
-                style: context.text.titleMedium),
+
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xs,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: c.surfaceElevated,
+        borderRadius: AppRadius.pillAll,
+        border: Border.all(color: c.border.withOpacity(0.6)),
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            tooltip: FinanceStrings.previousMonth,
+            icon: Icon(Icons.chevron_left, color: c.textSecondary),
+            onPressed: () => shift(-1),
           ),
-        ),
-        IconButton(
-          tooltip: FinanceStrings.nextMonth,
-          icon: const Icon(Icons.chevron_right),
-          onPressed: () => shift(1),
-        ),
-      ],
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.calendar_month_outlined, size: 16, color: c.primary),
+                const SizedBox(width: 8),
+                Text(
+                  AppDates.monthLabel(month),
+                  style: t.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            tooltip: FinanceStrings.nextMonth,
+            icon: Icon(Icons.chevron_right, color: c.textSecondary),
+            onPressed: () => shift(1),
+          ),
+        ],
+      ),
     );
   }
 }

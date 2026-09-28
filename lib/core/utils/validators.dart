@@ -19,8 +19,11 @@ abstract final class Validators {
     final missing = required(value, 'student ID / enrollment');
     if (missing != null) return missing;
     final v = value!.trim();
-    if (v.length < 3) return 'Student ID must be at least 3 characters.';
-    if (v.length > 30) return 'Keep your student ID under 30 characters.';
+    if (v.length < 4) return 'Student ID must be at least 4 characters.';
+    if (v.length > 25) return 'Keep your student ID under 25 characters.';
+    if (!RegExp(r'^[a-zA-Z0-9_-]+$').hasMatch(v)) {
+      return 'Use letters, numbers, or hyphens (e.g. Student1501103).';
+    }
     return null;
   }
 

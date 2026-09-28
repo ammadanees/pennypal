@@ -7,7 +7,6 @@ import '../../../app/routes.dart';
 import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/finance_strings.dart';
-import '../../../core/theme/app_accents.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_radius.dart';
@@ -80,7 +79,15 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.north_east),
+              leading: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: context.colors.expense.withOpacity(0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.north_east, size: 20, color: context.colors.expense),
+              ),
               title: const Text(FinanceStrings.quickAddExpense),
               onTap: () {
                 Navigator.of(sheetContext).pop();
@@ -89,7 +96,15 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.south_west),
+              leading: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: context.colors.income.withOpacity(0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.south_west, size: 20, color: context.colors.income),
+              ),
               title: const Text(FinanceStrings.quickAddIncome),
               onTap: () {
                 Navigator.of(sheetContext).pop();
@@ -98,7 +113,15 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.call_split_rounded),
+              leading: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: context.colors.primary.withOpacity(0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.call_split_rounded, size: 20, color: context.colors.primary),
+              ),
               title: const Text('Split Bill with Roommates'),
               subtitle: const Text('Calculate per-person share & tip'),
               onTap: () {
@@ -348,7 +371,7 @@ class _AccountSummaryCard extends StatelessWidget {
                   'Sum: ${Formatters.money(netSum)}',
                   style: t.labelMedium?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: netSum >= 0 ? AppAccents.green.color : AppAccents.coral.color,
+                    color: netSum >= 0 ? c.income : c.expense,
                   ),
                 ),
               ],
@@ -360,7 +383,7 @@ class _AccountSummaryCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppAccents.green.color.withOpacity(0.08),
+                      color: c.income.withOpacity(0.08),
                       borderRadius: AppRadius.smAll,
                     ),
                     child: Row(
@@ -368,7 +391,7 @@ class _AccountSummaryCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.south_west, size: 12, color: AppAccents.green.color),
+                            Icon(Icons.south_west, size: 12, color: c.income),
                             const SizedBox(width: 4),
                             Text('Income', style: t.bodySmall?.copyWith(fontSize: 11)),
                           ],
@@ -376,7 +399,7 @@ class _AccountSummaryCard extends StatelessWidget {
                         Text(
                           '+${Formatters.money(inTotal)}',
                           style: t.labelSmall?.copyWith(
-                            color: AppAccents.green.color,
+                            color: c.income,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -389,7 +412,7 @@ class _AccountSummaryCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppAccents.coral.color.withOpacity(0.08),
+                      color: c.expense.withOpacity(0.08),
                       borderRadius: AppRadius.smAll,
                     ),
                     child: Row(
@@ -397,7 +420,7 @@ class _AccountSummaryCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.north_east, size: 12, color: AppAccents.coral.color),
+                            Icon(Icons.north_east, size: 12, color: c.expense),
                             const SizedBox(width: 4),
                             Text('Expense', style: t.bodySmall?.copyWith(fontSize: 11)),
                           ],
@@ -405,7 +428,7 @@ class _AccountSummaryCard extends StatelessWidget {
                         Text(
                           '-${Formatters.money(exTotal)}',
                           style: t.labelSmall?.copyWith(
-                            color: AppAccents.coral.color,
+                            color: c.expense,
                             fontWeight: FontWeight.w700,
                           ),
                         ),

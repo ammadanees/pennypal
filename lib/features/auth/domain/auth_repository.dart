@@ -31,6 +31,8 @@ abstract class AuthRepository {
     required String mobile,
     String? studentId,
     String? photoUrl,
+    String? studentStatus,
+    bool? notificationsEnabled,
   });
 
   /// True when running without Firebase (local development only).

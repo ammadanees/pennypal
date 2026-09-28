@@ -16,6 +16,8 @@ class AppUser {
     this.studentId,
     this.photoUrl,
     this.isEmailVerified = true,
+    this.studentStatus = 'Full-time',
+    this.notificationsEnabled = true,
   });
 
   final String uid;
@@ -26,6 +28,8 @@ class AppUser {
   final String? studentId;
   final String? photoUrl;
   final bool isEmailVerified;
+  final String studentStatus;
+  final bool notificationsEnabled;
 
   bool get isAdmin => role == UserRole.admin;
 
@@ -51,6 +55,8 @@ class AppUser {
     String? studentId,
     String? photoUrl,
     bool? isEmailVerified,
+    String? studentStatus,
+    bool? notificationsEnabled,
   }) =>
       AppUser(
         uid: uid,
@@ -61,5 +67,7 @@ class AppUser {
         role: role,
         photoUrl: photoUrl ?? this.photoUrl,
         isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+        studentStatus: studentStatus ?? this.studentStatus,
+        notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       );
 }

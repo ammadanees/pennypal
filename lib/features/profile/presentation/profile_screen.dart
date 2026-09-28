@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../core/services/cloudinary_service.dart';
 import '../../../core/services/currency_service.dart';
+import '../../../core/services/local_notification_service.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_loading.dart';
@@ -149,19 +150,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   label: AppStrings.labelFullName,
                   value: user.fullName,
                 ),
-                if (user.studentId != null && user.studentId!.isNotEmpty) ...[
-                  const Divider(),
-                  _InfoRow(
-                    icon: Icons.badge_outlined,
-                    label: AppStrings.labelStudentId,
-                    value: user.studentId!,
-                  ),
-                ],
+                const Divider(),
+                _InfoRow(
+                  icon: Icons.badge_outlined,
+                  label: AppStrings.labelStudentId,
+                  value: (user.studentId != null && user.studentId!.trim().isNotEmpty)
+                      ? user.studentId!
+                      : 'Not added',
+                ),
                 const Divider(),
                 _InfoRow(
                   icon: Icons.mail_outline,
                   label: AppStrings.labelEmail,
                   value: user.email,
+                ),
+                const Divider(),
+                _InfoRow(
+                  icon: Icons.school_outlined,
+                  label: 'Student Status',
+                  value: user.studentStatus,
                 ),
                 const Divider(),
                 _InfoRow(
@@ -181,6 +188,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
           const SectionHeader(title: 'Preferences'),
           const _CurrencyPreferenceTile(),
+          AppSpacing.vSm,
+          _NotificationPreferenceTile(user: user),
           const SectionHeader(title: AppStrings.appearance),
           const ThemeModeSelector(),
           const SectionHeader(title: AppStrings.account),
@@ -342,6 +351,61 @@ class _CurrencyPreferenceTile extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _NotificationPreferenceTile extends ConsumerWidget {
+  const _NotificationPreferenceTile({required this.user});
+
+  final AppUser user;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.colors;
+    final t = context.text;
+
+    return AppCard(
+      child: SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        value: user.notificationsEnabled,
+        activeColor: c.primary,
+        secondary: Container(
+          width: 40,
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: c.primarySoft,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            user.notificationsEnabled
+                ? Icons.notifications_active_outlined
+                : Icons.notifications_off_outlined,
+            color: c.primary,
+            size: 20,
+          ),
+        ),
+        title: const Text('Budget & Expense Alerts'),
+        subtitle: Text(
+          user.notificationsEnabled
+              ? 'Notify when nearing 80% of budget'
+              : 'Alerts are muted',
+          style: t.bodySmall?.copyWith(color: c.textMuted),
+        ),
+        onChanged: (enabled) async {
+          if (enabled) {
+            await LocalNotificationService.requestPermissions();
+          }
+          ref.read(authControllerProvider.notifier).updateProfile(
+                fullName: user.fullName,
+                mobile: user.mobile,
+                studentId: user.studentId,
+                studentStatus: user.studentStatus,
+                notificationsEnabled: enabled,
+              );
+        },
       ),
     );
   }

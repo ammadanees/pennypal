@@ -22,6 +22,12 @@ import '../data/transaction_repository.dart';
 import '../domain/finance_transaction.dart';
 import '../../cards/presentation/card_selector_view.dart';
 import '../../../core/services/expense_categorizer.dart';
+import '../../../core/services/local_notification_service.dart';
+import '../../../core/utils/app_dates.dart';
+import '../../auth/data/auth_providers.dart';
+import '../../budgets/data/budget_repository.dart';
+import '../../budgets/domain/budget_calculator.dart';
+import '../../dashboard/domain/finance_calculator.dart';
 
 /// Add or edit an income or expense. Works fully offline.
 class TransactionFormScreen extends ConsumerStatefulWidget {
@@ -137,6 +143,57 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       receiptImageUrl: _isIncome ? null : _receiptUrl,
     );
     await ref.read(transactionRepositoryProvider).save(transaction);
+
+    if (!_isIncome && _category != null) {
+      final user = ref.read(authStateProvider).valueOrNull;
+      if (user?.notificationsEnabled ?? true) {
+        final budgets = ref.read(budgetsProvider).valueOrNull;
+        final monthBudget = budgets?.forMonth(AppDates.startOfMonth(transaction.date));
+        if (monthBudget != null) {
+          final txs = (ref.read(transactionsProvider).valueOrNull ?? <FinanceTransaction>[])
+              .where((t) => t.id != transaction.id)
+              .toList()..add(transaction);
+          final summary = FinanceCalculator.monthSummary(txs, AppDates.startOfMonth(transaction.date));
+          final status = BudgetCalculator.status(monthBudget, summary);
+
+          final categoryLimit = monthBudget.categoryLimits[_category];
+          final categorySpent = summary.byCategory[_category] ?? 0.0;
+          if (categoryLimit != null && categoryLimit > 0) {
+            final catRatio = categorySpent / categoryLimit;
+            if (catRatio >= 1.0) {
+              await LocalNotificationService.showBudgetAlert(
+                category: _category!.label,
+                percentSpent: catRatio,
+                limit: categoryLimit,
+                isOver: true,
+              );
+            } else if (catRatio >= monthBudget.alertThreshold) {
+              await LocalNotificationService.showBudgetAlert(
+                category: _category!.label,
+                percentSpent: catRatio,
+                limit: categoryLimit,
+                isOver: false,
+              );
+            }
+          } else if (status.level == BudgetLevel.over) {
+            await LocalNotificationService.showBudgetAlert(
+              category: 'Overall',
+              percentSpent: status.ratio,
+              limit: monthBudget.totalAmount,
+              isOver: true,
+            );
+          } else if (status.level == BudgetLevel.nearing) {
+            await LocalNotificationService.showBudgetAlert(
+              category: 'Overall',
+              percentSpent: status.ratio,
+              limit: monthBudget.totalAmount,
+              isOver: false,
+            );
+          }
+        }
+      }
+    }
+
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text(FinanceStrings.transactionSaved)),

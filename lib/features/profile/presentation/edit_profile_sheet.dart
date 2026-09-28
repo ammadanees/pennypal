@@ -28,6 +28,7 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
   late final _studentId =
       TextEditingController(text: widget.user.studentId ?? '');
   late final _mobile = TextEditingController(text: widget.user.mobile);
+  late String _status = widget.user.studentStatus;
   String? _error;
 
   @override
@@ -47,6 +48,7 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
           fullName: _name.text,
           studentId: _studentId.text,
           mobile: _mobile.text,
+          studentStatus: _status,
         );
     if (!mounted) return;
     if (error == null) {
@@ -59,6 +61,7 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
   @override
   Widget build(BuildContext context) {
     final busy = ref.watch(authControllerProvider);
+    final t = context.text;
     return SingleChildScrollView(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -105,7 +108,22 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
                 FilteringTextInputFormatter.allow(RegExp(r'[\d+\s-]')),
               ],
               validator: Validators.mobile,
-              onSubmitted: (_) => _save(),
+            ),
+            AppSpacing.vMd,
+            DropdownButtonFormField<String>(
+              value: _status,
+              decoration: const InputDecoration(
+                labelText: 'Student Enrollment Status',
+                prefixIcon: Icon(Icons.school_outlined),
+              ),
+              items: const [
+                DropdownMenuItem(value: 'Full-time', child: Text('Full-time Student')),
+                DropdownMenuItem(value: 'Part-time', child: Text('Part-time Student')),
+                DropdownMenuItem(value: 'Exchange', child: Text('Exchange / Semester Abroad')),
+              ],
+              onChanged: (val) {
+                if (val != null) setState(() => _status = val);
+              },
             ),
             AppSpacing.vMd,
             if (_error != null) ...[

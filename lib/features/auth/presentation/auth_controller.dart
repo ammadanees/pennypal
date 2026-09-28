@@ -44,12 +44,16 @@ class AuthController extends Notifier<bool> {
     required String mobile,
     String? studentId,
     String? photoUrl,
+    String? studentStatus,
+    bool? notificationsEnabled,
   }) =>
       _run(() => ref.read(authRepositoryProvider).updateProfile(
             fullName: fullName,
             mobile: mobile,
             studentId: studentId,
             photoUrl: photoUrl,
+            studentStatus: studentStatus,
+            notificationsEnabled: notificationsEnabled,
           ));
 
   Future<void> signOut() => ref.read(authRepositoryProvider).signOut();

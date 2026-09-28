@@ -16,9 +16,10 @@ class DemoAuthRepository implements AuthRepository {
       studentPassword,
       const AppUser(
         uid: studentUid,
-        fullName: 'Alex Khan',
+        fullName: 'Ammad Anees',
+        studentId: 'Student1501103',
         email: studentEmail,
-        mobile: '+92 300 1234567',
+        mobile: '+92 306 9074462',
         role: UserRole.student,
       ),
     );
@@ -166,6 +167,8 @@ class DemoAuthRepository implements AuthRepository {
     required String mobile,
     String? studentId,
     String? photoUrl,
+    String? studentStatus,
+    bool? notificationsEnabled,
   }) async {
     final current = _current;
     if (current == null) throw const AppFailure(AppStrings.authNoSession);
@@ -175,6 +178,8 @@ class DemoAuthRepository implements AuthRepository {
       mobile: mobile.trim(),
       studentId: studentId?.trim(),
       photoUrl: photoUrl,
+      studentStatus: studentStatus?.trim(),
+      notificationsEnabled: notificationsEnabled,
     );
     _accounts[_key(current.email)]?.user = updated;
     _set(updated);
