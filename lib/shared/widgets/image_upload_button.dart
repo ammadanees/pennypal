@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -99,16 +100,35 @@ class _ImageUploadButtonState extends ConsumerState<ImageUploadButton> {
     setState(() => _busy = true);
     try {
       final Uint8List bytes = await file.readAsBytes();
-      final url = await ref
-          .read(cloudinaryServiceProvider)
-          .uploadImage(bytes, fileName: file.name);
-      if (mounted) widget.onUploaded(url);
 
+      // 1. Run receipt parsing immediately on image bytes so fields auto-fill
+      // without waiting on external cloud image hosting.
       if (widget.onReceiptParsed != null) {
-        final parsed = await ReceiptOcrService.parseReceiptImage(bytes);
-        if (mounted && parsed != null) {
-          widget.onReceiptParsed!(parsed);
+        try {
+          final parsed = await ReceiptOcrService.parseReceiptImage(
+            bytes,
+            fileName: file.name,
+          );
+          if (mounted && parsed != null) {
+            widget.onReceiptParsed!(parsed);
+          }
+        } catch (e) {
+          debugPrint('[ImageUploadButton] Receipt OCR parsing notice: $e');
         }
+      }
+
+      // 2. Upload image to Cloudinary for persistence
+      try {
+        final url = await ref
+            .read(cloudinaryServiceProvider)
+            .uploadImage(bytes, fileName: file.name);
+        if (mounted) widget.onUploaded(url);
+      } catch (uploadError) {
+        debugPrint('[ImageUploadButton] Cloudinary upload notice: $uploadError');
+        // Even if Cloudinary image hosting is unreachable or fails,
+        // provide a local data URI so receipt image preview still displays
+        final dataUri = 'data:image/jpeg;base64,${base64Encode(bytes)}';
+        if (mounted) widget.onUploaded(dataUri);
       }
     } on AppFailure catch (e) {
       if (mounted) setState(() => _error = e.message);

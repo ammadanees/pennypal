@@ -148,6 +148,72 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
           children: [
             Text(AppDates.monthLabel(widget.month), style: t.headlineMedium),
+            if (!_isEditing) ...[
+              () {
+                final prevMonth = AppDates.addMonths(widget.month, -1);
+                final prevBudget = ref.watch(budgetsProvider).valueOrNull?.forMonth(prevMonth);
+                if (prevBudget == null) return const SizedBox.shrink();
+
+                return Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.sm, bottom: AppSpacing.sm),
+                  child: InkWell(
+                    onTap: () {
+                      _total.text = _plain(prevBudget.totalAmount);
+                      for (final cat in ExpenseCategory.values) {
+                        final val = prevBudget.categoryLimits[cat];
+                        _limits[cat]!.text = val != null ? _plain(val) : '';
+                      }
+                      setState(() {
+                        _threshold = prevBudget.alertThreshold;
+                        _limitError = null;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Copied budget from ${AppDates.monthLabel(prevMonth)}!'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: c.surfaceElevated,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: c.primary.withValues(alpha: 0.35),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.content_copy_outlined, size: 20, color: c.primary),
+                          AppSpacing.hSm,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Copy from ${AppDates.monthLabel(prevMonth)}',
+                                  style: t.labelLarge?.copyWith(
+                                    color: c.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  'Auto-fill Rs. ${_plain(prevBudget.totalAmount)} and all category limits',
+                                  style: t.bodySmall?.copyWith(color: c.textMuted),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(Icons.arrow_forward_ios, size: 14, color: c.primary),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }(),
+            ],
             AppSpacing.vMd,
             AppTextField(
               label: FinanceStrings.labelBudgetTotal,

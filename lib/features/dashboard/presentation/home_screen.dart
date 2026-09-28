@@ -49,6 +49,8 @@ import '../../transactions/presentation/transaction_display.dart';
 import '../../transactions/presentation/transaction_filter_controller.dart';
 import '../data/sync_status.dart';
 import '../domain/finance_calculator.dart';
+import '../domain/financial_health_calculator.dart';
+import 'financial_health_card.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -85,6 +87,21 @@ class _HomeContent extends ConsumerWidget {
     final summary = FinanceCalculator.monthSummary(all, now);
     final budget =
         ref.watch(budgetsProvider).valueOrNull?.forMonth(AppDates.startOfMonth(now));
+    final hasSavings =
+        (ref.watch(savingsGoalsProvider).valueOrNull?.length ?? 0) > 0;
+    final healthScore = FinancialHealthCalculator.calculate(
+      transactions: all,
+      budget: budget,
+      now: now,
+      hasSavingsGoal: hasSavings,
+    );
+    final healthCard = all.isEmpty
+        ? const SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.md),
+            child: FinancialHealthCard(health: healthScore),
+          );
+
     final insights = InsightCalculator.forMonth(all, budget: budget, now: now)
         .take(2)
         .toList();
@@ -191,6 +208,7 @@ class _HomeContent extends ConsumerWidget {
                       children: [
                         hero,
                         summaryRow,
+                        healthCard,
                         accountsSection,
                         quickShortcuts,
                         insightWidgets,
@@ -213,6 +231,7 @@ class _HomeContent extends ConsumerWidget {
                 children: [
                   hero,
                   summaryRow,
+                  healthCard,
                   accountsSection,
                   quickShortcuts,
                   insightWidgets,

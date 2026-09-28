@@ -6,10 +6,11 @@
 /// 2. Paste your key in `apiKey` below.
 abstract final class GeminiConfig {
   /// Paste your Google AI Studio Gemini API key here:
-  static const String apiKey = 'AQ.Ab8RN6IDClPwuX845clBBKtopS1diJGBmV6Zx586jCLMdjs4ow';
+  static const String apiKey = 'AQ.Ab8RN6J7Cks4NuSUFXReFHqNJSfPfpviTT1wAN6yS-O8ucV6gw';
 
-  /// Fast and responsive model recommended for conversational mobile chatbots
-  static const String model = 'gemini-1.5-flash';
+  /// Fast and responsive model recommended for conversational mobile chatbots and OCR
+  static const String model = 'gemini-3.8-flash';
 
-  static bool get isConfigured => apiKey.trim().isNotEmpty;
+  static bool get isConfigured =>
+      apiKey.trim().isNotEmpty && !apiKey.contains('YOUR_API_KEY');
 }

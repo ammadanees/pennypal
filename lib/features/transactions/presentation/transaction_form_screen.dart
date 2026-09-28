@@ -403,31 +403,37 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                   onUploaded: (url) => setState(() => _receiptUrl = url),
                   onReceiptParsed: (receipt) {
                     setState(() {
-                      if (receipt.totalAmount != null &&
-                          (_amount.text.trim().isEmpty || _amount.text.trim() == '0')) {
+                      if (receipt.totalAmount != null) {
                         _amount.text = receipt.totalAmount! % 1 == 0
                             ? receipt.totalAmount!.toInt().toString()
                             : receipt.totalAmount!.toString();
                       }
-                      if (receipt.merchantName != null && _description.text.trim().isEmpty) {
-                        _description.text = receipt.merchantName!;
+                      if (receipt.merchantName != null &&
+                          receipt.merchantName!.trim().isNotEmpty) {
+                        _description.text = receipt.merchantName!.trim();
                       }
                       if (receipt.date != null) {
                         _date = receipt.date!;
                       }
-                      if (receipt.category != null && _category == null) {
+                      if (receipt.category != null) {
                         _category = receipt.category;
                         _isAutoCategorized = true;
                         _categoryMissing = false;
                       }
                     });
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
+                      SnackBar(
                         content: Row(
                           children: [
-                            Icon(Icons.auto_awesome, color: Colors.amber, size: 18),
-                            SizedBox(width: 8),
-                            Expanded(child: Text('Receipt scanned! Details auto-filled with AI.')),
+                            const Icon(Icons.auto_awesome, color: Colors.amber, size: 20),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                receipt.isAiParsed
+                                    ? 'Receipt scanned! Details auto-filled with AI.'
+                                    : 'Receipt scanned! Details auto-filled.',
+                              ),
+                            ),
                           ],
                         ),
                       ),
