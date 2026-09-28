@@ -1,6 +1,6 @@
 abstract final class GeminiConfig {
   static const String apiKey =
-      'AQ.Ab8RN6J7Cks4NuSUFXReFHqNJSfPfpviTT1wAN6yS-O8ucV6gw';
+      'AQ.Ab8RN6JPfOtNhM5TTNJRC2WuvZV3lGHfxXwGVI-bvkamwpiGug';
 
   static const String model = 'gemini-3.8-flash';
 

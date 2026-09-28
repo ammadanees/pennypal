@@ -160,10 +160,10 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
           onPressed: () => SplitBillSheet.show(context),
         ),
       ],
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
+        tooltip: FinanceStrings.add,
         onPressed: _showAddMenu,
-        icon: const Icon(Icons.add),
-        label: const Text(FinanceStrings.add),
+        child: const Icon(Icons.add),
       ),
       body: Column(
         children: [
