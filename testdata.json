@@ -1,0 +1,331 @@
+{
+  "metadata": {
+    "projectName": "PennyPal",
+    "tagline": "Make Every Penny Count",
+    "competition": "TechWiz 7 — The World Tech Championship",
+    "theme": "NextGen BudgetBee",
+    "category": "Multi-Platform App Computing",
+    "version": "1.0.0",
+    "generatedDate": "2026-09-28",
+    "description": "Standardized machine-readable test dataset matching SRS Section 1.9, database schema (pennypal_schema.sql), and Section 6 of the project documentation report."
+  },
+  "users": [
+    {
+      "userId": "usr_student_001",
+      "fullName": "Ammad Anees",
+      "email": "ammad.anees99@gmail.com",
+      "mobileNumber": "+92-300-1234567",
+      "password": "Ammad1234",
+      "role": "student",
+      "studentId": "Student1501103",
+      "status": "active",
+      "createdAt": "2026-09-01T08:00:00Z"
+    },
+    {
+      "userId": "usr_admin_001",
+      "fullName": "System Administrator",
+      "email": "admin@pennypal.com",
+      "mobileNumber": "+92-300-9876543",
+      "password": "Admin@1234",
+      "role": "admin",
+      "studentId": null,
+      "status": "active",
+      "createdAt": "2026-09-01T08:00:00Z"
+    }
+  ],
+  "userProfiles": [
+    {
+      "profileId": "prof_001",
+      "userId": "usr_student_001",
+      "studentStatus": "Undergraduate Enrolled",
+      "currencyPreference": "PKR",
+      "notificationPreference": true,
+      "biometricEnabled": true,
+      "profileImage": "https://res.cloudinary.com/pennypal/image/upload/v1/profiles/student001.jpg"
+    }
+  ],
+  "categories": [
+    {
+      "categoryId": "cat_inflow",
+      "categoryName": "Inflow / Allowance",
+      "categoryType": "income",
+      "icon": "account_balance_wallet",
+      "colorCode": "#10B981",
+      "isDefault": true
+    },
+    {
+      "categoryId": "cat_food",
+      "categoryName": "Food & Dining",
+      "categoryType": "expense",
+      "icon": "restaurant",
+      "colorCode": "#EF4444",
+      "isDefault": true
+    },
+    {
+      "categoryId": "cat_transport",
+      "categoryName": "Transport",
+      "categoryType": "expense",
+      "icon": "directions_bus",
+      "colorCode": "#8B5CF6",
+      "isDefault": true
+    },
+    {
+      "categoryId": "cat_education",
+      "categoryName": "Education & Books",
+      "categoryType": "expense",
+      "icon": "menu_book",
+      "colorCode": "#3B82F6",
+      "isDefault": true
+    },
+    {
+      "categoryId": "cat_bills",
+      "categoryName": "Bills & Utilities",
+      "categoryType": "expense",
+      "icon": "receipt_long",
+      "colorCode": "#EC4899",
+      "isDefault": true
+    },
+    {
+      "categoryId": "cat_entertainment",
+      "categoryName": "Entertainment",
+      "categoryType": "expense",
+      "icon": "movie",
+      "colorCode": "#F59E0B",
+      "isDefault": true
+    }
+  ],
+  "cards": [
+    {
+      "cardId": "card_001",
+      "userId": "usr_student_001",
+      "cardName": "Meezan Student Debit",
+      "lastFourDigits": "4821",
+      "cardType": "debit",
+      "expiryDate": "08/28",
+      "themeColor": "#4F46E5"
+    },
+    {
+      "cardId": "card_002",
+      "userId": "usr_student_001",
+      "cardName": "SadaPay Virtual Card",
+      "lastFourDigits": "9102",
+      "cardType": "virtual",
+      "expiryDate": "12/27",
+      "themeColor": "#10B981"
+    }
+  ],
+  "transactions": [
+    {
+      "transactionId": "tx_001",
+      "userId": "usr_student_001",
+      "type": "income",
+      "amount": 50000.00,
+      "categoryId": "cat_inflow",
+      "categoryName": "Inflow / Allowance",
+      "description": "Monthly Parent Allowance",
+      "paymentMode": "bank",
+      "cardId": null,
+      "date": "2026-09-01T09:30:00Z",
+      "receiptUrl": null
+    },
+    {
+      "transactionId": "tx_002",
+      "userId": "usr_student_001",
+      "type": "expense",
+      "amount": 450.00,
+      "categoryId": "cat_food",
+      "categoryName": "Food & Dining",
+      "description": "Campus Cafeteria Lunch",
+      "paymentMode": "cash",
+      "cardId": null,
+      "date": "2026-09-02T13:15:00Z",
+      "receiptUrl": null
+    },
+    {
+      "transactionId": "tx_003",
+      "userId": "usr_student_001",
+      "type": "expense",
+      "amount": 3200.00,
+      "categoryId": "cat_food",
+      "categoryName": "Food & Dining",
+      "description": "Weekly Grocery Market",
+      "paymentMode": "card",
+      "cardId": "card_001",
+      "date": "2026-09-05T18:45:00Z",
+      "receiptUrl": "https://res.cloudinary.com/pennypal/image/upload/v1/receipts/grocery_0905.jpg"
+    },
+    {
+      "transactionId": "tx_004",
+      "userId": "usr_student_001",
+      "type": "expense",
+      "amount": 1200.00,
+      "categoryId": "cat_transport",
+      "categoryName": "Transport",
+      "description": "Monthly Student Bus Pass",
+      "paymentMode": "cash",
+      "cardId": null,
+      "date": "2026-09-06T10:00:00Z",
+      "receiptUrl": null
+    },
+    {
+      "transactionId": "tx_005",
+      "userId": "usr_student_001",
+      "type": "expense",
+      "amount": 3500.00,
+      "categoryId": "cat_education",
+      "categoryName": "Education & Books",
+      "description": "Semester Course Textbooks",
+      "paymentMode": "card",
+      "cardId": "card_001",
+      "date": "2026-09-10T14:30:00Z",
+      "receiptUrl": null
+    },
+    {
+      "transactionId": "tx_006",
+      "userId": "usr_student_001",
+      "type": "expense",
+      "amount": 2800.00,
+      "categoryId": "cat_bills",
+      "categoryName": "Bills & Utilities",
+      "description": "High-Speed Fiber Internet",
+      "paymentMode": "bank",
+      "cardId": null,
+      "date": "2026-09-15T11:20:00Z",
+      "receiptUrl": null
+    },
+    {
+      "transactionId": "tx_007",
+      "userId": "usr_student_001",
+      "type": "expense",
+      "amount": 1800.00,
+      "categoryId": "cat_entertainment",
+      "categoryName": "Entertainment",
+      "description": "Weekend Cinema Ticket",
+      "paymentMode": "wallet",
+      "cardId": "card_002",
+      "date": "2026-09-20T20:00:00Z",
+      "receiptUrl": null
+    }
+  ],
+  "budgets": [
+    {
+      "budgetId": "bg_001",
+      "userId": "usr_student_001",
+      "month": "2026-09",
+      "categoryId": null,
+      "categoryName": "Overall Monthly Budget",
+      "limitAmount": 40000.00,
+      "currentSpend": 13000.00,
+      "alertThreshold": 80.00,
+      "status": "on_track",
+      "utilizationPercent": 32.50
+    },
+    {
+      "budgetId": "bg_002",
+      "userId": "usr_student_001",
+      "month": "2026-09",
+      "categoryId": "cat_food",
+      "categoryName": "Food & Dining",
+      "limitAmount": 5000.00,
+      "currentSpend": 4100.00,
+      "alertThreshold": 80.00,
+      "status": "nearing_threshold",
+      "utilizationPercent": 82.00
+    },
+    {
+      "budgetId": "bg_003",
+      "userId": "usr_student_001",
+      "month": "2026-09",
+      "categoryId": "cat_entertainment",
+      "categoryName": "Entertainment",
+      "limitAmount": 1500.00,
+      "currentSpend": 1800.00,
+      "alertThreshold": 80.00,
+      "status": "over_budget",
+      "utilizationPercent": 120.00
+    }
+  ],
+  "savingsGoals": [
+    {
+      "goalId": "goal_001",
+      "userId": "usr_student_001",
+      "goalName": "Laptop Replacement Fund",
+      "targetAmount": 100000.00,
+      "currentAmount": 60000.00,
+      "targetDate": "2027-06-30",
+      "monthlyContribution": 4500.00,
+      "status": "in_progress",
+      "progressPercent": 60.00,
+      "achievedMilestones": [25, 50]
+    },
+    {
+      "goalId": "goal_002",
+      "userId": "usr_student_001",
+      "goalName": "Noise-Cancelling Headphones",
+      "targetAmount": 8000.00,
+      "currentAmount": 8000.00,
+      "targetDate": "2026-09-15",
+      "monthlyContribution": 2000.00,
+      "status": "completed",
+      "progressPercent": 100.00,
+      "achievedMilestones": [25, 50, 75, 100]
+    }
+  ],
+  "learningArticles": [
+    {
+      "articleId": "art_001",
+      "title": "Mastering the 50/30/20 Rule on a Student Budget",
+      "category": "Budgeting Fundamentals",
+      "readingTimeMinutes": 4,
+      "summary": "How students can divide allowances into 50% Needs, 30% Wants, and 20% Emergency Savings.",
+      "isActive": true
+    },
+    {
+      "articleId": "art_002",
+      "title": "Why Every College Student Needs a Buffer Emergency Fund",
+      "category": "Savings & Security",
+      "readingTimeMinutes": 3,
+      "summary": "Building an initial Rs. 10,000 campus emergency cushion to avoid predatory borrowing.",
+      "isActive": true
+    },
+    {
+      "articleId": "art_003",
+      "title": "10 Smart Campus Life Hacks That Save Real Money",
+      "category": "Student Hacks",
+      "readingTimeMinutes": 5,
+      "summary": "Actionable tips for secondhand textbooks, meal prep, transit passes, and student discounts.",
+      "isActive": true
+    }
+  ],
+  "supportQueries": [
+    {
+      "queryId": "ticket_001",
+      "userId": "usr_student_001",
+      "subject": "Requesting export of custom date range report",
+      "message": "Can I export transactions from last semester into CSV format for my scholarship verification?",
+      "status": "answered",
+      "adminResponse": "Yes! Go to the Reports tab, choose Custom Date Range, filter by last semester, and tap 'Export as CSV'.",
+      "submittedOn": "2026-09-22T10:14:00Z"
+    }
+  ],
+  "notifications": [
+    {
+      "notificationId": "notif_001",
+      "userId": "usr_student_001",
+      "title": "⚠️ Budget Alert: Food & Dining",
+      "message": "You have spent Rs. 4,100 of your Rs. 5,000 budget (82% used).",
+      "type": "budget_alert",
+      "readStatus": false,
+      "createdAt": "2026-09-25T14:30:00Z"
+    },
+    {
+      "notificationId": "notif_002",
+      "userId": "usr_student_001",
+      "title": "🎉 Milestone Reached: Laptop Replacement Fund",
+      "message": "Congratulations! You have crossed 50% of your savings goal (Rs. 60,000 saved).",
+      "type": "goal_milestone",
+      "readStatus": true,
+      "createdAt": "2026-09-20T18:00:00Z"
+    }
+  ]
+}

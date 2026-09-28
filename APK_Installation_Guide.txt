@@ -1,0 +1,120 @@
+================================================================================
+PENNYPAL — ANDROID APK INSTALLATION & PROJECT SETUP GUIDE
+TechWiz 7 — The World Tech Championship
+Theme: NextGen BudgetBee | Category: Multi-Platform App Computing
+================================================================================
+
+[NOTE]
+This installation guide and project setup instructions are also fully documented 
+in the primary submission documentation:
+  1. Main Technical Report: docs/PennyPal_Project_Documentation_Report.md (Section 7 & 8)
+  2. Submission ReadMe: ReadMe.doc (Section 2 & 4)
+
+================================================================================
+1. PRE-COMPILED RELEASE APK LOCATION
+================================================================================
+The production-ready, compiled Android Package File (.apk) is ready for direct 
+installation on modern Android devices (ARM64-v8a):
+
+  Path: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+  Target Architecture: arm64-v8a (Android 5.0+ / API 21+, Target SDK 34)
+
+================================================================================
+2. DIRECT APK INSTALLATION INSTRUCTIONS (ON ANDROID DEVICE)
+================================================================================
+Method A: Direct USB / File Transfer
+  1. Copy 'app-arm64-v8a-release.apk' to your Android phone (via USB cable, 
+     Google Drive, WhatsApp, or email).
+  2. Open the 'Files' or 'File Manager' app on your Android device.
+  3. Tap on 'app-arm64-v8a-release.apk'.
+  4. If prompted with "Install unknown apps" or "Security warning", enable 
+     "Allow from this source" in Device Settings.
+  5. Tap 'Install'.
+  6. Tap 'Open' to launch PennyPal.
+
+Method B: Android Debug Bridge (ADB) via Terminal
+  If you have an Android device connected with USB debugging enabled:
+  ```bash
+  adb install -r build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+  ```
+
+================================================================================
+3. DEVELOPER INSTALLATION & SOURCE CODE SETUP (MANDATORY)
+================================================================================
+
+3.1 System Prerequisites:
+  - Operating System: Windows 10/11, macOS (Sonoma/Sequoia), or Ubuntu Linux 22.04+
+  - Flutter SDK: Version 3.24.0 or higher
+  - Dart SDK: Version 3.5.0 or higher
+  - Java Development Kit (JDK): Version 17 (Required for Gradle 8+)
+  - Android Studio / SDK: Android SDK Platform 34, Android Build-Tools 34.0.0
+
+3.2 Step-by-Step Installation:
+  1. Clone or extract the project directory:
+     ```bash
+     git clone https://github.com/ammadanees/pennypal.git
+     cd pennypal
+     ```
+
+  2. Install Flutter Dependencies:
+     ```bash
+     flutter pub get
+     ```
+
+  3. Validate Codebase Health & Run Tests:
+     ```bash
+     flutter analyze
+     flutter test
+     ```
+     (All 73 unit and widget tests will pass)
+
+  4. Launch the Application in Development Mode:
+     - For Web (Chrome):
+       ```bash
+       flutter run -d chrome
+       ```
+     - For Connected Android Device or Emulator:
+       ```bash
+       flutter run -d android
+       ```
+
+  5. Compile Production Android Package File (Release APK):
+     ```bash
+     flutter build apk --split-per-abi
+     ```
+     The generated release packages will be located at:
+     build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+
+================================================================================
+4. MANDATORY LOGIN CREDENTIALS (SRS Section 1.9)
+================================================================================
+
+A. Student User Account:
+   - Email: ammad.anees99@gmail.com
+   - Password: Ammad1234
+   - Student ID: Student1501103
+   - Privileges: Full access to Student Dashboard, Transaction Logging, 
+     Gemini Vision OCR, Budgeting Guardrails, Savings Goals, Financial Reports 
+     (PDF & CSV Export), Split Bill Calculator, Learning Academy, and AI Chatbot.
+
+B. Administrator Account:
+   - Email: admin@pennypal.com
+   - Password: Admin@1234
+   - Privileges: Full access to Admin Portal Dashboard, Student Directory, 
+     System Analytics, Feedback Moderation, Support Ticketing, and CMS Content.
+
+================================================================================
+5. DATABASE SCRIPTS & SCHEMA
+================================================================================
+The relational SQL table definitions containing all 10 entities required by the 
+SRS are located in:
+  - pennypal_schema.sql (Execute in MySQL / SQLite / PostgreSQL / Cloud Firestore)
+
+================================================================================
+6. STANDARDIZED TEST DATASET (testdata.json)
+================================================================================
+The complete machine-readable test dataset matching SRS Section 1.9 and Section 6
+of the project documentation report is provided in the project root:
+  - File: testdata.json
+  - Includes: Preconfigured student & admin accounts, 7 test transactions,
+    budget threshold scenarios, savings goals, categories, cards, and support tickets.

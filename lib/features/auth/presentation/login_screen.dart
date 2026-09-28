@@ -12,7 +12,6 @@ import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_inline_message.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../data/auth_providers.dart';
-import '../data/demo_auth_repository.dart';
 import 'auth_controller.dart';
 import 'widgets/auth_scaffold.dart';
 
@@ -48,7 +47,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final busy = ref.watch(authControllerProvider);
-    final isDemo = ref.watch(authRepositoryProvider).isDemo;
 
     return AuthScaffold(
       title: AppStrings.loginTitle,
@@ -72,13 +70,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (isDemo) ...[
-                const AppInlineMessage(
-                  message: DemoAuthRepository.loginHint,
-                  kind: InlineMessageKind.info,
-                ),
-                AppSpacing.vMd,
-              ],
               AppTextField(
                 label: AppStrings.labelEmail,
                 hint: AppStrings.hintEmail,

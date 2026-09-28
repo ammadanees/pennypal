@@ -10,7 +10,6 @@ import 'app/app.dart';
 import 'core/config/dev_tools.dart';
 import 'core/services/local_notification_service.dart';
 import 'core/services/shared_preferences_provider.dart';
-import 'data/demo_seed.dart';
 import 'data/firestore_record_store.dart';
 import 'data/memory_record_store.dart';
 import 'data/record_store.dart';
@@ -63,9 +62,8 @@ Future<_Backend> _createBackend(SharedPreferences prefs) async {
         FirebaseAuthRepository(prefs: prefs), FirestoreRecordStore());
   } catch (error) {
     if (kReleaseMode) rethrow;
-    debugPrint('Firebase is not configured ($error). Running in demo mode.');
+    debugPrint('Firebase is not configured ($error). Running in local mode.');
     final store = MemoryRecordStore();
-    await seedDemoData(store);
     return _Backend(DemoAuthRepository(), store);
   }
 }

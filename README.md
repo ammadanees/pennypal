@@ -11,8 +11,8 @@ flutter test
 ```
 Without Firebase, debug builds start in **demo mode** (in-memory accounts,
 nothing saved). The sign-in screen shows the demo logins:
-- Student: alex@student.edu / PennyPal1
-- Admin: admin@pennypal.app / Admin@1234
+- Student: ammad.anees99@gmail.com / Ammad1234
+- Admin: admin@pennypal.com / Admin@1234
 
 Release builds never fall back to demo mode.
 

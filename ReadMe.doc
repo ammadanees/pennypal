@@ -1,0 +1,99 @@
+PennyPal — TechWiz 7 Project Submission ReadMe
+Theme: NextGen BudgetBee
+Category: Multi-Platform App Computing
+Version: 1.0.0
+Submission Year: 2026
+
+================================================================================
+1. PROJECT OVERVIEW & DELIVERABLES
+================================================================================
+This submission contains the complete source code, database definitions, 
+installation instructions, and documentation for PennyPal, an intelligent, 
+cross-platform student personal finance and budgeting platform.
+
+Consolidated Project Submission Package:
+1. Source Code: Complete multi-platform Flutter codebase (Android, iOS, Web).
+2. Database Scripts: 'pennypal_schema.sql' containing all 10 SQL tables.
+3. Compiled Package: 'build/app/outputs/flutter-apk/app-arm64-v8a-release.apk' (Release APK).
+4. Documentation Report: 'docs/PennyPal_Project_Documentation_Report.md'
+5. Architecture Slide Deck: 'docs/PennyPal Architecture Deep Dive.pdf'
+6. Demonstration Video: 'PennyPal_Demo_Video.mp4' (walkthrough of all modules).
+
+================================================================================
+2. MANDATORY USER CREDENTIALS (SRS Section 1.9)
+================================================================================
+A. Student Account:
+   - Email: ammad.anees99@gmail.com
+   - Password: Ammad1234
+   - Student ID: Student1501103
+   - Privileges: Full access to Dashboard, Expense/Income Tracking, Gemini OCR, 
+     Budgets, Savings Goals, Reports (PDF/CSV Export), Split Bill, Learning Hub, 
+     and AI Chatbot.
+
+B. Administrator Account:
+   - Email: admin@pennypal.com
+   - Password: Admin@1234
+   - Privileges: Full access to Admin Dashboard, Student User Directory, 
+     Feedback Moderation, Support Ticket Resolutions, and Curriculum CMS.
+
+================================================================================
+3. PROJECT ASSUMPTIONS & DESIGN CONSTRAINTS (SRS Section 1.5 & 1.9)
+================================================================================
+1. Non-Banking Scope:
+   In strict accordance with SRS Section 1.5, PennyPal is an educational 
+   expense-tracking and budgeting system. It does not connect to real bank 
+   accounts or initiate real monetary transfers.
+2. Offline-First Resilience:
+   Transactions, budgets, cards, and goals are saved immediately to local 
+   storage and seamlessly synchronized to Cloud Firestore when an internet 
+   connection is detected.
+3. Multi-Platform Support:
+   A single unified Flutter codebase powers Android smartphones, Android 
+   tablets, iOS devices, and desktop/web browsers.
+4. AI Multimodal Architecture:
+   Uses Google Gemini 3.8 Flash for Receipt OCR and Conversational Advisory, 
+   with an automatic deterministic regex/rule-based engine fallback for 
+   offline or rate-limited environments.
+
+================================================================================
+4. INSTALLATION & SETUP INSTRUCTIONS (MANDATORY)
+================================================================================
+Prerequisites:
+- Flutter SDK >= 3.24.0
+- Dart SDK >= 3.5.0
+- Java JDK 17
+- Android Studio / Android SDK Platform 34
+
+Steps to Run:
+1. Extract the project zip file.
+2. Open terminal in the project directory:
+   cd pennypal
+3. Install dependencies:
+   flutter pub get
+4. Run tests:
+   flutter test
+5. Launch on device/emulator or Web:
+   flutter run -d chrome       (Web browser)
+   flutter run -d android      (Android phone/emulator)
+6. Build Release APK:
+   flutter build apk --split-per-abi
+
+================================================================================
+5. AI USAGE ACKNOWLEDGEMENT (SRS Page 11 Compliance)
+================================================================================
+- Google Gemini 3.8 Flash: Integrated in-app AI engine for multimodal receipt 
+  analysis and conversational financial coaching.
+- Claude 3.7 & Antigravity IDE: Used strictly as coding assistants for 
+  architectural validation and refactoring; all core logic was designed, 
+  reviewed, and verified by the development team.
+- Image Generation: Used exclusively for the custom 3D PennyPal minted app icon.
+
+================================================================================
+6. STANDARDIZED TEST DATASET (testdata.json)
+================================================================================
+A machine-readable test dataset file matching Section 1.9 of the SRS and 
+Section 6 of the Documentation Report is included in the project root:
+- File: testdata.json
+- Contents: Pre-configured Student/Admin accounts, 7 test transactions,
+  budget scenarios, savings targets, categories, and test cards.
+
