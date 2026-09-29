@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_categories.dart';
+import '../../../core/services/currency_service.dart';
 import '../../../core/constants/finance_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -130,6 +131,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currency = ref.watch(currencyProvider);
     final c = context.colors;
     final t = context.text;
     return AppScaffold(
@@ -208,7 +210,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'Auto-fill Rs. ${_plain(prevBudget.totalAmount)} and all category limits',
+                                  'Auto-fill $currency ${_plain(prevBudget.totalAmount)} and all category limits',
                                   style:
                                       t.bodySmall?.copyWith(color: c.textMuted),
                                 ),
@@ -229,10 +231,10 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
               label: FinanceStrings.labelBudgetTotal,
               hint: _categorySum > 0 ? _plain(_categorySum) : '0',
               helperText: _total.text.trim().isEmpty && _categorySum > 0
-                  ? 'Auto-summed from categories: Rs. ${_plain(_categorySum)}'
+                  ? 'Auto-summed from categories: $currency ${_plain(_categorySum)}'
                   : 'Leave empty to auto-sum from categories below',
               controller: _total,
-              prefixText: 'Rs. ',
+              prefixText: '$currency ',
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
@@ -261,7 +263,7 @@ class _BudgetFormScreenState extends ConsumerState<BudgetFormScreen> {
                 label: cat.label,
                 controller: _limits[cat],
                 prefixIcon: cat.icon,
-                prefixText: 'Rs. ',
+                prefixText: '$currency ',
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: AppInputFormatters.amount,

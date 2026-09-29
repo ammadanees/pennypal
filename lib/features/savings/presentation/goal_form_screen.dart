@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/finance_strings.dart';
+import '../../../core/services/currency_service.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -109,6 +110,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currency = ref.watch(currencyProvider);
     final t = context.text;
     return AppScaffold(
       title:
@@ -132,7 +134,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
             AppTextField(
               label: FinanceStrings.labelGoalTarget,
               controller: _target,
-              prefixText: 'Rs. ',
+              prefixText: '$currency ',
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
@@ -143,7 +145,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
             AppTextField(
               label: FinanceStrings.labelGoalCurrent,
               controller: _current,
-              prefixText: 'Rs. ',
+              prefixText: '$currency ',
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
@@ -170,7 +172,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
             AppTextField(
               label: FinanceStrings.labelGoalMonthly,
               controller: _monthly,
-              prefixText: 'Rs. ',
+              prefixText: '$currency ',
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,

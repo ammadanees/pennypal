@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/routes.dart';
+import '../../../core/services/currency_service.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/finance_strings.dart';
 import '../../../core/constants/step5_strings.dart';
@@ -364,7 +365,7 @@ class _HeaderButton extends StatelessWidget {
   }
 }
 
-class _BalanceHero extends StatefulWidget {
+class _BalanceHero extends ConsumerStatefulWidget {
   const _BalanceHero(
       {required this.balance, required this.net, required this.now});
 
@@ -373,14 +374,15 @@ class _BalanceHero extends StatefulWidget {
   final DateTime now;
 
   @override
-  State<_BalanceHero> createState() => _BalanceHeroState();
+  ConsumerState<_BalanceHero> createState() => _BalanceHeroState();
 }
 
-class _BalanceHeroState extends State<_BalanceHero> {
+class _BalanceHeroState extends ConsumerState<_BalanceHero> {
   bool _hideBalance = false;
 
   @override
   Widget build(BuildContext context) {
+    final currency = ref.watch(currencyProvider);
     final c = context.colors;
     final t = context.text;
     final up = widget.net >= 0;
@@ -465,7 +467,7 @@ class _BalanceHeroState extends State<_BalanceHero> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text(
-                'Rs. • • • • • •',
+                '$currency • • • • • •',
                 style: t.headlineLarge?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
@@ -505,7 +507,7 @@ class _BalanceHeroState extends State<_BalanceHero> {
                 ),
                 AppSpacing.hXs,
                 Text(
-                  '${up ? '+' : '-'}${Formatters.money(widget.net.abs())} ${FinanceStrings.balanceNote}',
+                  '${up ? '+' : '-'}${Formatters.money(widget.net.abs(), currency: currency)} ${FinanceStrings.balanceNote}',
                   style: t.labelMedium?.copyWith(
                     color:
                         up ? const Color(0xFF2EE6A6) : const Color(0xFFFF6B6B),

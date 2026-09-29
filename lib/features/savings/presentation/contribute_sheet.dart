@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/finance_strings.dart';
+import '../../../core/services/currency_service.dart';
 import '../../../core/services/local_notification_service.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -94,6 +95,7 @@ class _ContributeSheetState extends ConsumerState<ContributeSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final currency = ref.watch(currencyProvider);
     return SingleChildScrollView(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -117,7 +119,7 @@ class _ContributeSheetState extends ConsumerState<ContributeSheet> {
             AppTextField(
               label: FinanceStrings.labelAmount,
               controller: _amount,
-              prefixText: 'Rs. ',
+              prefixText: '$currency ',
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,

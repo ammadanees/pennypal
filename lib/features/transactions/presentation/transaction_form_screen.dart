@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_categories.dart';
+import '../../../core/services/currency_service.dart';
 import '../../../core/constants/finance_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
@@ -226,6 +227,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currency = ref.watch(currencyProvider);
     final c = context.colors;
     final t = context.text;
     final title = _isEditing
@@ -272,7 +274,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
             AppTextField(
               label: FinanceStrings.labelAmount,
               controller: _amount,
-              prefixText: 'Rs. ',
+              prefixText: '$currency ',
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: AppInputFormatters.amount,
