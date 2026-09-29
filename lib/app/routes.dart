@@ -18,6 +18,9 @@ abstract final class AppRoutes {
   static const String goalEdit = '/savings/edit';
 
   static const String reports = '/reports';
+  static const String cards = '/cards';
+  static const String debts = '/debts';
+  static const String subscriptions = '/subscriptions';
   static const String notifications = '/notifications';
   static const String assistant = '/assistant';
   static const String feedback = '/feedback';

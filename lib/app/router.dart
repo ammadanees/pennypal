@@ -18,6 +18,9 @@ import '../features/dashboard/presentation/home_screen.dart';
 import '../features/savings/domain/savings_goal.dart';
 import '../features/savings/presentation/goal_form_screen.dart';
 import '../features/savings/presentation/savings_screen.dart';
+import '../features/cards/presentation/cards_screen.dart';
+import '../features/debts/presentation/debt_tracker_screen.dart';
+import '../features/subscriptions/presentation/subscriptions_screen.dart';
 import '../features/transactions/domain/finance_transaction.dart';
 import '../features/transactions/presentation/activity_screen.dart';
 import '../features/transactions/presentation/transaction_form_screen.dart';
@@ -159,6 +162,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.reports,
         builder: (_, __) => const ReportsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.cards,
+        builder: (_, __) => const CardsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.debts,
+        builder: (_, __) => const DebtTrackerScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.subscriptions,
+        builder: (_, __) => const SubscriptionsScreen(),
       ),
       GoRoute(
         path: AppRoutes.notifications,

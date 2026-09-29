@@ -51,7 +51,7 @@ class HeroCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Positioned.fill(
+          const Positioned.fill(
             child: CustomPaint(
               painter: HexPatternPainter(
                 color: Colors.white,

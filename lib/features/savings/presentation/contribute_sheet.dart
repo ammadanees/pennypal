@@ -10,6 +10,7 @@ import '../../../core/utils/input_formatters.dart';
 import '../../../core/utils/validators.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
+import '../../../shared/widgets/milestone_celebration_dialog.dart';
 import '../../auth/data/auth_providers.dart';
 import '../data/savings_repository.dart';
 import '../domain/savings_calculator.dart';
@@ -80,17 +81,33 @@ class _ContributeSheetState extends ConsumerState<ContributeSheet> {
       }
     }
 
+    final isNewCompletion = updated.isCompleted && !goal.isCompleted;
+    final newlyReached = newProgress.milestonesReached
+        .toSet()
+        .difference(oldProgress.milestonesReached.toSet());
+
     if (!mounted) return;
     Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          updated.isCompleted
-              ? FinanceStrings.goalReached(goal.name)
-              : FinanceStrings.contributeSaved,
-        ),
-      ),
-    );
+
+    if (isNewCompletion) {
+      showMilestoneCelebrationDialog(
+        context,
+        goalName: goal.name,
+        milestone: 100,
+        isCompleted: true,
+      );
+    } else if (newlyReached.isNotEmpty) {
+      showMilestoneCelebrationDialog(
+        context,
+        goalName: goal.name,
+        milestone: newlyReached.last,
+        isCompleted: false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text(FinanceStrings.contributeSaved)),
+      );
+    }
   }
 
   @override

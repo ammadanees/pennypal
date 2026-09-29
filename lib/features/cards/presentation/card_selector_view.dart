@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../app/routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -70,6 +72,33 @@ class CardSelectorView extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    if (cards.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      InkWell(
+                        borderRadius: AppRadius.pillAll,
+                        onTap: () => context.push(AppRoutes.cards),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.tune_rounded,
+                                  size: 13, color: c.primary),
+                              const SizedBox(width: 3),
+                              Text(
+                                'Manage',
+                                style: t.bodySmall?.copyWith(
+                                  fontSize: 11,
+                                  color: c.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
                 if (canAddMore)
@@ -209,70 +238,92 @@ class _CardChip extends StatelessWidget {
     final c = context.colors;
     final t = context.text;
 
-    final background = isSelected ? c.primary : c.surfaceElevated;
-    final foreground = isSelected ? c.onPrimary : c.textPrimary;
-    final border = isSelected ? c.primary : c.border;
+    final foreground = isSelected ? Colors.white : c.textPrimary;
+    final border = isSelected ? card.gradient.colors.first : c.border;
 
-    return Material(
-      color: background,
-      borderRadius: AppRadius.mdAll,
-      child: InkWell(
-        onTap: onTap,
-        onLongPress: onDelete,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: isSelected ? card.gradient : null,
+        color: isSelected ? null : c.surfaceElevated,
         borderRadius: AppRadius.mdAll,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: AppRadius.mdAll,
-            border: Border.all(color: border, width: isSelected ? 1.5 : 1.0),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                isSelected ? Icons.check_circle : Icons.credit_card,
-                size: 18,
-                color: foreground,
-              ),
-              AppSpacing.hSm,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    card.name,
-                    style: t.labelMedium?.copyWith(
-                      color: foreground,
-                      fontWeight: FontWeight.w600,
+        border: Border.all(color: border, width: isSelected ? 1.5 : 1.0),
+        boxShadow: isSelected
+            ? [
+                BoxShadow(
+                  color: card.gradient.colors.first.withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ]
+            : null,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: AppRadius.mdAll,
+        child: InkWell(
+          onTap: onTap,
+          onLongPress: onDelete,
+          borderRadius: AppRadius.mdAll,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!isSelected)
+                  Container(
+                    width: 10,
+                    height: 10,
+                    margin: const EdgeInsets.only(right: 6),
+                    decoration: BoxDecoration(
+                      gradient: card.gradient,
+                      shape: BoxShape.circle,
                     ),
                   ),
-                  if (card.last4 != null && card.last4!.isNotEmpty)
+                Icon(
+                  isSelected ? Icons.check_circle : Icons.credit_card,
+                  size: 18,
+                  color: foreground,
+                ),
+                AppSpacing.hSm,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Text(
-                      '•••• ${card.last4} (${card.cardType})',
-                      style: t.bodySmall?.copyWith(
-                        color: foreground.withAlpha(200),
-                        fontSize: 11,
+                      card.name,
+                      style: t.labelMedium?.copyWith(
+                        color: foreground,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                ],
-              ),
-              AppSpacing.hSm,
-              InkWell(
-                onTap: onDelete,
-                borderRadius: AppRadius.pillAll,
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Icon(
-                    Icons.close,
-                    size: 14,
-                    color: foreground.withAlpha(180),
+                    if (card.last4 != null && card.last4!.isNotEmpty)
+                      Text(
+                        '•••• ${card.last4} (${card.cardType})',
+                        style: t.bodySmall?.copyWith(
+                          color: foreground.withAlpha(200),
+                          fontSize: 11,
+                        ),
+                      ),
+                  ],
+                ),
+                AppSpacing.hSm,
+                InkWell(
+                  onTap: onDelete,
+                  borderRadius: AppRadius.pillAll,
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Icon(
+                      Icons.close,
+                      size: 14,
+                      color: foreground.withAlpha(180),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

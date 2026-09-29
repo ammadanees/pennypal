@@ -27,6 +27,24 @@ class MoreScreen extends StatelessWidget {
         ),
         children: [
           _MoreTile(
+            icon: Icons.handshake_outlined,
+            label: 'Borrow & Lend Tracker',
+            onTap: () => context.push(AppRoutes.debts),
+          ),
+          AppSpacing.vSm,
+          _MoreTile(
+            icon: Icons.repeat_rounded,
+            label: 'Subscriptions & Bills',
+            onTap: () => context.push(AppRoutes.subscriptions),
+          ),
+          AppSpacing.vSm,
+          _MoreTile(
+            icon: Icons.credit_card_rounded,
+            label: 'Payment Cards & Wallets',
+            onTap: () => context.push(AppRoutes.cards),
+          ),
+          AppSpacing.vSm,
+          _MoreTile(
             icon: Icons.insights_outlined,
             label: ReportStrings.title,
             onTap: () => context.push(AppRoutes.reports),

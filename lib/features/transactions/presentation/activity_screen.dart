@@ -161,6 +161,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
         ),
       ],
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         tooltip: FinanceStrings.add,
         onPressed: _showAddMenu,
         child: const Icon(Icons.add),

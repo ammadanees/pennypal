@@ -33,6 +33,7 @@ class SavingsScreen extends ConsumerWidget {
     return AppScaffold(
       title: FinanceStrings.savingsTitle,
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: null,
         onPressed: () => context.push(AppRoutes.goalEdit),
         icon: const Icon(Icons.add),
         label: const Text(FinanceStrings.newGoal),

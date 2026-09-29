@@ -233,6 +233,7 @@ class _AdminContentScreenState extends ConsumerState<AdminContentScreen> {
     return AppScaffold(
       title: 'Learning Content',
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: null,
         onPressed: () => _openLessonEditor(),
         icon: const Icon(Icons.add),
         label: const Text('Add Lesson'),

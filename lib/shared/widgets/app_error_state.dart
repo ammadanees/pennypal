@@ -12,11 +12,13 @@ class AppErrorState extends StatelessWidget {
     super.key,
     this.title = AppStrings.errorGenericTitle,
     this.message = AppStrings.errorGenericMessage,
+    this.icon = Icons.cloud_off_outlined,
     this.onRetry,
   });
 
   final String title;
   final String message;
+  final IconData icon;
   final VoidCallback? onRetry;
 
   @override
@@ -28,7 +30,7 @@ class AppErrorState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.cloud_off_outlined,
+            Icon(icon,
                 size: AppDimensions.iconLg, color: c.textMuted),
             AppSpacing.vMd,
             Text(title,

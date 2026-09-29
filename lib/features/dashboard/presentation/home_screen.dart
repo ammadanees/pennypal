@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -441,8 +442,10 @@ class _BalanceHeroState extends ConsumerState<_BalanceHero> {
                     visualDensity: VisualDensity.compact,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    onPressed: () =>
-                        setState(() => _hideBalance = !_hideBalance),
+                    onPressed: () {
+                      HapticFeedback.selectionClick();
+                      setState(() => _hideBalance = !_hideBalance);
+                    },
                   ),
                   const SizedBox(width: 12),
                   Icon(
@@ -463,24 +466,40 @@ class _BalanceHeroState extends ConsumerState<_BalanceHero> {
             ),
           ),
           AppSpacing.vXs,
-          if (_hideBalance)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text(
-                '$currency • • • • • •',
-                style: t.headlineLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 2.0,
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 260),
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.94, end: 1.0)
+                      .animate(animation),
+                  child: child,
                 ),
-              ),
-            )
-          else
-            MoneyDisplay(
-              amount: widget.balance,
-              size: MoneySize.hero,
-              color: c.onInk,
-            ),
+              );
+            },
+            child: _hideBalance
+                ? Padding(
+                    key: const ValueKey('hidden_hero_balance'),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      '$currency • • • • • •',
+                      style: t.headlineLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 2.0,
+                      ),
+                    ),
+                  )
+                : KeyedSubtree(
+                    key: const ValueKey('visible_hero_balance'),
+                    child: MoneyDisplay(
+                      amount: widget.balance,
+                      size: MoneySize.hero,
+                      color: c.onInk,
+                    ),
+                  ),
+          ),
           AppSpacing.vSm,
           Container(
             padding: const EdgeInsets.symmetric(
@@ -888,6 +907,20 @@ class _QuickShortcutsSection extends ConsumerWidget {
         onTap: () => SplitBillSheet.show(context),
       ),
       (
+        icon: Icons.handshake_outlined,
+        label: 'Borrow & Lend',
+        subtitle: 'Who owes what',
+        accent: AppAccents.amber,
+        onTap: () => context.push(AppRoutes.debts),
+      ),
+      (
+        icon: Icons.repeat_rounded,
+        label: 'Subscriptions',
+        subtitle: 'Recurring bills',
+        accent: AppAccents.purple,
+        onTap: () => context.push(AppRoutes.subscriptions),
+      ),
+      (
         icon: Icons.history,
         label: 'History',
         subtitle: 'All records',
@@ -901,21 +934,21 @@ class _QuickShortcutsSection extends ConsumerWidget {
         icon: Icons.school_outlined,
         label: 'Learning',
         subtitle: 'Finance tips',
-        accent: AppAccents.amber,
+        accent: AppAccents.green,
         onTap: () => context.push(AppRoutes.learning),
       ),
       (
         icon: Icons.rate_review_outlined,
         label: 'Feedback',
         subtitle: 'Share review',
-        accent: AppAccents.green,
+        accent: AppAccents.blue,
         onTap: () => context.push(AppRoutes.feedback),
       ),
       (
         icon: Icons.headset_mic_outlined,
         label: 'Support',
         subtitle: 'Get help',
-        accent: AppAccents.purple,
+        accent: AppAccents.coral,
         onTap: () => context.push(AppRoutes.support),
       ),
     ];

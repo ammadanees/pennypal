@@ -10,6 +10,7 @@ import 'app/app.dart';
 import 'core/config/dev_tools.dart';
 import 'core/services/local_notification_service.dart';
 import 'core/services/shared_preferences_provider.dart';
+import 'core/utils/formatters.dart';
 import 'data/firestore_record_store.dart';
 import 'data/memory_record_store.dart';
 import 'data/record_store.dart';
