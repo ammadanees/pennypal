@@ -23,6 +23,10 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
+  final savedCurrency = prefs.getString('user_currency_preference');
+  if (savedCurrency != null && savedCurrency.isNotEmpty) {
+    Formatters.currentCurrency = savedCurrency;
+  }
   FirebaseAuthRepository.loadPersistedVerifiedUids(prefs);
   await LocalNotificationService.initialize();
   final backend = await _createBackend(prefs);

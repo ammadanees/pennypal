@@ -7,6 +7,7 @@ import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/budget_progress.dart';
 import '../../../shared/widgets/money_display.dart';
@@ -159,7 +160,7 @@ class _SavingsIllustration extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('New laptop', style: t.titleMedium),
-                    Text('Rs. 60,000 of Rs. 100,000', style: t.bodySmall),
+                    Text('${Formatters.money(60000)} of ${Formatters.money(100000)}', style: t.bodySmall),
                   ],
                 ),
               ),
@@ -184,7 +185,7 @@ class _SavingsIllustration extends StatelessWidget {
               AppSpacing.hSm,
               Expanded(
                 child: Text(
-                  'Rs. 5,000 a month, about 8 months to go',
+                  '${Formatters.money(5000)} a month, about 8 months to go',
                   style: t.bodySmall,
                 ),
               ),

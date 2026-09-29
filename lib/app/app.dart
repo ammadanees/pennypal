@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/config/dev_tools.dart';
 import '../core/constants/app_strings.dart';
+import '../core/services/currency_service.dart';
 import '../core/theme/app_theme.dart';
 import '../core/theme/theme_provider.dart';
 import 'router.dart';
@@ -13,6 +14,7 @@ class PennyPalApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(currencyProvider);
     return MaterialApp.router(
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,

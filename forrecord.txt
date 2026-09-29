@@ -1,0 +1,55 @@
+I conducted a thorough, end-to-end audit across the codebase to uncover other bugs, formatting inconsistencies, state desynchronizations, and edge cases.
+
+Here is the detailed breakdown of the bugs identified, their root causes, and the fixes applied:
+
+1. Cold Boot Currency Desynchronization
+Location: 
+
+lib/main.dart
+The Bug: When the app booted up from cold storage, Formatters.currentCurrency defaulted to the hardcoded fallback 'Rs.'. SharedPreferences was read, but the saved user preference ('user_currency_preference') was only set once currencyProvider was triggered by UI widgets. Any early service, background calculation, local notification, or early rendered widget before provider instantiation formatted values in Rs. instead of the user's chosen currency (e.g., $, €, £, AED, ₹).
+Fix: Initialized Formatters.currentCurrency directly from SharedPreferences in main() during cold boot before any providers or services spin up.
+2. App-wide Currency Reactivity Lag
+Location: 
+
+lib/app/app.dart
+The Bug: 
+
+PennyPalApp
+ only watched themeModeProvider and routerProvider, not 
+
+currencyProvider
+. When a student went into Profile and switched currencies (e.g., from Rs. to $), other cached tabs (such as the Budget screen or Savings screen) would not always immediately rebuild with the newly selected symbol unless invalidated or remounted.
+Fix: Added ref.watch(currencyProvider) at the root 
+
+PennyPalApp
+ widget so that changing the currency preference triggers an immediate, reactive re-render across the entire widget hierarchy.
+3. Inverted Negative Amount Formatting (Rs. -250 / $ -250)
+Location: 
+
+lib/core/utils/formatters.dart
+The Bug: Formatters.number(double value) formatted negative values directly with NumberFormat('#,##0'), generating a minus sign inside the number string. When Formatters.money(value) concatenated currency with number(value), negative amounts produced strings like Rs. -250 or $ -1,200 (the minus sign was trapped after the currency symbol and space).
+This caused visual defects on the Activity Screen (Sum: Rs. -1,200), Reports Screen (Sum: Rs. -500), and Split Bill cards whenever cashflow or balances were negative.
+Fix: Refactored Formatters.number() to always format the absolute magnitude value.abs(), and updated Formatters.money() to output -Cur Num (e.g., -Rs. 250 or -$250), conforming to standard financial display rules.
+4. Missing Currency in AI Smart Coach Recommendations
+Location: 
+
+lib/features/dashboard/domain/financial_health_calculator.dart
+The Bug: The AI Financial Health Coach generated spending advice like:
+dart
+recommendation = 'Limit spend to ~${targetDaily.toInt()}/day to finish the month within budget.';
+It was printing raw numbers without any currency symbol (e.g. Limit spend to ~1200/day).
+Fix: Updated to use Formatters.money(targetDaily.floorToDouble()), which now renders dynamically as Limit spend to ~$ 12/day or Limit spend to ~Rs. 1,200/day.
+5. Hardcoded Currency in Onboarding Previews
+Location: 
+
+lib/features/onboarding/presentation/welcome_illustrations.dart
+The Bug: Lines 162 and 187 contained hardcoded 'Rs. 60,000 of Rs. 100,000' and 'Rs. 5,000 a month' text strings in the feature demonstration illustrations.
+Fix: Replaced with dynamic Formatters.money() calls so that onboarding screens align with the system currency setting.
+6. Inaccessible Payment Card Color Customization
+Location: 
+
+lib/features/cards/presentation/add_card_sheet.dart
+The Bug: Even though the underlying 
+
+PaymentCard
+ model and Firestore schema supported card gradient color themes via colorIndex, _colorIndex in AddCardSheet was declared as final int _colorIndex = 0; without exposing color selections, causing every added card to be permanently stuck in the single default purple theme.

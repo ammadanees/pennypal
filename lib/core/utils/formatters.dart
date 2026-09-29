@@ -8,12 +8,15 @@ abstract final class Formatters {
   static final NumberFormat _decimal = NumberFormat('#,##0.00');
 
   static String number(double value) =>
-      (value.abs() % 1 == 0 ? _whole : _decimal).format(value);
+      (value.abs() % 1 == 0 ? _whole : _decimal).format(value.abs());
 
   static String currentCurrency = AppStrings.defaultCurrency;
 
-  static String money(double value, {String? currency}) =>
-      '${currency ?? currentCurrency} ${number(value)}';
+  static String money(double value, {String? currency}) {
+    final cur = currency ?? currentCurrency;
+    final numStr = number(value);
+    return value < 0 ? '-$cur $numStr' : '$cur $numStr';
+  }
 
   static String percent(double ratio) => '${(ratio * 100).round()}%';
 

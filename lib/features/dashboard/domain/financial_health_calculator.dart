@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import '../../../core/utils/formatters.dart';
 import '../../budgets/domain/budget.dart';
 import '../../transactions/domain/finance_transaction.dart';
 import 'finance_calculator.dart';
@@ -138,7 +139,7 @@ abstract final class FinancialHealthCalculator {
           ? math.max(0.0, (budget.totalAmount - monthExpense) / daysRemaining)
           : 0.0;
       recommendation =
-          'Limit spend to ~${targetDaily.toInt()}/day to finish the month within budget.';
+          'Limit spend to ~${Formatters.money(targetDaily.floorToDouble())}/day to finish the month within budget.';
     } else if (monthExpense > monthIncome && monthIncome > 0) {
       recommendation =
           'Expenses exceed monthly income. Trim discretionary spending to rebuild your balance.';
