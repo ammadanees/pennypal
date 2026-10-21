@@ -30,6 +30,16 @@ class DemoAuthRepository implements AuthRepository {
         role: UserRole.admin,
       ),
     );
+    _accounts['admin@pennypal.com'] = _Account(
+      adminPassword,
+      const AppUser(
+        uid: 'demo-admin',
+        fullName: 'PennyPal Admin',
+        email: 'admin@pennypal.com',
+        mobile: '',
+        role: UserRole.admin,
+      ),
+    );
   }
 
   static const String studentUid = 'demo-student';

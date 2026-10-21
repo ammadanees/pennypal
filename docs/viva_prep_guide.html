@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PennyPal — TechWiz 7 Final Viva Defense & Validation Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F172A;
+      --bg-card: #1E293B;
+      --bg-card-hover: #24344D;
+      --border: #334155;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dark: #0F172A;
+      --primary: #4F46E5;
+      --primary-light: #6366F1;
+      --primary-soft: rgba(79, 70, 229, 0.15);
+      --accent-green: #10B981;
+      --accent-green-soft: rgba(16, 185, 129, 0.15);
+      --accent-amber: #F59E0B;
+      --accent-amber-soft: rgba(245, 158, 11, 0.15);
+      --accent-coral: #EF4444;
+      --accent-coral-soft: rgba(239, 68, 68, 0.15);
+      --accent-cyan: #06B6D4;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+
+    [data-theme="light"] {
+      --bg: #F1F5F9;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #F8FAFC;
+      --border: #CBD5E1;
+      --text: #0F172A;
+      --text-muted: #334155;
+      --text-dark: #0F172A;
+      --primary: #4338CA;
+      --primary-light: #4F46E5;
+      --primary-soft: #EEF2FF;
+      --accent-green: #047857;
+      --accent-green-soft: #D1FAE5;
+      --accent-amber: #B45309;
+      --accent-amber-soft: #FEF3C7;
+      --accent-coral: #B91C1C;
+      --accent-coral-soft: #FEE2E2;
+      --accent-cyan: #0E7490;
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="light"] body {
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    [data-theme="light"] .brand-title {
+      color: #0F172A;
+    }
+
+    [data-theme="light"] .brand-badge {
+      background: #EEF2FF;
+      color: #4338CA;
+      border-color: #C7D2FE;
+    }
+
+    [data-theme="light"] .hero-banner {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      box-shadow: var(--shadow-md);
+    }
+
+    [data-theme="light"] .hero-details h1 {
+      color: #0F172A;
+    }
+
+    [data-theme="light"] .hero-meta {
+      color: #334155;
+    }
+
+    [data-theme="light"] .hero-meta strong {
+      color: #0F172A;
+    }
+
+    [data-theme="light"] .card {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    [data-theme="light"] .card:hover {
+      border-color: #6366F1;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+    }
+
+    [data-theme="light"] .card-title {
+      color: #0F172A;
+    }
+
+    [data-theme="light"] .card-timing {
+      background: #EEF2FF;
+      color: #4338CA;
+      border: 1px solid #C7D2FE;
+    }
+
+    [data-theme="light"] .script-text {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-left: 5px solid #4338CA;
+      color: #0F172A;
+      font-weight: 500;
+    }
+
+    [data-theme="light"] .script-text strong {
+      color: #000000;
+      font-weight: 700;
+    }
+
+    [data-theme="light"] .script-text code {
+      background: #EEF2FF;
+      color: #3730A3;
+      border: 1px solid #C7D2FE;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    [data-theme="light"] .tip-box {
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      color: #065F46;
+      font-weight: 600;
+    }
+
+    [data-theme="light"] .action-badge {
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      color: #92400E;
+      font-weight: 700;
+    }
+
+    [data-theme="light"] .qa-card {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+    }
+
+    [data-theme="light"] .qa-header:hover {
+      background: #F8FAFC;
+    }
+
+    [data-theme="light"] .qa-question {
+      color: #0F172A;
+      font-weight: 700;
+    }
+
+    [data-theme="light"] .qa-tag {
+      background: #EEF2FF;
+      color: #4338CA;
+      border: 1px solid #C7D2FE;
+    }
+
+    [data-theme="light"] .qa-answer {
+      border-top: 1px solid #E2E8F0;
+    }
+
+    [data-theme="light"] .qa-answer-text {
+      color: #1E293B;
+      font-weight: 500;
+    }
+
+    [data-theme="light"] .cred-chip {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    [data-theme="light"] .cred-label {
+      color: #475569;
+      font-weight: 700;
+    }
+
+    [data-theme="light"] .cred-value {
+      color: #3730A3;
+      font-weight: 700;
+    }
+
+    [data-theme="light"] .btn-copy {
+      background: #EEF2FF;
+      color: #4338CA;
+      border: 1px solid #C7D2FE;
+    }
+
+    [data-theme="light"] .btn-copy:hover {
+      background: #4338CA;
+      color: #FFFFFF;
+    }
+
+    [data-theme="light"] .timer-card {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+    }
+
+    [data-theme="light"] .timer-display {
+      color: #0E7490;
+    }
+
+    [data-theme="light"] .btn-timer {
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      color: #0F172A;
+    }
+
+    [data-theme="light"] .btn-timer:hover {
+      background: #4338CA;
+      border-color: #4338CA;
+      color: #FFFFFF;
+    }
+
+    [data-theme="light"] .search-bar {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      color: #0F172A;
+    }
+
+    [data-theme="light"] .search-bar::placeholder {
+      color: #64748B;
+    }
+
+    [data-theme="light"] .search-bar:focus {
+      border-color: #4338CA;
+      box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15);
+    }
+
+    [data-theme="light"] .nav-tabs {
+      background: #E2E8F0;
+      border: 1px solid #CBD5E1;
+    }
+
+    [data-theme="light"] .nav-tab {
+      color: #334155;
+    }
+
+    [data-theme="light"] .nav-tab.active {
+      background: #4338CA;
+      color: #FFFFFF;
+    }
+
+    [data-theme="light"] .btn-icon {
+      background: #FFFFFF;
+      border-color: #CBD5E1;
+      color: #0F172A;
+    }
+
+    [data-theme="light"] .table-responsive {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+    }
+
+    [data-theme="light"] th {
+      background: #F8FAFC;
+      color: #0F172A;
+      border-bottom: 2px solid #CBD5E1;
+      font-weight: 700;
+    }
+
+    [data-theme="light"] td {
+      color: #0F172A;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    [data-theme="light"] td strong {
+      color: #000000;
+    }
+
+    [data-theme="light"] .status-badge {
+      background: #D1FAE5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    [data-theme="light"] .code-badge {
+      background: #EEF2FF;
+      color: #3730A3;
+      border: 1px solid #C7D2FE;
+    }
+
+    [data-theme="light"] footer {
+      border-top-color: #CBD5E1;
+      color: #475569;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* Header Nav */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+    }
+
+    [data-theme="light"] header {
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid #CBD5E1;
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #4F46E5, #06B6D4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .brand-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: var(--primary-soft);
+      color: var(--primary-light);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: rgba(30, 41, 59, 0.7);
+      padding: 4px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+
+    [data-theme="light"] .nav-tabs {
+      background: #F1F5F9;
+    }
+
+    .nav-tab {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-tab:hover {
+      color: var(--text);
+    }
+
+    .nav-tab.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon:hover {
+      border-color: var(--primary-light);
+      color: var(--primary-light);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.1));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .hero-details h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta-item strong {
+      color: var(--text);
+    }
+
+    /* Timer Widget */
+    .timer-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .timer-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      letter-spacing: 0.05em;
+      min-width: 80px;
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-timer {
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-timer:hover {
+      background: var(--primary);
+      color: #FFF;
+      border-color: var(--primary);
+    }
+
+    /* Credentials Floating Bar */
+    .creds-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .cred-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .cred-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cred-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .cred-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary-light);
+    }
+
+    .btn-copy {
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--primary-soft);
+      color: var(--primary-light);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-copy:hover {
+      background: var(--primary);
+      color: #FFF;
+    }
+
+    /* Content Views */
+    .view-content {
+      display: none;
+    }
+
+    .view-content.active {
+      display: block;
+    }
+
+    /* Sections & Cards */
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: var(--accent-green-soft);
+      color: var(--accent-green);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-timing {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      background: var(--primary-soft);
+      color: var(--primary-light);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .script-text {
+      background: rgba(15, 23, 42, 0.6);
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-size: 15px;
+      line-height: 1.7;
+      margin: 12px 0;
+      color: #F1F5F9;
+    }
+
+    [data-theme="light"] .script-text {
+      background: #F8FAFC;
+      color: #0F172A;
+      border-left-color: var(--primary);
+    }
+
+    .action-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--accent-amber-soft);
+      color: var(--accent-amber);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      margin: 8px 0;
+    }
+
+    .tip-box {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      font-size: 13px;
+      color: var(--accent-green);
+    }
+
+    /* Q&A Accordion & Search */
+    .search-bar {
+      width: 100%;
+      padding: 14px 18px 14px 44px;
+      font-size: 15px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      margin-bottom: 20px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-bar:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .qa-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.15s ease;
+    }
+
+    .qa-header {
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      user-select: none;
+    }
+
+    .qa-header:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .qa-question {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .qa-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: var(--primary-soft);
+      color: var(--primary-light);
+      white-space: nowrap;
+    }
+
+    .qa-icon {
+      font-size: 18px;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+
+    .qa-card.open .qa-icon {
+      transform: rotate(180deg);
+    }
+
+    .qa-answer {
+      display: none;
+      padding: 0 20px 18px 20px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="light"] .qa-answer {
+      border-top: 1px solid var(--border);
+    }
+
+    .qa-card.open .qa-answer {
+      display: block;
+    }
+
+    .qa-answer-text {
+      color: var(--text);
+      font-weight: 500;
+      padding-top: 12px;
+    }
+
+    /* Table Styles */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 14px 16px;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+
+    [data-theme="light"] th {
+      background: #F1F5F9;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    [data-theme="light"] tr:hover td {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: var(--accent-green-soft);
+      color: var(--accent-green);
+    }
+
+    .code-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: rgba(79, 70, 229, 0.12);
+      color: var(--primary-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 40px;
+    }
+
+    /* Print Optimization */
+    @media print {
+      header, .timer-card, .btn-icon, .nav-tabs, .btn-copy, .search-wrapper {
+        display: none !important;
+      }
+      body {
+        background: #FFF !important;
+        color: #000 !important;
+      }
+      .card, .qa-card, .table-responsive {
+        border-color: #CCC !important;
+        box-shadow: none !important;
+        background: #FFF !important;
+      }
+      .script-text {
+        background: #F5F5F5 !important;
+        color: #000 !important;
+        border-left: 4px solid #000 !important;
+      }
+      .qa-answer {
+        display: block !important;
+        color: #000 !important;
+      }
+      .view-content {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">💎</div>
+        <div>
+          <div class="brand-title">PennyPal Viva Defense Portal</div>
+          <span class="brand-badge">TechWiz 7</span>
+        </div>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('script')">🎙️ Viva Script</button>
+        <button class="nav-tab" onclick="switchTab('mechanics')">📱 App Mechanics & Flow</button>
+        <button class="nav-tab" onclick="switchTab('tech')">⚡ Senior Tech Stack</button>
+        <button class="nav-tab" onclick="switchTab('qa')">❓ 20 Technical Q&A</button>
+        <button class="nav-tab" onclick="switchTab('validation')">🛡️ Validation Audit</button>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-icon" title="Toggle Light/Dark" onclick="toggleTheme()">🌓</button>
+        <button class="btn-icon" title="Print Guide" onclick="window.print()">🖨️</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Hero Banner with Live Timer -->
+    <div class="hero-banner">
+      <div class="hero-details">
+        <h1>North Nazimabad Center</h1>
+        <div class="hero-meta">
+          <div class="hero-meta-item"><span>Lead Presenter:</span> <strong>Muhammad Ammad</strong></div>
+          <div class="hero-meta-item"><span>Team:</span> <strong style="color:var(--primary-light);">TechBeast</strong></div>
+          <div class="hero-meta-item"><span>Competition:</span> <strong>Techwiz7</strong></div>
+          <div class="hero-meta-item"><span>Category:</span> <strong>Multi-Platform App Computing</strong></div>
+          <div class="hero-meta-item"><span>Status:</span> <strong style="color:var(--accent-green);">Final Round Qualifier</strong></div>
+        </div>
+      </div>
+
+      <!-- Practice Timer -->
+      <div class="timer-card">
+        <div>
+          <div style="font-size: 11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Practice Timer (5-7m)</div>
+          <div class="timer-display" id="timer">00:00</div>
+        </div>
+        <div class="timer-controls">
+          <button class="btn-timer" id="btnStart" onclick="startTimer()">Start</button>
+          <button class="btn-timer" onclick="pauseTimer()">Pause</button>
+          <button class="btn-timer" onclick="resetTimer()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Firebase Credentials Bar -->
+    <div class="creds-bar">
+      <div class="cred-chip">
+        <div class="cred-info">
+          <span class="cred-label">Student Account (Live Firebase)</span>
+          <span class="cred-value">ammad.anees99@gmail.com</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Pass: Ammad1234</span>
+        </div>
+        <button class="btn-copy" onclick="copyText('ammad.anees99@gmail.com')">Copy</button>
+      </div>
+
+      <div class="cred-chip">
+        <div class="cred-info">
+          <span class="cred-label">Admin Account (Preconfigured)</span>
+          <span class="cred-value">admin@pennypal.com</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Pass: [PASSWORD]</span>
+        </div>
+        <button class="btn-copy" onclick="copyText('admin@pennypal.com')">Copy</button>
+      </div>
+
+      <div class="cred-chip">
+        <div class="cred-info">
+          <span class="cred-label">Core Technical Highlights</span>
+          <span class="cred-value" style="font-size: 12px;">Flutter 3.24 • Riverpod 2.0 • Offline Firestore</span>
+          <span style="font-size: 11px; color: var(--accent-green);">Dual-Engine Gemini Vision + Heuristic OCR</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 1: VIVA SCRIPT -->
+    <div id="view-script" class="view-content active">
+      
+      <div class="section-title">
+        <span>🎙️ Word-for-Word Spoken Presentation Script</span>
+        <span class="section-badge">Target Time: 5 to 7 Minutes</span>
+      </div>
+
+      <!-- Section 1 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">1. Self & Team Introduction</div>
+          <span class="card-timing">0:00 – 0:30</span>
+        </div>
+        <div class="script-text">
+          "Hi Good Morning Everyone..<br><br>
+          I am <strong>Muhammad Ammad</strong> student of North Nazimabad center. Together with my team, we proudly represent <strong>TechBeast</strong> in Techwiz7 under the Multi-Platform App Computing category.<br><br>
+          It is an incredible honor for our team to qualify for this round.<br><br>
+          Today, we are excited to present <strong>PennyPal</strong> — an intelligent student personal finance companion built on one simple motto: <strong>"Make Every Penny Count.</strong>"
+        </div>
+        <div class="tip-box">
+          💡 <strong>Speaker Tip:</strong> Start with a natural smile and a confident greeting. Keep your tone conversational and energetic, not robotic.
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">2. Why We Chose PennyPal (30 Seconds)</div>
+          <span class="card-timing">0:30 – 1:00</span>
+        </div>
+        <div class="script-text">
+          "Now, before we dive into the live app, I’d like to briefly share why our team chose this specific project.<br><br>
+          When we received the three project tracks in TechWiz, PennyPal stood out to us immediately—because managing money is a challenge we face every single day as students.<br><br>
+          Most personal finance apps in the market are designed for working professionals. They have paid subscriptions, complicated accounting features, and they require a continuous internet connection.<br><br>
+          On a campus, students manage small daily expenses in cash and digital wallets, often in classrooms or basements with poor connectivity.<br><br>
+          We wanted to build a practical, reliable companion tailored to student life—one that is fast, easy to use, and works completely offline."
+        </div>
+        <div class="tip-box">
+          💡 <strong>Speaker Tip:</strong> Use the opening line ("Now, before we dive into the live app...") as a natural bridge so your speech flows effortlessly from your team intro.
+        </div>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">3. Technology Stack & Architecture (45 Seconds)</div>
+          <span class="card-timing">1:00 – 1:45</span>
+        </div>
+        <div class="script-text">
+          "To turn this vision into a reality that students could genuinely rely on anywhere on campus, we needed an architecture that is rock-solid and completely offline-ready.<br><br>
+          We developed PennyPal using <strong>Flutter</strong> to deliver a responsive, 60 FPS experience across mobile, tablet, and web from a single codebase.<br><br>
+          For state management, we implemented <strong>Riverpod 2.0</strong>, which gives us compile-time safety and handles real-time streams without unnecessary widget rebuilds.<br><br>
+          For our database, we used <strong>Cloud Firestore</strong> with offline cache persistence enabled, so students can log transactions anytime, even without an active internet connection.<br><br>
+          We also integrated <strong>Google Gemini Vision AI</strong> for receipt scanning, backed by an offline regex parser to handle network dropouts.<br><br>
+          Now, having seen the foundation under the hood, let’s jump straight into the application itself. Let me share my screen and walk you through the live demo."
+        </div>
+        <div class="tip-box">
+          💡 <strong>Speaker Tip:</strong> Deliver this smoothly and calmly. Notice how the opening and closing lines naturally bridge from 'Why we built it' directly into the live screen share.
+        </div>
+      </div>
+
+      <!-- Section 4 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">4. Live Demonstration Walkthrough (3 to 4 Minutes)</div>
+          <span class="card-timing">1:45 – 5:15</span>
+        </div>
+
+        <!-- Step A -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge">👉 Live Action: Launch PennyPal & Sign in as ammad.anees99@gmail.com</div>
+          <div class="script-text">
+            "We begin right here at the login screen. The application uses GoRouter with declarative route guards to keep user sessions secure. When I enter our student credentials and tap Sign In, the app verifies the account against Firebase and routes us directly into the student dashboard."
+          </div>
+        </div>
+
+        <!-- Step B -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge">👉 Live Action: Point with mouse/tap on Income, Expense, Net Balance & central Budget Ring</div>
+          <div class="script-text">
+            "And the first thing a student lands on is the Dashboard. Right at the top, they get an immediate summary of their finances: Total Income, Monthly Expenses, and Net Balance, combined across cash in pocket, bank cards, and mobile wallets like Nayapay or EasyPaisa.<br><br>
+            Right here in the center, this animated ring shows exactly how much of this month's budget has been consumed so far, calculated in real time by our core finance engine."
+          </div>
+        </div>
+
+        <!-- Step C -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge">👉 Live Action: Tap Budget Tab & Show 1-Tap Copy from Previous Month</div>
+          <div class="script-text">
+            "Now, seeing your balance is one thing, but preventing overspending is what truly matters. So let's head over to the Budget section.<br><br>
+            Budgets in PennyPal are organized strictly by calendar month, matching how student allowances and hostel rent operate. Students can set spending caps for individual categories.<br><br>
+            And to save students from tedious data entry at the start of every month, we built a <strong>1-Tap Quick Copy</strong> feature. Instead of typing every category limit again, a single tap copies the previous month's budget automatically."
+          </div>
+        </div>
+
+        <!-- Step D -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge">👉 Live Action: Tap Add Expense (+) & Show 8 Categories + AI Receipt Scanner</div>
+          <div class="script-text">
+            "Once a budget is in place, the student needs to log their daily spending. Adding an expense takes just a few seconds across all 8 standard categories, like Food, Transport, and Education.<br><br>
+            In addition to manual entry, students can scan paper receipts. Using Google Gemini Vision AI, the app scans the photo, extracts the merchant name, transaction date, and total amount, and pre-fills the form automatically."
+          </div>
+        </div>
+
+        <!-- Step E -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge" style="background: var(--accent-coral-soft); color: var(--accent-coral);">⭐ Live Action: Turn ON Airplane Mode -> Add $15 Expense -> Turn OFF Airplane Mode</div>
+          <div class="script-text">
+            "Now, here is a real-world scenario every student encounters on campus: what happens when your Wi-Fi drops or you're in a basement classroom with zero signal? Let me demonstrate how PennyPal handles this.<br><br>
+            I will turn on <strong>Airplane Mode</strong> to simulate having zero internet connection.<br><br>
+            When I log a 15-dollar expense for lunch, notice that it commits immediately to local storage and updates the dashboard without any loading spinner or lag.<br><br>
+            And the moment I turn Airplane Mode back off, Firebase automatically detects the restored connection and synchronizes the transaction to the cloud in the background."
+          </div>
+        </div>
+
+        <!-- Step F -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge">👉 Live Action: Tap Savings Tab & Add $20 Contribution to Active Goal</div>
+          <div class="script-text">
+            "Keeping daily expenses in check is essential, but building long-term financial health requires saving. That brings us to our Savings Goals.<br><br>
+            Here, students can set dedicated targets—such as saving for a laptop, a certification, or emergency cash—with specific deadlines. When we add a contribution, the progress bar updates, the app recalculates the remaining timeline, and provides milestone encouragement to help students stay disciplined."
+          </div>
+        </div>
+
+        <!-- Step G -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge" style="background: var(--accent-green-soft); color: var(--accent-green);">🚀 Live Action: Show Split Bill, Borrow & Lend, and Subscriptions</div>
+          <div class="script-text">
+            "Now, while testing the app with our classmates, we realized that student life involves social moments that traditional banking apps completely ignore. That's why we engineered three practical student utilities right on the dashboard:<br><br>
+            First, <strong>Split Bill</strong>—which calculates each person's exact share when dining out with classmates and lets you copy a payment reminder to WhatsApp in one tap.<br><br>
+            Second, <strong>Borrow and Lend</strong>—to keep a clear, transparent record of small informal peer debts so friendships don't get awkward.<br><br>
+            And third, <strong>Subscriptions Manager</strong>—to track recurring monthly services like software or gym passes so they don't quietly drain your allowance."
+          </div>
+        </div>
+
+        <!-- Step H -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge">👉 Live Action: Open Learning Hub lesson & Send an AI prompt in Assistant</div>
+          <div class="script-text">
+            "Beyond daily tracking, we also wanted to empower students with financial knowledge. That's why our <strong>Learning Hub</strong> offers bite-sized lessons on topics like needs versus wants and emergency funds.<br><br>
+            And if a student is ever unsure about their spending decisions, they can consult our <strong>AI Assistant</strong> for personalized advice on budgeting and saving."
+          </div>
+        </div>
+
+        <!-- Step I -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge">👉 Live Action: Logout & Log in as admin@pennypal.com / Admin@1234</div>
+          <div class="script-text">
+            "Everything we’ve seen so far is from the student’s perspective. But a campus platform also needs administrative oversight. So let's quickly switch over to the Administrator Portal.<br><br>
+            When an administrator signs in, they access a dedicated administrative dashboard to monitor registered students, inspect system analytics, resolve support tickets, and publish new educational lessons through the built-in CMS."
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">5. Closing Statement & Handover (20 Seconds)</div>
+          <span class="card-timing">5:15 – 5:45</span>
+        </div>
+        <div class="script-text">
+          "To bring everything together—PennyPal was designed from day one to be more than just a digital ledger. It is a dependable, offline-ready companion that genuinely helps students take control of their finances and build healthy habits for life.<br><br>
+          On behalf of team <strong>TechBeast</strong> and <strong>Aptech North Nazimabad Center</strong>, thank you very much for your time and guidance today. We would be delighted to answer any questions you have!"
+        </div>
+        <div class="tip-box">
+          💡 <strong>Speaker Tip:</strong> Close with confidence, maintain eye contact, and leave your screen showing the Student Dashboard as a visual reference for the judges.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW: APP MECHANICS, FLOW & EDGE CASES -->
+    <div id="view-mechanics" class="view-content">
+      <div class="section-title">
+        <span>📱 PennyPal Complete App Mechanics & Edge Cases</span>
+        <span class="section-badge">How It Works Under the Hood</span>
+      </div>
+
+      <!-- Card 1: Lifecycle From Scratch -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">1. The Student Financial Journey (From Scratch)</div>
+          <span class="card-timing">Step-by-Step Flow</span>
+        </div>
+        <div class="script-text">
+          <strong>How a student uses PennyPal from day one:</strong><br><br>
+          <strong>Step 1: Secure Onboarding & Auth</strong> — Student registers with Full Name, Student ID, Email, Mobile, and Password. They can link up to 2 primary payment cards (e.g. Student Debit Card, Campus Meal Card).<br><br>
+          <strong>Step 2: Recording Initial Income</strong> — The student logs incoming funds (Pocket Money allowance, scholarship, or freelance work). This establishes their starting <strong>Net Balance</strong> and initializes their available cash cushion.<br><br>
+          <strong>Step 3: Creating a Monthly Budget</strong> — Under the Budget tab, the student sets an overall monthly spending limit and allocates category caps (e.g., Food: $150, Transport: $40, Education: $50).<br><br>
+          <strong>Step 4: Daily Expense Tracking & Gemini OCR</strong> — Throughout the month, the student logs micro-expenses manually or by scanning receipts with our AI scanner. The app categorizes spending across the 8 mandatory categories.<br><br>
+          <strong>Step 5: Dynamic Habit Coaching</strong> — Instead of passive charts, PennyPal computes a live <strong>Financial Health Score (0–100)</strong> and calculates a <strong>Daily Burn Rate Runway</strong> telling the student exactly how many days their cash will last.
+        </div>
+        <div class="tip-box">
+          💡 <strong>What to say to judges:</strong> "PennyPal is not just an electronic ledger. It guides students step-by-step: starting with income allocation, setting calendar-month limits, logging micro-expenses with AI, and monitoring their daily burn rate runway."
+        </div>
+      </div>
+
+      <!-- Card 2: What Happens When the Month Changes? -->
+      <div class="card" style="border-left: 4px solid var(--primary-light);">
+        <div class="card-header">
+          <div class="card-title">2. What Happens to the Dashboard When the Month Changes? (e.g. Midnight on Oct 1st)</div>
+          <span class="card-timing">Calendar Transition</span>
+        </div>
+        <div class="script-text">
+          <strong>When the calendar hits midnight on the 1st of a new month:</strong><br><br>
+          • <strong>Net Balance (All-Time): DOES NOT RESET.</strong> Cash in hand and bank accounts carry over as an active savings cushion. Money unspent in September remains in the student's pocket for October.<br><br>
+          • <strong>Monthly Income & Expenses: Evaluated for the new month (<code>YYYY-MM</code>).</strong> Both reset cleanly to <strong>$0.00</strong> ready for October's allowance, salary, or stipend.<br><br>
+          • <strong>Home Screen Budget Ring:</strong> Automatically checks for October's budget document (<code>users/{uid}/budgets/2026-10</code>). If not created yet, the dashboard displays: <em>"No budget set for October"</em> with a primary <strong>"Create Budget"</strong> button.<br><br>
+          • <strong>The 1-Tap "Copy from Previous Month" Innovation:</strong> When the student taps "Create Budget" for October, PennyPal inspects September's budget. A prominent action banner appears: <code>[📋 Copy from September — Auto-fill limits]</code>. With a single tap, all category allocations are pre-filled, saving students from repetitive manual data entry.<br><br>
+          • <strong>Category Ribbon ("Where It Went"):</strong> Automatically collapses or hides because there are 0 expenses logged for October yet, keeping the UI clean and uncluttered.<br><br>
+          • <strong>Financial Health Index & Runway:</strong> Pacing resets to Day 1 of 31 (<code>daysElapsed = 1</code>). Burn rate initializes cleanly without divide-by-zero errors. Runway safely projects based on the carried-forward net balance.<br><br>
+          • <strong>Recent Transactions:</strong> Continues displaying the global stream of latest transactions with explicit date badges (e.g. "28 Sep"), so the student never loses sight of recent activity.
+        </div>
+        <div class="tip-box">
+          💬 <strong>Judge Defense Answer:</strong> "Budgets are strictly partitioned by calendar month (YYYY-MM). When a new month starts, all-time cash balances carry forward, monthly expenses reset to zero, and our 1-Tap Quick Copy feature lets students clone last month's budget with one click."
+        </div>
+      </div>
+
+      <!-- Card 3: What Happens If Overall Balance Goes into the Minus? -->
+      <div class="card" style="border-left: 4px solid var(--accent-coral);">
+        <div class="card-header">
+          <div class="card-title">3. What Happens If the Overall Balance Goes into the Minus (Deficit)?</div>
+          <span class="card-timing">Negative Balance</span>
+        </div>
+        <div class="script-text">
+          <strong>When Total Expenses exceed Total Income:</strong><br><br>
+          • <strong>Visual Deficit Indicator:</strong> The Net Available Balance on the Dashboard turns negative and highlights with a prominent coral/red alert badge (e.g., <code>-$15.00</code> or <code>-Rs. 1,500</code>).<br><br>
+          • <strong>Severe Health Score Drop:</strong> PennyPal's Financial Health algorithm immediately penalizes the Savings Margin pillar (dropping from 30 points to 0). The overall health score falls into the <strong>"Needs Attention"</strong> or <strong>"Critical"</strong> tier.<br><br>
+          • <strong>Proactive Deficit Warnings:</strong> The Insight Banner and AI Assistant trigger an automated alert: <em>"You have spent more than your total recorded income this month. Recommendation: Pause all discretionary spending (Shopping, Entertainment, Eating out) until next allowance."</em><br><br>
+          • <strong>Zero Division Safeguards:</strong> In mathematical calculations (burn rate, runway days), our pure Dart <code>FinanceCalculator</code> includes safety guards (<code>balance &lt;= 0 ? 0 : (balance / burnRate)</code>) so the app never throws infinity, NaN, or runtime crashes.
+        </div>
+        <div class="tip-box">
+          💬 <strong>Judge Defense Answer:</strong> "If a student overspends past their income, the balance displays in negative with a coral alert badge, the Financial Health Score automatically drops into the 'Needs Attention' tier, and our AI Assistant provides actionable guidance to cut discretionary spend."
+        </div>
+      </div>
+
+      <!-- Card 4: What Happens If a Specific Payment Mode (Card/Cash) Goes into Minus? -->
+      <div class="card" style="border-left: 4px solid var(--accent-amber);">
+        <div class="card-header">
+          <div class="card-title">4. What Happens If Cash, Card, or Wallet Goes into Minus (Overdraft)?</div>
+          <span class="card-timing">Multi-Mode Overdraft</span>
+        </div>
+        <div class="script-text">
+          <strong>The Real-World Student Dilemma:</strong><br>
+          A student might have $100 in their bank account, but only $5 physical cash in their wallet. If they buy lunch with $15 cash at a canteen, their cash is in a -$10 deficit, even though their overall wealth is positive!<br><br>
+          <strong>How PennyPal Handles This Elegantly:</strong><br><br>
+          • <strong>Independent Payment Mode Summaries:</strong> Our <code>FinanceCalculator.modeSummaries</code> tracks running balances for each mode separately: Cash, Payment Cards, Mobile Wallets (EasyPaisa/JazzCash), and Bank Transfers.<br><br>
+          • <strong>Specific Overdraft Alert Badge:</strong> If the student logs a cash transaction that exceeds their cash balance, PennyPal flags an <strong>Overdrawn Warning</strong> specifically on the Cash wallet card, alerting them that physical cash is exhausted.<br><br>
+          • <strong>Preservation of Total Net Worth:</strong> The global balance accurately subtracts the expense ($100 - $15 = $85 total balance). This gives students true financial awareness: they know they have money, but need to visit an ATM or transfer funds to cash.
+        </div>
+        <div class="tip-box">
+          💬 <strong>Judge Defense Answer:</strong> "We track payment modes independently. If a student spends more cash than they have logged, that specific cash wallet displays an overdraft badge, while overall net balance remains mathematically accurate."
+        </div>
+      </div>
+
+      <!-- Card 5: Budget Overspending & Category Limit Thresholds -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">5. Budget Overspending Engine: 80% vs 100% Thresholds</div>
+          <span class="card-timing">Real-Time Alerts</span>
+        </div>
+        <div class="script-text">
+          <strong>How PennyPal monitors category limits dynamically:</strong><br><br>
+          • <strong>On Track (&lt; 80% of Limit):</strong> Progress ring displays in healthy Emerald Green or Indigo. The student is spending within safe velocity.<br><br>
+          • <strong>Nearing Limit (80% to 99% of Limit):</strong> Progress bar turns Amber. An instant in-app alert badge and local push notification are dispatched: <em>"Heads up! You have reached 80% of your Food budget."</em><br><br>
+          • <strong>Overspent (≥ 100% of Limit):</strong> Progress bar turns Coral/Red. An overspending warning badge appears showing the exact overage: <em>"Overspent by $25.00"</em>.<br><br>
+          • <strong>Unbudgeted Spending Detection:</strong> If a student spends money in a category with no limit set, PennyPal isolates it in an <em>"Unbudgeted Spending"</em> ribbon so every single penny remains transparent.
+        </div>
+      </div>
+
+      <!-- Card 6: Savings Goals & Milestone Forecasting -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">6. Savings Goals Lifecycle & Milestone Celebrations</div>
+          <span class="card-timing">Habit Formation</span>
+        </div>
+        <div class="script-text">
+          <strong>How Savings Goals operate:</strong><br><br>
+          • <strong>Goal Creation:</strong> Student specifies Goal Name, Target Amount, Target Date, and Monthly Contribution.<br><br>
+          • <strong>Dynamic Forecast Calculation:</strong> PennyPal calculates the exact completion percentage and remaining months required: <code>(targetAmount - currentAmount) / monthlyContribution</code>.<br><br>
+          • <strong>Contributing Money:</strong> Tapping <strong>"Contribute"</strong> transfers money into the goal. When savings reach 25%, 50%, 75%, and 100% milestones, the app triggers a celebratory dialog with haptic feedback.<br><br>
+          • <strong>Completed Goal Archival:</strong> Once 100% is reached, the goal automatically transitions to <strong>Completed</strong> and is safely archived in the goal history.
+        </div>
+      </div>
+
+      <!-- Card 7: Extra Features Workflow -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">7. Extra Features Mechanics: Split Bill, Debts & Subscriptions</div>
+          <span class="card-timing">Value-Add Modules</span>
+        </div>
+        <div class="script-text">
+          • <strong>Split Bill Sheet:</strong> Divides shared restaurant or dorm bills among friends. Calculates tip percentages, applies rounding protection, and generates a formatted message that can be sent straight to WhatsApp with one tap.<br><br>
+          • <strong>Borrow &amp; Lend (IOU) Tracker:</strong> Segregates debts into <em>"I Lent (They Owe Me)"</em> and <em>"I Borrowed (I Owe)"</em>. Tracks friend names, amounts, due dates, and settlement status so informal student debts are never forgotten.<br><br>
+          • <strong>Subscriptions Manager:</strong> Monitors recurring monthly charges (Spotify, Netflix, campus gym). Shows renewal days and calculates the total recurring burn rate impact on the student's monthly runway.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW: SENIOR TECH STACK & FLUTTER/FIREBASE ARCHITECTURE -->
+    <div id="view-tech" class="view-content">
+      <div class="section-title">
+        <span>⚡ Senior Flutter & Firebase Technical Deep-Dive</span>
+        <span class="section-badge">Production Architecture</span>
+      </div>
+
+      <!-- Quick Vocabulary Pro-Tip Card -->
+      <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+        <div class="card-header">
+          <div class="card-title">💡 How to Sound Like a Senior Flutter Engineer (Vocabulary Guide)</div>
+          <span class="card-timing">Interview Gold</span>
+        </div>
+        <p style="font-size: 14px; margin-bottom: 12px; color: var(--text-muted);">
+          When judges ask technical questions, replace basic beginner words with industry-standard software engineering terms:
+        </p>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 35%;">Instead of Saying (Junior)...</th>
+                <th style="width: 65%;">Say This (Senior / Lead Developer)...</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>"I used Riverpod to change variables."</td>
+                <td><strong>"We implemented a unidirectional reactive state architecture using Riverpod 2.0 with compile-time type safety."</strong></td>
+              </tr>
+              <tr>
+                <td>"I saved data in Firebase."</td>
+                <td><strong>"We built an offline-first data layer with Firestore local cache persistence and optimistic UI synchronization."</strong></td>
+              </tr>
+              <tr>
+                <td>"I made a big screen with setState."</td>
+                <td><strong>"We engineered atomic, reusable ConsumerWidgets to isolate rebuild scopes and preserve 60 to 120 FPS rendering."</strong></td>
+              </tr>
+              <tr>
+                <td>"AI reads the bill."</td>
+                <td><strong>"We designed a Dual-Engine OCR pipeline utilizing Gemini Vision 1.5 Flash with an on-device heuristic regex fallback."</strong></td>
+              </tr>
+              <tr>
+                <td>"I checked if fields are empty."</td>
+                <td><strong>"We enforced strict domain-level input validation with RFC-compliant regex patterns and form state keys."</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Module 1: Riverpod 2.0 State Architecture -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">1. Reactive State Management: Riverpod 2.0 Architecture</div>
+          <span class="card-timing">Core State Engine</span>
+        </div>
+        <div class="script-text">
+          <strong>Why Riverpod 2.0 over Provider or Bloc?</strong><br>
+          • <strong>Compile-Time Safety:</strong> Riverpod providers are top-level global constants. They completely eliminate <code>ProviderNotFoundException</code> runtime crashes because provider dependencies are resolved at compile time.<br>
+          • <strong>Decoupled from BuildContext:</strong> In standard Provider or Bloc, accessing state requires a <code>BuildContext</code>. In PennyPal, our repositories, background sync listeners, and domain services interact with providers cleanly without needing the Flutter widget tree.<br>
+          • <strong>Streaming with <code>StreamProvider&lt;T&gt;</code>:</strong> We bind our Firestore snapshot streams (<code>collection.snapshots()</code>) directly to StreamProviders. When an expense is added on any device, the stream emits a new list and updates the UI automatically.<br>
+          • <strong>Pattern Matching with <code>AsyncValue&lt;T&gt;</code>:</strong> We use <code>AsyncValue.when(data:, loading:, error:)</code> across all screens. This eliminates manual null-checks and loading booleans, guaranteeing a seamless UX with zero white-screen flickers.<br>
+          • <strong>Fine-Grained Rebuilding with <code>ref.watch(provider.select(...))</code>:</strong> Instead of rebuilding an entire dashboard when one number updates, we scope rebuilds to the exact sub-widget listening to that property.
+        </div>
+        <div class="tip-box">
+          💬 <strong>What to say to judges:</strong> "We chose Riverpod 2.0 because it provides compile-time safety and lets us decouple our business logic from Flutter's widget tree. We use StreamProviders for real-time Firestore sync and AsyncValue for seamless reactive UI states."
+        </div>
+      </div>
+
+      <!-- Module 2: Flutter Widget Tree & Design System -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">2. Widget Tree Engineering & Atomic Design System</div>
+          <span class="card-timing">UI & Rendering</span>
+        </div>
+        <div class="script-text">
+          <strong>Key Flutter Widgets & Architectural Highlights:</strong><br><br>
+          • <strong>Atomic Component Architecture:</strong> All UI elements follow an atomic design system located in <code>lib/shared/widgets/</code>:
+          <ul style="margin: 8px 0 8px 20px;">
+            <li><code>AppCard</code> & <code>HeroCard</code>: Encapsulates surface elevations, border radii, and brand shadow tokens.</li>
+            <li><code>AppTextField</code>: Standardized text inputs with auto-validation, prefix icons, and OS autofill integration (<code>AutofillGroup</code>).</li>
+            <li><code>AccentIconBox</code>: Reusable colored icon container with dynamic opacity tinting.</li>
+            <li><code>AppButton</code>: Configurable primary, secondary, and ghost action buttons with loading indicator states.</li>
+          </ul>
+          • <strong><code>AdaptiveScaffold</code> (Multi-Platform Responsiveness):</strong> Rather than hardcoding screen sizes, we built an <code>AdaptiveScaffold</code>. Using <code>LayoutBuilder</code> and <code>MediaQuery</code>, the app dynamically renders a bottom <code>NavigationBar</code> on phones, but automatically pivots into a persistent <code>NavigationRail</code> with multi-column grids on tablets and desktop web browsers.<br><br>
+          • <strong><code>CustomPainter</code> & Low-Level Canvas:</strong> The animated Budget Ring chart and financial sparklines are not bloated third-party plugins. They are drawn directly onto Flutter's <code>Canvas</code> using <code>CustomPainter</code> with quadratic bezier curves and mathematical sweep angles, ensuring 60 FPS hardware acceleration.<br><br>
+          • <strong>Hero Subtree Conflict Elimination:</strong> In nested shell routing, multiple FloatingActionButtons can share the default hero tag and trigger assertion errors. We explicitly assigned <code>heroTag: null</code> across all screens (<code>ActivityScreen</code>, <code>SubscriptionsScreen</code>, etc.) ensuring smooth page transitions with zero scheduler crashes.
+        </div>
+        <div class="tip-box">
+          💬 <strong>What to say to judges:</strong> "Our UI is built on atomic design principles using an AdaptiveScaffold that transitions between navigation bars on mobile and navigation rails on tablets. We also rendered our Budget Ring directly using CustomPainter for native GPU performance."
+        </div>
+      </div>
+
+      <!-- Module 3: Firebase Cloud & Offline Persistence -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">3. Firebase Firestore & Offline-First Persistence</div>
+          <span class="card-timing">Backend & Data</span>
+        </div>
+        <div class="script-text">
+          <strong>Enterprise Cloud Data Architecture:</strong><br><br>
+          • <strong>Offline-First Pipeline with Cache Persistence:</strong> Firestore is configured with client-side persistence enabled. When a student records an expense inside an offline lecture hall, the transaction commits instantly to local SQLite/cache storage, and Riverpod updates the UI with <em>optimistic rendering</em>. The snapshot contains <code>hasPendingWrites: true</code>. Once network connectivity returns, Firestore reconciles changes with the cloud automatically.<br><br>
+          • <strong>Multi-Tenant Zero-Trust Security Rules:</strong> All user records are partitioned under <code>users/{userId}</code> sub-collections. In <code>firestore.rules</code>, we enforce:<br>
+          <code>match /users/{userId}/{document=**} { allow read, write: if request.auth != null && request.auth.uid == userId; }</code><br>
+          This guarantees server-enforced data isolation so no student can access another user's ledger.<br><br>
+          • <strong>Compound Indexing & Query Partitioning:</strong> Transactions are queried by calendar month and indexed with compound Firestore indexes on <code>(userId, date DESC)</code>. This keeps cloud read operations minimal, bandwidth low, and prevents memory spikes even if a student logs thousands of records over four years.<br><br>
+          • <strong>Temporal Tamper Resistance:</strong> We utilize <code>FieldValue.serverTimestamp()</code> for auditing. If a student manipulates their device system clock forward or backward, the backend assigns the true atomic cloud timestamp upon synchronization.
+        </div>
+        <div class="tip-box">
+          💬 <strong>What to say to judges:</strong> "We implemented an offline-first architecture using Firestore local cache persistence with optimistic UI updates. Data is protected by zero-trust multi-tenant security rules restricting reads and writes strictly to the authenticated user ID."
+        </div>
+      </div>
+
+      <!-- Module 4: Dual-Engine AI & OCR Service -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">4. Dual-Engine Machine Learning & Heuristic OCR</div>
+          <span class="card-timing">AI Architecture</span>
+        </div>
+        <div class="script-text">
+          <strong>How <code>ReceiptOcrService</code> Operates Under the Hood:</strong><br><br>
+          • <strong>Primary Engine (Google Gemini 1.5 Flash Vision):</strong> Converts the camera/gallery receipt image to base64 bytes and dispatches an HTTP request to Google AI Studio. It supplies a strict JSON schema enforcing typed extraction of: <code>merchant</code>, <code>date</code>, <code>amount</code>, and <code>category</code>.<br><br>
+          • <strong>Graceful Fallback Engine (Local Heuristic Regex Parser):</strong> In the real world, campus Wi-Fi can drop or APIs can time out. We wrapped the network call in a <strong>12-second timeout ceiling</strong>. If the API fails or connectivity drops, the system seamlessly cascades to our internal regex parser. It scans for currency markers (<code>Rs.</code>, <code>$</code>, <code>PKR</code>), date patterns, and vendor keywords locally without ever crashing or displaying an error dialog to the student.
+        </div>
+        <div class="tip-box">
+          💬 <strong>What to say to judges:</strong> "We built a Dual-Engine architecture for receipt scanning. We use Gemini Vision 1.5 Flash with structured JSON output as our primary engine, and a local regex heuristic parser as an automated fallback if the network drops."
+        </div>
+      </div>
+
+      <!-- Module 5: Clean Architecture & Pure Dart Domain Layer -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">5. Clean Architecture & Automated Testing</div>
+          <span class="card-timing">Code Quality</span>
+        </div>
+        <div class="script-text">
+          <strong>Pure Dart Domain Decoupling:</strong><br><br>
+          • <strong>Zero Flutter Dependencies in Domain Layer:</strong> All business logic calculators (<code>FinanceCalculator</code>, <code>ReportCalculator</code>, <code>FinancialHealthCalculator</code>) are pure Dart classes. They do not import <code>package:flutter</code> or touch any UI widgets.<br><br>
+          • <strong>100% Deterministic Automated Testing:</strong> Because calculations are isolated from UI rendering, our automated test suite runs <strong>73 unit and widget tests in under 40 seconds</strong> with zero flaky tests. We test edge cases including zero-division in burn rate calculations, leap year February clamping, budget overspending thresholds, and debt settlement logic.
+        </div>
+        <div class="tip-box">
+          💬 <strong>What to say to judges:</strong> "All our business math and financial calculators are pure Dart classes with zero Flutter UI dependencies. This allowed us to write 73 automated unit tests that verify calculations with 100% determinism."
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: 20 TECHNICAL Q&A -->
+    <div id="view-qa" class="view-content">
+      <div class="section-title">
+        <span>❓ Top 20 Technical & Architectural Judge Questions</span>
+        <span class="section-badge">Live Search Ready</span>
+      </div>
+
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="qaSearch" class="search-bar" placeholder="Search questions by keyword (e.g. riverpod, offline, gemini, budget, cards, security)..." onkeyup="filterQA()">
+      </div>
+
+      <div id="qaList">
+        <!-- Q1 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q1: Why did you implement Split Bill, Debt Tracker, and Subscriptions when they were not in the SRS baseline?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">SRS Innovation</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              SRS Section 1.9 explicitly encourages applying creativity to improve the cross-platform application. Our research at Aptech showed that split canteen meals, forgotten peer debts, and recurring subscriptions are the three largest causes of student financial leakage. Adding these completed the real-world student financial workflow.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q2: How does Riverpod manage state compared to Provider or Bloc?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">State Management</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              Riverpod is a complete rewrite of Provider that operates outside Flutter's widget tree. It provides compile-time safety with no runtime ProviderNotFoundExceptions. We use StreamProviders for real-time Firestore synchronization and StateNotifiers for form and filter state, allowing selective widget rebuilds without unnecessary re-renders.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q3: What is the exact difference between ref.watch() and ref.read() in your code?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Flutter Riverpod</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              We use ref.watch() inside build() methods to subscribe widgets to reactive state changes so the UI rebuilds when data updates. We use ref.read() strictly inside event handlers and callbacks, such as button onTap functions, to read a provider once or trigger a method without creating an unwanted rebuild subscription.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q4: What happens if a student sets a budget mid-month on October 20th?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Budget Engine</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              The budget document is keyed deterministically by month as YYYY-MM (e.g., 2026-10). All transactions recorded from October 1st to 20th are immediately aggregated against the new budget limit, updating remaining funds and triggering overspending warnings if past spending already exceeded the limit.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q5: How does receipt OCR work if Gemini API is offline or times out?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Dual-Engine AI</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              We engineered a Dual-Engine architecture in ReceiptOcrService. When an image is scanned, it queries the Gemini Vision API. If the call times out after 12 seconds or fails with a network exception, it seamlessly cascades to our local heuristic regex parser, ensuring zero downtime for the user.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q6: How is student data secured in Firestore?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Security & Rules</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              We implement multi-tenant security rules in firestore.rules. Every document path is scoped under users/{userId}. Our rules enforce that request.auth.uid matches the document userId. No student can read or write another student's ledger. Furthermore, sensitive CVV and full card numbers are never stored.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q7: How do you prevent negative balances or warn students of overdrafts?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Finance Math</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              Our FinanceCalculator computes live running balances per payment mode. If an expense exceeds the balance in a specific mode, such as spending $50 from a cash wallet holding $20, the app flags an overdrawn warning and updates the Financial Health Index into the 'Needs Attention' tier.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q8: How is the Financial Health Score calculated?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Algorithm</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              It is a 100-point algorithm divided into three pillars:<br>
+              1. Budget Discipline (40 points): Compares actual spend against expected burn rate using a dynamic time-decay pace ratio (daysElapsed / totalDays).<br>
+              2. Savings Margin (30 points): Evaluates whether savings exceed 25% of income.<br>
+              3. Habit Consistency (30 points): Rewards daily transaction logging regularity and active savings goals.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q9: How does offline synchronization prevent data corruption?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Offline Sync</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              Firestore provides client-side offline persistence. Local writes receive optimistic timestamps and a hasPendingWrites flag. When the connection re-establishes, Firestore synchronizes changes via atomic transactions. In the event of conflicting edits, Firestore's last-write-wins resolution guarantees document integrity.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q10: Why limit payment cards to two?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Behavioral Design</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              This is an intentional behavioral finance design choice. Research indicates that students juggling multiple credit and debit cards face higher rates of impulse spending and missed payments. Restricting to two cards encourages disciplined primary and emergency card usage and keeps the UI clean.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q11: How does PennyPal handle push and in-app notifications?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Notifications</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              We use flutter_local_notifications paired with domain notification triggers. When a user logs an expense that crosses 80% or 100% of their monthly category budget, or when a subscription renewal or debt due date is within 48 hours, the app dispatches an immediate local notification.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q12: How do you optimize image handling for receipt attachments to prevent memory leaks?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Performance</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              Receipt photos are captured via image_picker and compressed before uploading. On the UI side, images are loaded using memory caching with fixed decode dimensions (cacheWidth and cacheHeight), preventing high-resolution camera images from consuming excessive device RAM.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q13 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q13: How does the app scale if a student logs thousands of transactions over four years?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Scalability</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              Our queries are partitioned by calendar month and indexed with compound Firestore indexes on (userId, date). The app only queries the active month's transactions for the dashboard, using pagination and date-range limits on the Activity screen so data payloads remain tiny regardless of total history size.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q14: What automated tests did you write to ensure financial math accuracy?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Unit Testing</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              We wrote automated Dart unit tests covering our domain calculation engines: FinanceCalculator, ReportCalculator, the budget pace ratio formula, and debt split rounding. Because our domain layer contains pure Dart models with zero Flutter UI dependencies, all 73 tests execute in milliseconds with 100% determinism.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q15 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q15: How does the app protect against SQL or NoSQL injection?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Security</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              PennyPal uses the official Cloud Firestore SDK, which structures all operations as parameterized objects and typed document references rather than raw query strings. User inputs in text fields are strictly data payload values, making injection attacks impossible.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q16 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q16: What happens if a student changes their device clock to bypass a budget or goal deadline?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Tamper Resistance</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              While local dates assist with offline entry, all cloud persistence uses Firestore's server-assigned timestamps (FieldValue.serverTimestamp()). When data synchronizes with the backend, cloud validation guarantees audit accuracy regardless of client clock tampering.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q17 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q17: How did you ensure responsive UI across phones, foldables, and tablets?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Responsive UI</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              We built an AdaptiveScaffold and custom responsive breakpoints. On standard mobile screens, navigation uses a bottom navigation bar. On tablets and desktop web browsers, the layout automatically transforms into a persistent navigation rail with multi-column grid cards, maximizing screen real estate.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q18 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q18: Can students export reports for parents or university scholarship audits?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Reporting</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              Yes. From the Reports module, students can generate comprehensive monthly statements and export their full ledger to CSV or formatted print-ready PDF files using Flutter's printing and pdf packages.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q19 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q19: How do you support international currencies for students studying abroad?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Internationalization</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              Our CurrencyService allows students to select their local currency symbol (such as PKR, USD, EUR, GBP, or INR). All financial formatting in the UI passes through our centralized CurrencyFormatter, ensuring seamless formatting across all screens.
+            </div>
+          </div>
+        </div>
+
+        <!-- Q20 -->
+        <div class="qa-card" onclick="toggleQA(this)">
+          <div class="qa-header">
+            <div class="qa-question">
+              <span>Q20: What is your roadmap for monetization or scaling PennyPal beyond TechWiz?</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="qa-tag">Business Model</span>
+              <span class="qa-icon">▼</span>
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-text">
+              Our roadmap follows a B2B2C model: licensing PennyPal directly to universities and colleges as an official campus wellness tool, integrating student meal cards, and offering curated affiliate discounts on educational supplies and textbooks.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 3: VALIDATION AUDIT MATRIX -->
+    <div id="view-validation" class="view-content">
+      <div class="section-title">
+        <span>🛡️ PennyPal Application-Wide Validation Audit</span>
+        <span class="section-badge">All Forms Protected</span>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature / Screen</th>
+              <th>Field Name</th>
+              <th>Validation Rule / Constraints</th>
+              <th>Enforcement Mechanism</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>User Registration</strong></td>
+              <td>Full Name</td>
+              <td>Required; Min 2 characters, Max 60 characters.</td>
+              <td><code>Validators.fullName</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>User Registration</strong></td>
+              <td>Student ID</td>
+              <td>Required; Min 4 chars, Max 25 chars; Regex <code>^[a-zA-Z0-9_-]+$</code>.</td>
+              <td><code>Validators.studentId</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>User Registration</strong></td>
+              <td>Email Address</td>
+              <td>Required; RFC-compliant email regex pattern.</td>
+              <td><code>Validators.email</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>User Registration</strong></td>
+              <td>Mobile Number</td>
+              <td>Required; 10 to 15 digits international format regex <code>^\+?\d{10,15}$</code>.</td>
+              <td><code>Validators.mobile</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>User Registration</strong></td>
+              <td>Password</td>
+              <td>Required; Min 8 chars; Must contain 1 uppercase, 1 lowercase, 1 number.</td>
+              <td><code>Validators.newPassword</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>User Registration</strong></td>
+              <td>Confirm Password</td>
+              <td>Required; Must match password field exactly.</td>
+              <td><code>Validators.confirmPassword</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Login Screen</strong></td>
+              <td>Email & Password</td>
+              <td>Required non-empty; Email format validation; Auth error mapping.</td>
+              <td><code>Validators.email & passwordPresent</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Transaction Form</strong></td>
+              <td>Amount</td>
+              <td>Required numeric; Strictly &gt; 0; Upper bound &lt;= 999,999,999.</td>
+              <td><code>Validators.amount</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Transaction Form</strong></td>
+              <td>Date</td>
+              <td>Required; Clamped to past & present (<code>lastDate: DateTime.now()</code>). Future blocked.</td>
+              <td><code>showDatePicker clamping</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Transaction Form</strong></td>
+              <td>Category</td>
+              <td>Required for expenses; Must be one of 8 SRS categories.</td>
+              <td><code>_categoryMissing guard</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Transaction Form</strong></td>
+              <td>Income Source</td>
+              <td>Required for income transactions (Allowance, Salary, Freelance, etc.).</td>
+              <td><code>_source validation</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Budget Form</strong></td>
+              <td>Total Budget</td>
+              <td>Required &gt; 0; Total cannot be zero if categories are empty.</td>
+              <td><code>_limitError guard</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Budget Form</strong></td>
+              <td>Category Limits</td>
+              <td>Sum of category limits cannot exceed total monthly budget (<code>sum &lt;= total</code>).</td>
+              <td><code>FinanceStrings.limitsTooHigh</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Savings Goals</strong></td>
+              <td>Target Amount</td>
+              <td>Required; Strictly &gt; 0; Numeric decimal.</td>
+              <td><code>Validators.amount</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Savings Goals</strong></td>
+              <td>Target Date</td>
+              <td>Required; Must be in future (<code>firstDate: now</code>). Past deadlines rejected.</td>
+              <td><code>_dateMissing guard</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Split Bill Sheet</strong></td>
+              <td>Total Bill</td>
+              <td>Required; Must be &gt; 0 to activate "Record My Share" action.</td>
+              <td><code>onPressed: _totalBill &gt; 0</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Split Bill Sheet</strong></td>
+              <td>People Count</td>
+              <td>Enforced minimum 2 people (minus button disabled at count = 2).</td>
+              <td><code>_peopleCount &gt; 2 disabled</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Borrow &amp; Lend</strong></td>
+              <td>Friend Name</td>
+              <td>Required; Non-empty string.</td>
+              <td><code>Validators.required</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Borrow &amp; Lend</strong></td>
+              <td>Debt Amount</td>
+              <td>Required numeric; Strictly &gt; 0.</td>
+              <td><code>Validators.amount</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Subscriptions</strong></td>
+              <td>Service Name</td>
+              <td>Required; Non-empty string.</td>
+              <td><code>Validators.required</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Subscriptions</strong></td>
+              <td>Cycle Amount</td>
+              <td>Required numeric; Strictly &gt; 0.</td>
+              <td><code>Validators.amount</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Subscriptions</strong></td>
+              <td>Due Day</td>
+              <td>Restricted to valid calendar days (1 to 31).</td>
+              <td><code>Number range clamping</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Feedback Screen</strong></td>
+              <td>Rating</td>
+              <td>Required 1 to 5 stars; 0 stars rejected with visual warning.</td>
+              <td><code>_ratingMissing guard</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Support Desk</strong></td>
+              <td>Subject &amp; Message</td>
+              <td>Both fields validated non-empty before submission.</td>
+              <td><code>FormState validate</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+            <tr>
+              <td><strong>Admin CMS</strong></td>
+              <td>Lesson Title &amp; Body</td>
+              <td>Validated non-empty before publishing to Firestore.</td>
+              <td><code>titleCtrl &amp; bodyCtrl check</code></td>
+              <td><span class="status-badge">✅ Enforced</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    PennyPal • TechWiz 7 World Tech Championship • Aptech North Nazimabad Center • Make Every Penny Count
+  </footer>
+
+  <script>
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+      
+      const activeBtn = Array.from(document.querySelectorAll('.nav-tab')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      const targetView = document.getElementById('view-' + tabId);
+      if (targetView) targetView.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      const isLight = document.body.getAttribute('data-theme') === 'light';
+      document.body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+    }
+
+    // Copy Helper
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      alert('Copied to clipboard: ' + text);
+    }
+
+    // QA Accordion Toggle
+    function toggleQA(card) {
+      card.classList.toggle('open');
+    }
+
+    // QA Search Filter
+    function filterQA() {
+      const q = document.getElementById('qaSearch').value.toLowerCase();
+      const cards = document.querySelectorAll('.qa-card');
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if (text.includes(q)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Stopwatch Practice Timer
+    let timerSeconds = 0;
+    let timerInterval = null;
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+      const s = (timerSeconds % 60).toString().padStart(2, '0');
+      document.getElementById('timer').textContent = `${m}:${s}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        updateTimerDisplay();
+      }, 1000);
+      document.getElementById('btnStart').textContent = 'Running';
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('btnStart').textContent = 'Resume';
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      timerSeconds = 0;
+      updateTimerDisplay();
+      document.getElementById('btnStart').textContent = 'Start';
+    }
+  </script>
+</body>
+</html>
