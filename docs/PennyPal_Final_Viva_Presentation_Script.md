@@ -3,7 +3,6 @@
 **TechWiz 7: The World Tech Championship**  
 **Center:** Aptech North Nazimabad Center | **Team:** TechBeast  
 **Theme:** NextGen BudgetBee | **Category:** Multi-Platform App Computing  
-**Lead Presenter:** Muhammad Ammad  
 **Project:** PennyPal — Make Every Penny Count  
 
 ---
@@ -27,7 +26,7 @@
 
 I am **Muhammad Ammad** student of North Nazimabad center. Together with my team, we proudly represent **TechBeast** in Techwiz7 under the Multi-Platform App Computing category.
 
-It is an incredible honor for our team to qualify for this round.
+It is an honor for our team to be selected for this round.
 
 Today, we are excited to present **PennyPal** — an intelligent student personal finance companion built on one simple motto: **"Make Every Penny Count."**"
 
