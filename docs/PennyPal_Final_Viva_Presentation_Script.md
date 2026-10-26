@@ -22,13 +22,16 @@
 # Section 1: Self & Team Introduction (30 Seconds)
 
 ### Spoken Script:
-"Hi Good Morning Everyone..
+"Good morning, everyone! First of all, thank you so much for giving us this opportunity to present our project.
 
-I am **Muhammad Ammad** student of North Nazimabad center. Together with my team, we proudly represent **TechBeast** in Techwiz7 under the Multi-Platform App Computing category.
+My name is **Muhammad Ammad Anees**, and I'm the team lead of **Team TechBeast** representing Aptech North Nazimabad Center in TechWiz 7 under the Multi-Platform App Computing category.
 
-It is an honor for our team to be selected for this round.
+Before we get started, let me quickly introduce my team members:
+- **Muhammad Hadi**, who worked on the UI design,
+- **Muhammad Sharjeel**, who worked on the admin panel, and
+- **Abdul Qadir**, who handled our documentation.
 
-Today, we are excited to present **PennyPal** — an intelligent student personal finance companion built on one simple motto: **"Make Every Penny Count."**"
+Together, we developed **PennyPal** — an intelligent personal finance companion for students built on one simple motto: **'Make Every Penny Count.'**"
 
 ### Speaker Tips:
 - Start with a natural smile and a confident greeting.

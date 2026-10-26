@@ -297,6 +297,12 @@
       color: #475569;
     }
 
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100vw;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -383,6 +389,16 @@
       padding: 4px;
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+      display: none;
     }
 
     [data-theme="light"] .nav-tabs {
@@ -402,6 +418,8 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .nav-tab:hover {
@@ -438,6 +456,31 @@
     .btn-icon:hover {
       border-color: var(--primary-light);
       color: var(--primary-light);
+    }
+
+    .nav-tab-pdf {
+      text-decoration: none;
+      color: var(--accent-cyan);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      background: rgba(6, 182, 212, 0.12);
+      font-weight: 600;
+    }
+
+    .nav-tab-pdf:hover {
+      background: rgba(6, 182, 212, 0.25);
+      color: #FFFFFF;
+      border-color: var(--accent-cyan);
+    }
+
+    [data-theme="light"] .nav-tab-pdf {
+      color: #0E7490;
+      border-color: rgba(14, 116, 144, 0.45);
+      background: rgba(14, 116, 144, 0.1);
+    }
+
+    [data-theme="light"] .nav-tab-pdf:hover {
+      background: rgba(14, 116, 144, 0.2);
+      color: #083344;
     }
 
     /* Container */
@@ -880,14 +923,355 @@
       border-radius: 4px;
     }
 
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 24px;
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 40px;
+    /* Responsive Breakpoints & Mobile Optimization */
+    @media (max-width: 868px) {
+      header {
+        padding: 10px 16px;
+      }
+
+      .header-inner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand {
+        order: 1;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .brand-title {
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .header-actions {
+        order: 2;
+        flex-shrink: 0;
+      }
+
+      .nav-tabs {
+        order: 3;
+        width: 100%;
+        margin-top: 4px;
+        padding: 4px;
+        gap: 6px;
+        border-radius: var(--radius-md);
+      }
+
+      .nav-tab {
+        padding: 7px 12px;
+        font-size: 12px;
+      }
+
+      .container {
+        padding: 16px 14px;
+      }
+
+      .hero-banner {
+        padding: 18px 16px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+
+      .hero-details h1 {
+        font-size: 20px;
+        line-height: 1.3;
+      }
+
+      .hero-meta {
+        gap: 10px 14px;
+        font-size: 12px;
+      }
+
+      .timer-card {
+        width: 100%;
+        justify-content: space-between;
+        padding: 10px 14px;
+      }
+
+      .creds-bar {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .card {
+        padding: 16px 14px;
+        margin-bottom: 14px;
+        border-radius: var(--radius-md);
+      }
+
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .card-title {
+        font-size: 16px;
+        line-height: 1.35;
+      }
+
+      .script-text {
+        padding: 12px 14px;
+        font-size: 14px;
+        line-height: 1.65;
+        margin: 10px 0;
+        border-left-width: 3px;
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      }
+
+      .tip-box {
+        padding: 10px 12px;
+        font-size: 12.5px;
+      }
+
+      .action-badge {
+        font-size: 12px;
+        padding: 5px 10px;
+        white-space: normal;
+        line-height: 1.4;
+        display: inline-block;
+      }
+
+      .qa-header {
+        padding: 14px 16px;
+        gap: 10px;
+      }
+
+      .qa-question {
+        font-size: 14px;
+      }
+
+      .qa-answer {
+        padding: 0 16px 16px 16px;
+        font-size: 13.5px;
+      }
+
+      .table-responsive table {
+        min-width: 600px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      header {
+        padding: 8px 12px;
+      }
+
+      .brand {
+        gap: 8px;
+      }
+
+      .brand-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+
+      .brand-title {
+        font-size: 14.5px;
+      }
+
+      .brand-badge {
+        font-size: 9.5px;
+        padding: 1px 6px;
+      }
+
+      .btn-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+      }
+
+      .nav-tabs {
+        padding: 3px 2px;
+        gap: 4px;
+      }
+
+      .nav-tab {
+        padding: 6px 10px;
+        font-size: 11.5px;
+        gap: 4px;
+      }
+
+      .container {
+        padding: 10px 8px;
+      }
+
+      .hero-banner {
+        padding: 14px 12px;
+        margin-bottom: 12px;
+        border-radius: var(--radius-md);
+      }
+
+      .hero-details h1 {
+        font-size: 17px;
+        line-height: 1.3;
+      }
+
+      .hero-meta {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 11.5px;
+      }
+
+      .timer-card {
+        padding: 8px 12px;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .timer-display {
+        font-size: 18px;
+        min-width: 55px;
+      }
+
+      .btn-timer {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+
+      .creds-bar {
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .cred-chip {
+        padding: 10px 10px;
+      }
+
+      .cred-label {
+        font-size: 10px;
+      }
+
+      .cred-value {
+        font-size: 11.5px;
+        word-break: break-all;
+      }
+
+      .btn-copy {
+        padding: 5px 8px;
+        font-size: 10px;
+      }
+
+      .section-title {
+        font-size: 16px;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .section-badge {
+        font-size: 10px;
+        padding: 1px 6px;
+      }
+
+      .card {
+        padding: 12px 10px;
+        margin-bottom: 10px;
+        border-radius: var(--radius-sm);
+      }
+
+      .card-title {
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .card-timing {
+        font-size: 10px;
+        padding: 2px 6px;
+      }
+
+      .script-text {
+        padding: 10px 10px;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 8px 0;
+        border-left-width: 3px;
+        border-radius: 0 6px 6px 0;
+      }
+
+      .tip-box {
+        padding: 8px 10px;
+        font-size: 11.5px;
+        line-height: 1.45;
+        margin-top: 8px;
+      }
+
+      .action-badge {
+        font-size: 11px;
+        padding: 4px 8px;
+        white-space: normal;
+        line-height: 1.35;
+        display: inline-block;
+        word-break: break-word;
+      }
+
+      .search-bar {
+        padding: 10px 12px 10px 38px;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+
+      .search-icon {
+        left: 12px;
+        font-size: 14px;
+      }
+
+      .qa-card {
+        margin-bottom: 8px;
+      }
+
+      .qa-header {
+        padding: 10px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .qa-question {
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
+      .qa-tag {
+        font-size: 9.5px;
+        padding: 1px 6px;
+      }
+
+      .qa-answer {
+        padding: 0 10px 10px 10px;
+        font-size: 12.5px;
+        line-height: 1.6;
+      }
+
+      .table-responsive {
+        border-radius: var(--radius-sm);
+        margin-bottom: 12px;
+      }
+
+      .table-responsive table {
+        min-width: 540px;
+      }
+
+      th, td {
+        padding: 8px 10px;
+        font-size: 11.5px;
+      }
+
+      footer {
+        padding: 16px 8px;
+        font-size: 11px;
+        margin-top: 24px;
+      }
     }
 
     /* Print Optimization */
@@ -938,11 +1322,11 @@
         <button class="nav-tab" onclick="switchTab('tech')">⚡ Senior Tech Stack</button>
         <button class="nav-tab" onclick="switchTab('qa')">❓ 20 Technical Q&A</button>
         <button class="nav-tab" onclick="switchTab('validation')">🛡️ Validation Audit</button>
+        <a href="chatgpt.pdf" target="_blank" class="nav-tab nav-tab-pdf" title="Open Presentation Script PDF in new tab">📄 Script PDF ↗</a>
       </div>
 
       <div class="header-actions">
         <button class="btn-icon" title="Toggle Light/Dark" onclick="toggleTheme()">🌓</button>
-        <button class="btn-icon" title="Print Guide" onclick="window.print()">🖨️</button>
       </div>
     </div>
   </header>
@@ -1020,13 +1404,12 @@
           <span class="card-timing">0:00 – 0:30</span>
         </div>
         <div class="script-text">
-          "Hi Good Morning Everyone..<br><br>
-          I am <strong>Muhammad Ammad</strong> student of North Nazimabad center. Together with my team, we proudly represent <strong>TechBeast</strong> in Techwiz7 under the Multi-Platform App Computing category.<br><br>
-          It is an incredible honor for our team to qualify for this round.<br><br>
-          Today, we are excited to present <strong>PennyPal</strong> — an intelligent student personal finance companion built on one simple motto: <strong>"Make Every Penny Count.</strong>"
+          "Good morning, everyone! First of all, thank you so much for giving us this opportunity to present our project. My name is <strong>Muhammad Ammad Anees</strong>, and I'm the team lead of <strong>Team TechBeast</strong> from Aptech North Nazimabad Center.<br><br>
+          Before we get started, let me quickly introduce my team members who are here with me today: so, we have <strong>Muhammad Hadi</strong>, who worked on the UI design; <strong>Muhammad Sharjeel</strong>, who worked on the admin panel; and <strong>Abdul Qadir</strong>, who handled the project documentation.<br><br>
+          Together, we developed an application called <strong>PennyPal</strong>, with one simple goal: to help students manage their money better. Our motto is: <strong>Make Every Penny Count.</strong> Today, I'll explain why we built PennyPal, how it works, and then I will share my screen and demonstrate all its main features live. So, let's get started!"
         </div>
         <div class="tip-box">
-          💡 <strong>Speaker Tip:</strong> Start with a natural smile and a confident greeting. Keep your tone conversational and energetic, not robotic.
+          💡 <strong>Speaker Tip:</strong> Start with a natural smile and a confident greeting. Introduce your teammates clearly and pause briefly before moving to Section 2.
         </div>
       </div>
 
@@ -1037,14 +1420,12 @@
           <span class="card-timing">0:30 – 1:00</span>
         </div>
         <div class="script-text">
-          "Now, before we dive into the live app, I’d like to briefly share why our team chose this specific project.<br><br>
-          When we received the three project tracks in TechWiz, PennyPal stood out to us immediately—because managing money is a challenge we face every single day as students.<br><br>
-          Most personal finance apps in the market are designed for working professionals. They have paid subscriptions, complicated accounting features, and they require a continuous internet connection.<br><br>
-          On a campus, students manage small daily expenses in cash and digital wallets, often in classrooms or basements with poor connectivity.<br><br>
-          We wanted to build a practical, reliable companion tailored to student life—one that is fast, easy to use, and works completely offline."
+          "Now, let me give you a little background about why we chose this project. You know, in TECHWIZ, the management provided us with three project options, and our team picked PennyPal without hesitation. Because as students, this is a real problem we experience every single day.<br><br>
+          Students have different sources of income. Some receive pocket money from home, some earn through freelancing or part-time jobs, and others receive scholarships or stipends. But regardless of where the money comes from, keeping track of daily spending is really difficult. You spend a little bit on food, a little on transport, maybe pay for a subscription... and basically, by the third week of the month, you wonder: <em>'Where did all my money go?'</em><br><br>
+          We wanted to make managing money simple and stress-free. That's why we chose PennyPal. It helps students record their daily income and expenses, set monthly budgets, track their savings, and understand their spending habits. And most importantly, we wanted the app to work even when the internet is unavailable, because in campus classrooms and basements, students don't always have a reliable connection. So, our goal was to create a simple, useful financial companion for student life."
         </div>
         <div class="tip-box">
-          💡 <strong>Speaker Tip:</strong> Use the opening line ("Now, before we dive into the live app...") as a natural bridge so your speech flows effortlessly from your team intro.
+          💡 <strong>Speaker Tip:</strong> Speak naturally and with genuine empathy. Judges love seeing that you built a solution for a problem you actually face every day.
         </div>
       </div>
 
@@ -1078,16 +1459,18 @@
         <div style="margin-bottom: 18px;">
           <div class="action-badge">👉 Live Action: Launch PennyPal & Sign in as ammad.anees99@gmail.com</div>
           <div class="script-text">
-            "We begin right here at the login screen. The application uses GoRouter with declarative route guards to keep user sessions secure. When I enter our student credentials and tap Sign In, the app verifies the account against Firebase and routes us directly into the student dashboard."
+            "Alright, let me start right here by signing in as our student. I'll enter our email and password, and tap <strong>Sign In</strong>. As you can see, it verifies our credentials and takes us directly into the dashboard."
           </div>
         </div>
 
         <!-- Step B -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge">👉 Live Action: Point with mouse/tap on Income, Expense, Net Balance & central Budget Ring</div>
+          <div class="action-badge">👉 Live Action: Point to 3 Summary Cards, Multi-Mode Breakdown & Budget Pace Ring</div>
           <div class="script-text">
-            "And the first thing a student lands on is the Dashboard. Right at the top, they get an immediate summary of their finances: Total Income, Monthly Expenses, and Net Balance, combined across cash in pocket, bank cards, and mobile wallets like Nayapay or EasyPaisa.<br><br>
-            Right here in the center, this animated ring shows exactly how much of this month's budget has been consumed so far, calculated in real time by our core finance engine."
+            "Now, we are on the main dashboard. Let's spend a moment here because this is where the student sees their complete financial picture.<br><br>
+            Right at the top, we have three clear summary cards: <strong>Total Income</strong>, <strong>Monthly Expenses</strong>, and <strong>Net Balance</strong>. And what's really convenient is that this balance combines all payment modes — cash in pocket, bank cards, and mobile wallets like Nayapay or Easypaisa.<br><br>
+            Right here in the center, you can see our <strong>budget pace ring</strong>. This visual ring instantly shows how much of this month's budget has been spent. Notice the color: it's green when spending is healthy, turns amber as a warning when you reach eighty percent, and changes to coral red if you ever go over budget.<br><br>
+            Next, right below the ring, you'll see two smart indicators: our <strong>Financial Health Score</strong>, rated from zero to one hundred based on the student's savings ratio and budget discipline, and right next to it, the <strong>Cash Runway Days</strong>, which counts down how many days their remaining cash will last based on their daily spending speed. So, with just one look at the dashboard, a student knows exactly where they stand without doing any math!"
           </div>
         </div>
 
@@ -1114,10 +1497,10 @@
         <div style="margin-bottom: 18px;">
           <div class="action-badge" style="background: var(--accent-coral-soft); color: var(--accent-coral);">⭐ Live Action: Turn ON Airplane Mode -> Add $15 Expense -> Turn OFF Airplane Mode</div>
           <div class="script-text">
-            "Now, here is a real-world scenario every student encounters on campus: what happens when your Wi-Fi drops or you're in a basement classroom with zero signal? Let me demonstrate how PennyPal handles this.<br><br>
-            I will turn on <strong>Airplane Mode</strong> to simulate having zero internet connection.<br><br>
-            When I log a 15-dollar expense for lunch, notice that it commits immediately to local storage and updates the dashboard without any loading spinner or lag.<br><br>
-            And the moment I turn Airplane Mode back off, Firebase automatically detects the restored connection and synchronizes the transaction to the cloud in the background."
+            "Now, watch this: what happens if the student loses internet connection or is sitting in a basement classroom with zero signal? Let me show you how PennyPal handles this.<br><br>
+            I'm turning on <strong>Airplane Mode</strong> right now to disconnect from the internet completely.<br><br>
+            Now, let's add a quick expense: fifteen dollars for lunch under Food. I'll tap Save. Notice that it saves instantly to local storage and updates our dashboard numbers with zero delay or loading spinner.<br><br>
+            And now, when I turn Airplane Mode back off, Firebase automatically detects the connection and syncs our new expense to the cloud database in the background. It's completely seamless for the student."
           </div>
         </div>
 
@@ -2044,7 +2427,10 @@
       document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
       
       const activeBtn = Array.from(document.querySelectorAll('.nav-tab')).find(b => b.getAttribute('onclick').includes(tabId));
-      if (activeBtn) activeBtn.classList.add('active');
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
       
       const targetView = document.getElementById('view-' + tabId);
       if (targetView) targetView.classList.add('active');
