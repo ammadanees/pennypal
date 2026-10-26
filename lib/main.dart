@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 import 'core/config/dev_tools.dart';
+import 'core/services/currency_service.dart';
 import 'core/services/local_notification_service.dart';
 import 'core/services/shared_preferences_provider.dart';
 import 'core/utils/formatters.dart';
@@ -24,10 +25,9 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  final savedCurrency = prefs.getString('user_currency_preference');
-  if (savedCurrency != null && savedCurrency.isNotEmpty) {
-    Formatters.currentCurrency = savedCurrency;
-  }
+  final savedCurrency = prefs.getString('user_currency_preference') ??
+      CurrencyNotifier.detectDefaultCurrency();
+  Formatters.currentCurrency = savedCurrency;
   FirebaseAuthRepository.loadPersistedVerifiedUids(prefs);
   await LocalNotificationService.initialize();
   final backend = await _createBackend(prefs);

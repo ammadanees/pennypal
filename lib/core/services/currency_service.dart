@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,12 +30,63 @@ const List<CurrencyOption> supportedCurrencies = [
 class CurrencyNotifier extends Notifier<String> {
   static const _key = 'user_currency_preference';
 
+  /// Resolves the default currency symbol based on the device's locale.
+  static String detectDefaultCurrency() {
+    try {
+      final locale = WidgetsBinding.instance.platformDispatcher.locale;
+      final country = locale.countryCode?.toUpperCase();
+      if (country != null) {
+        return switch (country) {
+          'PK' => 'Rs.', // Pakistan
+          'US' => '\$',   // United States
+          'GB' => '£',    // United Kingdom
+          'IN' => '₹',    // India
+          'AE' => 'AED',  // UAE
+          // Eurozone
+          'DE' ||
+          'FR' ||
+          'IT' ||
+          'ES' ||
+          'NL' ||
+          'BE' ||
+          'AT' ||
+          'PT' ||
+          'IE' ||
+          'FI' ||
+          'GR' ||
+          'LU' ||
+          'CY' ||
+          'MT' ||
+          'SK' ||
+          'SI' ||
+          'EE' ||
+          'LV' ||
+          'LT' ||
+          'HR' =>
+            '€',
+          _ => '\$',      // Global default for international users
+        };
+      }
+    } catch (_) {
+      // Platform dispatcher not initialized yet or locale missing
+    }
+    return AppStrings.defaultCurrency;
+  }
+
   @override
   String build() {
     final prefs = ref.watch(sharedPreferencesProvider);
-    final saved = prefs.getString(_key) ?? AppStrings.defaultCurrency;
-    Formatters.currentCurrency = saved;
-    return saved;
+    final saved = prefs.getString(_key);
+    if (saved != null && saved.isNotEmpty) {
+      Formatters.currentCurrency = saved;
+      return saved;
+    }
+
+    final detected = detectDefaultCurrency();
+    Formatters.currentCurrency = detected;
+    // Persist auto-detected preference
+    prefs.setString(_key, detected);
+    return detected;
   }
 
   Future<void> setCurrency(String newCurrency) async {

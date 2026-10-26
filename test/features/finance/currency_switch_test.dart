@@ -72,5 +72,11 @@ void main() {
       expect(codes.contains('USD'), isTrue);
       expect(codes.contains('EUR'), isTrue);
     });
+
+    test('detectDefaultCurrency returns valid supported symbol', () {
+      final detected = CurrencyNotifier.detectDefaultCurrency();
+      final symbols = supportedCurrencies.map((c) => c.symbol).toSet();
+      expect(symbols.contains(detected), isTrue);
+    });
   });
 }
