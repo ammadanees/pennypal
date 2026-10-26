@@ -41,6 +41,7 @@ class TransactionListTile extends StatelessWidget {
       amount: transaction.amount,
       kind: transaction.kind,
       icon: transaction.icon,
+      currency: transaction.currency,
       accent: transaction.accent,
       onTap: onTap,
     );

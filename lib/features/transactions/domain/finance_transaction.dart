@@ -1,4 +1,5 @@
 import '../../../core/constants/app_categories.dart';
+import '../../../core/utils/formatters.dart';
 import '../../../data/record_store.dart';
 
 enum TransactionType { income, expense }
@@ -17,6 +18,7 @@ class FinanceTransaction {
     this.cardId,
     this.cardName,
     this.receiptImageUrl,
+    this.currency,
     this.pending = false,
   });
 
@@ -31,6 +33,7 @@ class FinanceTransaction {
   final String? cardId;
   final String? cardName;
   final String? receiptImageUrl;
+  final String? currency;
 
   final String? source;
 
@@ -46,6 +49,40 @@ class FinanceTransaction {
     return category?.label ?? 'Expense';
   }
 
+  FinanceTransaction copyWith({
+    String? id,
+    TransactionType? type,
+    double? amount,
+    DateTime? date,
+    DateTime? createdAt,
+    ExpenseCategory? category,
+    PaymentMode? paymentMode,
+    String? cardId,
+    String? cardName,
+    String? receiptImageUrl,
+    String? currency,
+    String? source,
+    String? description,
+    bool? pending,
+  }) {
+    return FinanceTransaction(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      amount: amount ?? this.amount,
+      date: date ?? this.date,
+      createdAt: createdAt ?? this.createdAt,
+      category: category ?? this.category,
+      paymentMode: paymentMode ?? this.paymentMode,
+      cardId: cardId ?? this.cardId,
+      cardName: cardName ?? this.cardName,
+      receiptImageUrl: receiptImageUrl ?? this.receiptImageUrl,
+      currency: currency ?? this.currency,
+      source: source ?? this.source,
+      description: description ?? this.description,
+      pending: pending ?? this.pending,
+    );
+  }
+
   Map<String, dynamic> toMap() => {
         'type': type.name,
         'amount': amount,
@@ -59,6 +96,7 @@ class FinanceTransaction {
         'source': source,
         'description': description,
         'receiptImageUrl': receiptImageUrl,
+        'currency': currency ?? Formatters.currentCurrency,
       };
 
   factory FinanceTransaction.fromRecord(StoredRecord record) {
@@ -79,6 +117,7 @@ class FinanceTransaction {
       source: d['source'] as String?,
       description: (d['description'] as String?) ?? '',
       receiptImageUrl: d['receiptImageUrl'] as String?,
+      currency: d['currency'] as String?,
       pending: record.hasPendingWrites,
     );
   }

@@ -16,6 +16,7 @@ class TransactionTile extends StatelessWidget {
     required this.amount,
     required this.kind,
     required this.icon,
+    this.currency,
     this.accent,
     this.onTap,
   });
@@ -25,6 +26,7 @@ class TransactionTile extends StatelessWidget {
   final double amount;
   final MoneyKind kind;
   final IconData icon;
+  final String? currency;
 
   final AppAccent? accent;
   final VoidCallback? onTap;
@@ -62,7 +64,12 @@ class TransactionTile extends StatelessWidget {
                 ),
               ),
               AppSpacing.hSm,
-              MoneyDisplay(amount: amount, size: MoneySize.body, kind: kind),
+              MoneyDisplay(
+                amount: amount,
+                size: MoneySize.body,
+                kind: kind,
+                currency: currency,
+              ),
             ],
           ),
         ),

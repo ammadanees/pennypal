@@ -145,6 +145,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       source: _isIncome ? _source.text.trim() : null,
       description: _description.text.trim(),
       receiptImageUrl: _isIncome ? null : _receiptUrl,
+      currency: existing?.currency ?? ref.read(currencyProvider),
     );
     await ref.read(transactionRepositoryProvider).save(transaction);
 

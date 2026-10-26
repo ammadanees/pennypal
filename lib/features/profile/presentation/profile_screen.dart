@@ -22,6 +22,7 @@ import '../../../shared/widgets/user_avatar.dart';
 import '../../auth/data/auth_providers.dart';
 import '../../auth/domain/app_user.dart';
 import '../../auth/presentation/auth_controller.dart';
+import 'currency_switch_sheet.dart';
 import 'edit_profile_sheet.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -289,6 +290,10 @@ class _CurrencyPreferenceTile extends ConsumerWidget {
 
   void _pickCurrency(
       BuildContext context, WidgetRef ref, String selectedSymbol) {
+    final activeOption = supportedCurrencies.firstWhere(
+      (opt) => opt.symbol == selectedSymbol,
+      orElse: () => supportedCurrencies.first,
+    );
     showModalBottomSheet<void>(
       context: context,
       useRootNavigator: true,
@@ -349,8 +354,14 @@ class _CurrencyPreferenceTile extends ConsumerWidget {
                       ? Icon(Icons.check_circle, color: ctx.colors.primary)
                       : null,
                   onTap: () {
-                    ref.read(currencyProvider.notifier).setCurrency(opt.symbol);
                     Navigator.of(ctx).pop();
+                    if (opt.symbol != selectedSymbol) {
+                      CurrencySwitchSheet.show(
+                        context,
+                        oldOption: activeOption,
+                        newOption: opt,
+                      );
+                    }
                   },
                 ),
                 AppSpacing.vXs,

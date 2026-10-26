@@ -109,7 +109,12 @@ class TransactionDetailSheet extends ConsumerWidget {
             ],
           ),
           AppSpacing.vMd,
-          MoneyDisplay(amount: tx.amount, size: MoneySize.hero, kind: tx.kind),
+          MoneyDisplay(
+            amount: tx.amount,
+            size: MoneySize.hero,
+            kind: tx.kind,
+            currency: tx.currency,
+          ),
           if (tx.receiptImageUrl != null) ...[
             AppSpacing.vMd,
             GestureDetector(
