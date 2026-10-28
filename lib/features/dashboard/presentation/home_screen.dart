@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -209,34 +210,40 @@ class _HomeContent extends ConsumerWidget {
       builder: (context, constraints) {
         final wide = constraints.maxWidth >= 800;
         final body = wide
-            ? Row(
+            ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        hero,
-                        summaryRow,
-                        healthCard,
-                        accountsSection,
-                        quickShortcuts,
-                        insightWidgets,
-                        ribbon,
-                      ],
-                    ),
-                  ),
-                  AppSpacing.hLg,
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        budgetSection,
-                        goals,
-                        if (recent != null) recent
-                      ],
-                    ),
+                  quickShortcuts,
+                  AppSpacing.vLg,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            hero,
+                            summaryRow,
+                            healthCard,
+                            accountsSection,
+                            insightWidgets,
+                            ribbon,
+                          ],
+                        ),
+                      ),
+                      AppSpacing.hLg,
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            budgetSection,
+                            goals,
+                            if (recent != null) recent,
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               )
@@ -984,75 +991,110 @@ class _QuickShortcutsSection extends ConsumerWidget {
       ),
     ];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppSpacing.vMd,
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          clipBehavior: Clip.none,
-          child: Row(
-            children: [
-              for (var i = 0; i < shortcuts.length; i++) ...[
-                if (i > 0) AppSpacing.hSm,
-                SizedBox(
-                  width: 96,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: c.surface,
-                      borderRadius: AppRadius.mdAll,
-                      border: Border.all(color: c.border, width: 1.0),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      borderRadius: AppRadius.mdAll,
-                      child: InkWell(
-                        onTap: shortcuts[i].onTap,
-                        borderRadius: AppRadius.mdAll,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: AppSpacing.md,
-                            horizontal: AppSpacing.xs,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AccentIconBox(
-                                icon: shortcuts[i].icon,
-                                accent: shortcuts[i].accent,
-                                size: 38,
-                              ),
-                              AppSpacing.vSm,
-                              Text(
-                                shortcuts[i].label,
-                                style: t.labelMedium
-                                    ?.copyWith(fontWeight: FontWeight.w600),
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                shortcuts[i].subtitle,
-                                style: t.bodySmall?.copyWith(
-                                  fontSize: 10,
-                                  color: c.textSecondary,
-                                ),
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+    Widget buildShortcutCard(
+        ({
+          AppAccent accent,
+          IconData icon,
+          String label,
+          VoidCallback onTap,
+          String subtitle
+        }) s) {
+      return Container(
+        decoration: BoxDecoration(
+          color: c.surface,
+          borderRadius: AppRadius.mdAll,
+          border: Border.all(color: c.border, width: 1.0),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: AppRadius.mdAll,
+          child: InkWell(
+            onTap: s.onTap,
+            borderRadius: AppRadius.mdAll,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: AppSpacing.md,
+                horizontal: AppSpacing.xs,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AccentIconBox(
+                    icon: s.icon,
+                    accent: s.accent,
+                    size: 38,
                   ),
-                ),
-              ],
-            ],
+                  AppSpacing.vSm,
+                  Text(
+                    s.label,
+                    style: t.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    s.subtitle,
+                    style: t.bodySmall?.copyWith(
+                      fontSize: 10,
+                      color: c.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-      ],
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final canFitAll = constraints.maxWidth >= (shortcuts.length * 96);
+        if (canFitAll) {
+          return Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.md),
+            child: Row(
+              children: [
+                for (var i = 0; i < shortcuts.length; i++) ...[
+                  if (i > 0) AppSpacing.hSm,
+                  Expanded(child: buildShortcutCard(shortcuts[i])),
+                ],
+              ],
+            ),
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.only(top: AppSpacing.md),
+          child: ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(
+              dragDevices: {
+                PointerDeviceKind.touch,
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.trackpad,
+                PointerDeviceKind.stylus,
+              },
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (var i = 0; i < shortcuts.length; i++) ...[
+                    if (i > 0) AppSpacing.hSm,
+                    SizedBox(
+                      width: 96,
+                      child: buildShortcutCard(shortcuts[i]),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
