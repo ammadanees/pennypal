@@ -384,21 +384,16 @@
 
     .nav-tabs {
       display: flex;
+      align-items: center;
       gap: 6px;
       background: rgba(30, 41, 59, 0.7);
       padding: 4px;
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      position: relative;
+      overflow: visible;
       white-space: nowrap;
       flex-wrap: nowrap;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .nav-tabs::-webkit-scrollbar {
-      display: none;
     }
 
     [data-theme="light"] .nav-tabs {
@@ -406,7 +401,7 @@
     }
 
     .nav-tab {
-      padding: 8px 16px;
+      padding: 8px 14px;
       font-size: 13px;
       font-weight: 600;
       border: none;
@@ -430,6 +425,84 @@
       background: var(--primary);
       color: #FFFFFF;
       box-shadow: var(--shadow-sm);
+    }
+
+    /* Nav Dropdown */
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .nav-dropdown-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .nav-dropdown-btn span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 220px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.45), 0 8px 12px -6px rgba(0, 0, 0, 0.3);
+      padding: 6px;
+      z-index: 1000;
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-dropdown.open .nav-dropdown-menu {
+      display: block;
+      animation: dropdownSlide 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes dropdownSlide {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .dropdown-item:hover {
+      background: var(--primary-soft);
+      color: var(--text);
+    }
+
+    .dropdown-item.active {
+      background: var(--primary);
+      color: #FFFFFF;
+    }
+
+    [data-theme="light"] .nav-dropdown-menu {
+      background: #FFFFFF;
+      border-color: #CBD5E1;
+      box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.12), 0 8px 12px -6px rgba(0, 0, 0, 0.06);
     }
 
     .header-actions {
@@ -481,6 +554,53 @@
     [data-theme="light"] .nav-tab-pdf:hover {
       background: rgba(14, 116, 144, 0.2);
       color: #083344;
+    }
+
+    .vocab-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 12px 0;
+    }
+
+    .vocab-tag {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: var(--radius-sm);
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary-light);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    [data-theme="light"] .vocab-tag {
+      background: #EEF2FF;
+      color: #4338CA;
+      border-color: #C7D2FE;
+    }
+
+    .short-lines {
+      list-style: none;
+      padding-left: 0;
+      margin: 8px 0;
+    }
+
+    .short-line-item {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .short-line-item::before {
+      content: "🗣️";
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+      top: 1px;
     }
 
     /* Container */
@@ -1318,10 +1438,21 @@
 
       <div class="nav-tabs">
         <button class="nav-tab active" onclick="switchTab('script')">🎙️ Viva Script</button>
-        <button class="nav-tab" onclick="switchTab('mechanics')">📱 App Mechanics & Flow</button>
-        <button class="nav-tab" onclick="switchTab('tech')">⚡ Senior Tech Stack</button>
-        <button class="nav-tab" onclick="switchTab('qa')">❓ 20 Technical Q&A</button>
-        <button class="nav-tab" onclick="switchTab('validation')">🛡️ Validation Audit</button>
+        <button class="nav-tab" onclick="switchTab('shortcards')">⚡ Short Words</button>
+        <button class="nav-tab" onclick="switchTab('qa')">❓ 20 Q&A</button>
+
+        <!-- More Dropdown -->
+        <div class="nav-dropdown" id="navMoreDropdown">
+          <button class="nav-tab nav-dropdown-btn" id="navMoreBtn" onclick="toggleMoreMenu(event)">
+            <span>More ▾</span>
+          </button>
+          <div class="nav-dropdown-menu" id="navMoreMenu">
+            <button class="dropdown-item" onclick="selectDropdownTab('mechanics', '📱 App Mechanics')">📱 App Mechanics & Flow</button>
+            <button class="dropdown-item" onclick="selectDropdownTab('tech', '⚡ Tech Stack')">⚡ Senior Tech Stack</button>
+            <button class="dropdown-item" onclick="selectDropdownTab('validation', '🛡️ Validation')">🛡️ Validation Audit</button>
+          </div>
+        </div>
+
         <a href="chatgpt.pdf" target="_blank" class="nav-tab nav-tab-pdf" title="Open Presentation Script PDF in new tab">📄 Script PDF ↗</a>
       </div>
 
@@ -1556,6 +1687,316 @@
         <div class="tip-box">
           💡 <strong>Speaker Tip:</strong> Close with confidence, maintain eye contact, and leave your screen showing the Student Dashboard as a visual reference for the judges.
         </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW: SHORT WORDS & PROMPTS (CUE CARDS) -->
+    <div id="view-shortcards" class="view-content">
+      <div class="section-title">
+        <span>⚡ Quick Speaker Cue Cards: Simple Words & 5-8 Word Sentences</span>
+        <span class="section-badge" style="background:var(--accent-cyan-soft); color:var(--accent-cyan);">Full App Cheatsheet</span>
+      </div>
+
+      <!-- Rescue & Bridge Words -->
+      <div class="card" style="border-left: 4px solid var(--accent-amber);">
+        <div class="card-header">
+          <div class="card-title">🧭 Transition Words & Emergency Rescue Phrases</div>
+          <span class="card-timing">Confidence Boost</span>
+        </div>
+        <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
+          Use these short phrases when moving between screens or if your mind goes blank:
+        </div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">"Now, let's look at..."</span>
+          <span class="vocab-tag">"Right here, you see..."</span>
+          <span class="vocab-tag">"Next, watch this..."</span>
+          <span class="vocab-tag">"For example..."</span>
+          <span class="vocab-tag">"Basically..."</span>
+          <span class="vocab-tag" style="color:var(--accent-coral); border-color:var(--accent-coral);">Rescue: "Let me show this on screen..."</span>
+          <span class="vocab-tag" style="color:var(--accent-coral); border-color:var(--accent-coral);">Rescue: "In simple words..."</span>
+        </div>
+      </div>
+
+      <!-- Card 1: Intro -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">1. Team & Project Introduction</div>
+          <span class="card-timing">30s Intro</span>
+        </div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Lead (in charge)</span>
+          <span class="vocab-tag">Team TechBeast</span>
+          <span class="vocab-tag">Multi-Platform</span>
+          <span class="vocab-tag">UI Design</span>
+          <span class="vocab-tag">Admin Panel</span>
+          <span class="vocab-tag">Documentation</span>
+          <span class="vocab-tag">Motto</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">Good morning, respected judges.</li>
+          <li class="short-line-item">My name is Muhammad Ammad Anees.</li>
+          <li class="short-line-item">I am the team lead of Team TechBeast.</li>
+          <li class="short-line-item">We represent Aptech North Nazimabad Center.</li>
+          <li class="short-line-item">Muhammad Hadi worked on UI design.</li>
+          <li class="short-line-item">Muhammad Sharjeel built the admin panel.</li>
+          <li class="short-line-item">Abdul Qadir handled the documentation.</li>
+          <li class="short-line-item">Our app is called PennyPal.</li>
+          <li class="short-line-item">Our motto is: Make Every Penny Count.</li>
+        </ul>
+      </div>
+
+      <!-- Card 2: Problem -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">2. Why We Built PennyPal (The Problem)</div>
+          <span class="card-timing">Why Track</span>
+        </div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Pocket money</span>
+          <span class="vocab-tag">Freelancing</span>
+          <span class="vocab-tag">Daily spending</span>
+          <span class="vocab-tag">Overspending</span>
+          <span class="vocab-tag">No Wi-Fi / Offline</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">We chose PennyPal without hesitation.</li>
+          <li class="short-line-item">Because students face this problem every day.</li>
+          <li class="short-line-item">Students receive pocket money or freelance income.</li>
+          <li class="short-line-item">Daily spending is hard to track manually.</li>
+          <li class="short-line-item">By third week, money is gone.</li>
+          <li class="short-line-item">Also, campus classrooms often have no internet.</li>
+          <li class="short-line-item">So students need an app that works offline.</li>
+        </ul>
+      </div>
+
+      <!-- Card 3: Tech Stack -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">3. Technology Stack</div>
+          <span class="card-timing">Core Tech</span>
+        </div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Flutter (one codebase)</span>
+          <span class="vocab-tag">Riverpod (state management)</span>
+          <span class="vocab-tag">Firestore (cloud database)</span>
+          <span class="vocab-tag">Cache (offline storage)</span>
+          <span class="vocab-tag">Gemini AI (receipt OCR)</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">We developed PennyPal using Flutter.</li>
+          <li class="short-line-item">It works smoothly across mobile, tablet, and web.</li>
+          <li class="short-line-item">We use Riverpod for state management.</li>
+          <li class="short-line-item">It makes data updates fast and safe.</li>
+          <li class="short-line-item">Our database is Cloud Firestore with offline cache.</li>
+          <li class="short-line-item">And Google Gemini AI scans paper receipts.</li>
+        </ul>
+      </div>
+
+      <!-- Card 4: Login -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">4. Login & Authentication</div>
+          <span class="card-timing">Live Demo</span>
+        </div>
+        <div class="action-badge">👉 Action: Enter email, enter password, tap Sign In</div>
+        <ul class="short-lines">
+          <li class="short-line-item">Let me sign in with our student account.</li>
+          <li class="short-line-item">I enter email and password.</li>
+          <li class="short-line-item">Now I tap Sign In.</li>
+          <li class="short-line-item">It verifies credentials with Firebase.</li>
+          <li class="short-line-item">And routes us straight to the dashboard.</li>
+        </ul>
+      </div>
+
+      <!-- Card 5: Dashboard -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">5. Student Dashboard Walkthrough</div>
+          <span class="card-timing">Key Screen</span>
+        </div>
+        <div class="action-badge">👉 Action: Point to 3 summary cards, central ring, and health score</div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Net Balance</span>
+          <span class="vocab-tag">Income</span>
+          <span class="vocab-tag">Expenses</span>
+          <span class="vocab-tag">Cash & Cards & EasyPaisa</span>
+          <span class="vocab-tag">Budget Pace Ring</span>
+          <span class="vocab-tag" style="color:var(--accent-green);">Green = Safe</span>
+          <span class="vocab-tag" style="color:var(--accent-amber);">Amber = Warning (80%)</span>
+          <span class="vocab-tag" style="color:var(--accent-coral);">Red = Over budget</span>
+          <span class="vocab-tag">Health Score (0-100)</span>
+          <span class="vocab-tag">Runway Days</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">Right here is the main dashboard.</li>
+          <li class="short-line-item">At the top, we see three summary cards:</li>
+          <li class="short-line-item">Total Income, Monthly Expenses, and Net Balance.</li>
+          <li class="short-line-item">This balance combines cash, bank cards, and EasyPaisa.</li>
+          <li class="short-line-item">In the center is our Budget Ring.</li>
+          <li class="short-line-item">Green means spending is safe and healthy.</li>
+          <li class="short-line-item">Amber is a warning at eighty percent.</li>
+          <li class="short-line-item">Red alerts that you are over budget.</li>
+          <li class="short-line-item">Below is the Financial Health Score from 0 to 100.</li>
+          <li class="short-line-item">Next to it, Cash Runway counts down remaining days.</li>
+        </ul>
+      </div>
+
+      <!-- Card 6: Budget -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">6. Monthly Budget & 1-Tap Copy</div>
+          <span class="card-timing">Feature Demo</span>
+        </div>
+        <div class="action-badge">👉 Action: Tap Budget tab -> Point to 1-Tap Copy button</div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Spending limit</span>
+          <span class="vocab-tag">Calendar month</span>
+          <span class="vocab-tag">Category caps</span>
+          <span class="vocab-tag">1-Tap Copy (clones last month)</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">Now, let's open the Budget section.</li>
+          <li class="short-line-item">Budgets run by calendar month.</li>
+          <li class="short-line-item">Students set spending caps for categories like Food or Transport.</li>
+          <li class="short-line-item">Look at this feature: 1-Tap Copy.</li>
+          <li class="short-line-item">A single tap clones last month's budget.</li>
+          <li class="short-line-item">This saves students from repetitive typing.</li>
+        </ul>
+      </div>
+
+      <!-- Card 7: Add Expense -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">7. Logging an Expense</div>
+          <span class="card-timing">Feature Demo</span>
+        </div>
+        <div class="action-badge">👉 Action: Tap (+) -> Select Food -> Enter $15 -> Tap Save</div>
+        <ul class="short-lines">
+          <li class="short-line-item">Now, let's record a daily expense.</li>
+          <li class="short-line-item">I tap the plus button.</li>
+          <li class="short-line-item">I choose Food category and enter fifteen dollars.</li>
+          <li class="short-line-item">I pick Cash as the payment mode.</li>
+          <li class="short-line-item">I tap Save.</li>
+          <li class="short-line-item">The dashboard and budget ring update instantly.</li>
+        </ul>
+      </div>
+
+      <!-- Card 8: AI Scanner -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">8. Google Gemini AI Receipt Scanner</div>
+          <span class="card-timing">AI Innovation</span>
+        </div>
+        <div class="action-badge">👉 Action: Tap Receipt Scanner icon on expense screen</div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Receipt / Bill</span>
+          <span class="vocab-tag">Gemini Vision AI</span>
+          <span class="vocab-tag">Auto-extract</span>
+          <span class="vocab-tag">Merchant name</span>
+          <span class="vocab-tag">Date and amount</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">Students can also scan paper bills.</li>
+          <li class="short-line-item">I tap the Scan Receipt button.</li>
+          <li class="short-line-item">Google Gemini Vision AI scans the photo.</li>
+          <li class="short-line-item">It extracts store name, date, and amount.</li>
+          <li class="short-line-item">It pre-fills the form automatically.</li>
+        </ul>
+      </div>
+
+      <!-- Card 9: Offline Mode -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">9. Offline Engine (Airplane Mode Test)</div>
+          <span class="card-timing">Star Feature ⭐</span>
+        </div>
+        <div class="action-badge" style="background:var(--accent-coral-soft); color:var(--accent-coral);">👉 Action: Turn ON Airplane Mode -> Save $10 -> Turn OFF Airplane Mode</div>
+        <ul class="short-lines">
+          <li class="short-line-item">Now, watch this important offline test.</li>
+          <li class="short-line-item">I turn ON Airplane Mode right now.</li>
+          <li class="short-line-item">Notice: we have zero internet connection.</li>
+          <li class="short-line-item">I add a ten dollar expense and tap Save.</li>
+          <li class="short-line-item">Look: it commits to phone storage instantly.</li>
+          <li class="short-line-item">No lag, no loading spinner.</li>
+          <li class="short-line-item">Now, I turn OFF Airplane Mode.</li>
+          <li class="short-line-item">Internet is restored.</li>
+          <li class="short-line-item">Firebase syncs the new data to cloud automatically.</li>
+        </ul>
+      </div>
+
+      <!-- Card 10: Savings Goals -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">10. Savings Goals</div>
+          <span class="card-timing">Feature Demo</span>
+        </div>
+        <div class="action-badge">👉 Action: Tap Savings tab -> Show goal -> Add $20 contribution</div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Target amount</span>
+          <span class="vocab-tag">Monthly contribution</span>
+          <span class="vocab-tag">Progress percentage</span>
+          <span class="vocab-tag">Milestone alert (100% done)</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">Next, let's open Savings Goals.</li>
+          <li class="short-line-item">Students save for specific goals like a laptop or certification.</li>
+          <li class="short-line-item">I tap Contribute and add twenty dollars.</li>
+          <li class="short-line-item">The progress bar updates in real time.</li>
+          <li class="short-line-item">It shows how many months are remaining.</li>
+          <li class="short-line-item">When complete, it celebrates with milestone feedback.</li>
+        </ul>
+      </div>
+
+      <!-- Card 11: Extra Tools -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">11. Split Bill, Borrow & Lend, Subscriptions</div>
+          <span class="card-timing">Student Utilities</span>
+        </div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Split Bill (shares dining cost)</span>
+          <span class="vocab-tag">WhatsApp Share</span>
+          <span class="vocab-tag">Borrow & Lend (peer debt tracker)</span>
+          <span class="vocab-tag">Subscriptions (recurring apps)</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">We also built three student utilities:</li>
+          <li class="short-line-item">First: Split Bill divides canteen bills with classmates.</li>
+          <li class="short-line-item">It copies payment shares straight to WhatsApp.</li>
+          <li class="short-line-item">Second: Borrow and Lend tracks informal debts between friends.</li>
+          <li class="short-line-item">It records who owes you and what you owe.</li>
+          <li class="short-line-item">Third: Subscriptions Tracker monitors recurring apps like Spotify.</li>
+        </ul>
+      </div>
+
+      <!-- Card 12: Learning & Admin -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">12. Learning Hub, AI Assistant & Admin Panel</div>
+          <span class="card-timing">Platform Scale</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">Our Learning Hub has bite-sized financial lessons.</li>
+          <li class="short-line-item">Students can also ask our AI Assistant for savings advice.</li>
+          <li class="short-line-item">Finally, we built an Administrator Panel.</li>
+          <li class="short-line-item">Admins can inspect student statistics, resolve tickets, and publish lessons.</li>
+        </ul>
+      </div>
+
+      <!-- Card 13: Closing -->
+      <div class="card" style="border-left: 4px solid var(--accent-green);">
+        <div class="card-header">
+          <div class="card-title">13. Closing Statement</div>
+          <span class="card-timing">Finish Strong</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">To wrap up:</li>
+          <li class="short-line-item">PennyPal is a dependable, offline financial companion.</li>
+          <li class="short-line-item">It helps students take control of their money.</li>
+          <li class="short-line-item">Thank you so much, respected judges.</li>
+          <li class="short-line-item">We are now ready for your questions!</li>
+        </ul>
       </div>
 
     </div>
@@ -2426,16 +2867,67 @@
       document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
       
-      const activeBtn = Array.from(document.querySelectorAll('.nav-tab')).find(b => b.getAttribute('onclick').includes(tabId));
+      const activeBtn = Array.from(document.querySelectorAll('.nav-tab')).find(b => b.getAttribute('onclick')?.includes(tabId));
       if (activeBtn) {
         activeBtn.classList.add('active');
         activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+
+      // Handle Dropdown selection sync
+      const moreBtn = document.getElementById('navMoreBtn');
+      const dropdownItems = document.querySelectorAll('.dropdown-item');
+      dropdownItems.forEach(item => {
+        if (item.getAttribute('onclick')?.includes(tabId)) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+
+      if (['mechanics', 'tech', 'validation'].includes(tabId)) {
+        if (moreBtn) moreBtn.classList.add('active');
+      } else {
+        if (moreBtn) {
+          moreBtn.classList.remove('active');
+          const span = moreBtn.querySelector('span');
+          if (span) span.innerText = 'More ▾';
+        }
       }
       
       const targetView = document.getElementById('view-' + tabId);
       if (targetView) targetView.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // Dropdown Handlers
+    function toggleMoreMenu(event) {
+      event.stopPropagation();
+      const dropdown = document.getElementById('navMoreDropdown');
+      if (dropdown) dropdown.classList.toggle('open');
+    }
+
+    function closeMoreMenu() {
+      const dropdown = document.getElementById('navMoreDropdown');
+      if (dropdown) dropdown.classList.remove('open');
+    }
+
+    function selectDropdownTab(tabId, label) {
+      switchTab(tabId);
+      const moreBtn = document.getElementById('navMoreBtn');
+      if (moreBtn) {
+        const span = moreBtn.querySelector('span');
+        if (span) span.innerText = label + ' ▾';
+      }
+      closeMoreMenu();
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('navMoreDropdown');
+      if (dropdown && !dropdown.contains(e.target)) {
+        closeMoreMenu();
+      }
+    });
 
     // Theme Toggle
     function toggleTheme() {

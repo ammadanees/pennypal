@@ -769,7 +769,19 @@ class _GoalSection extends ConsumerWidget {
               data: (goals) {
                 final active = goals.where((g) => !g.isCompleted).toList()
                   ..sort((a, b) => b.currentAmount.compareTo(a.currentAmount));
-                if (active.isEmpty) {
+                final completed = goals.where((g) => g.isCompleted).toList()
+                  ..sort((a, b) => (b.completedAt ?? b.createdAt)
+                      .compareTo(a.completedAt ?? a.createdAt));
+
+                // Prioritize active goals; fall back to completed goals to show at least 2 if available
+                final displayed = active.length >= 2
+                    ? active.take(2).toList()
+                    : [
+                        ...active,
+                        ...completed.take(2 - active.length),
+                      ];
+
+                if (displayed.isEmpty) {
                   return _CtaCard(
                     icon: Icons.savings_outlined,
                     accent: AppAccents.amber,
@@ -779,22 +791,41 @@ class _GoalSection extends ConsumerWidget {
                     onAction: () => context.push(AppRoutes.goalEdit),
                   );
                 }
-                final goal = active.first;
+
                 return AppCard(
                   onTap: () => context.go(AppRoutes.savings),
-                  child: Row(
+                  child: Column(
                     children: [
-                      const AccentIconBox(
-                          icon: Icons.flag_outlined, accent: AppAccents.amber),
-                      AppSpacing.hMd,
-                      Expanded(
-                        child: SavingsProgress(
-                          label: goal.name,
-                          current: goal.currentAmount,
-                          target: goal.targetAmount,
-                          color: AppAccents.amber.color,
+                      for (var i = 0; i < displayed.length; i++) ...[
+                        if (i > 0) ...[
+                          AppSpacing.vMd,
+                          const Divider(height: 1),
+                          AppSpacing.vMd,
+                        ],
+                        Row(
+                          children: [
+                            AccentIconBox(
+                              icon: displayed[i].isCompleted
+                                  ? Icons.emoji_events_outlined
+                                  : Icons.flag_outlined,
+                              accent: displayed[i].isCompleted
+                                  ? AppAccents.green
+                                  : AppAccents.amber,
+                            ),
+                            AppSpacing.hMd,
+                            Expanded(
+                              child: SavingsProgress(
+                                label: displayed[i].name,
+                                current: displayed[i].currentAmount,
+                                target: displayed[i].targetAmount,
+                                color: displayed[i].isCompleted
+                                    ? AppAccents.green.color
+                                    : AppAccents.amber.color,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 );

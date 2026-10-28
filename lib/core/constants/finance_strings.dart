@@ -11,7 +11,7 @@ abstract final class FinanceStrings {
   static const String quickBudget = 'Budget';
   static const String quickSavings = 'Savings';
   static const String sectionBudget = 'This month\'s budget';
-  static const String sectionSavings = 'Savings goal';
+  static const String sectionSavings = 'Savings goals';
   static const String sectionRecent = 'Recent transactions';
   static const String seeAll = 'See all';
   static const String details = 'Details';

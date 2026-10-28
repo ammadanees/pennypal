@@ -114,6 +114,15 @@ Future<void> seedDemoData(MemoryRecordStore store, {DateTime? now}) async {
     'targetDate': AppDates.addMonths(today, 9),
     'createdAt': AppDates.addMonths(today, -4),
   });
+  await store.upsert(uid, 'savingsGoals', 'demo-goal-emergency', {
+    'name': 'Emergency fund',
+    'targetAmount': 30000.0,
+    'currentAmount': 18000.0,
+    'monthlyContribution': 3000.0,
+    'status': 'active',
+    'targetDate': AppDates.addMonths(today, 4),
+    'createdAt': AppDates.addMonths(today, -2),
+  });
   await store.upsertShared('users', uid, {
     'fullName': 'Alex Khan',
     'studentId': 'Student1501103',
