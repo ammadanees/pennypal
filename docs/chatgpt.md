@@ -62,20 +62,35 @@ We wanted to make managing money simple and stress-free. That's why we chose Pen
 # Part 3 — Technologies We Used
 Now, before we jump into the live demo, let me briefly explain how we built PennyPal.
 
-First, we used **Flutter** to develop the application with a smooth experience across multiple platforms from a single codebase. Second, for managing the app's state and real-time screen updates, we used **Riverpod**. It helps different screens get the exact data they need and update automatically whenever that data changes, without lag or crashes. Third, we used **Firebase Cloud Firestore** as our database. It stores our data online and also supports offline use through its local cache. And finally, we integrated **Google Gemini AI** to scan paper receipts and automatically extract details like the store name, date, and amount.
+First, we used **Flutter** to develop the application with a smooth experience across multiple platforms from a single codebase. Second, for managing the app's state and real-time screen updates, we used **Riverpod**. It helps different screens get the exact data they need and update automatically whenever that data changes, without lag or crashes. Third, we used **Firebase Cloud Firestore** as our database. It stores our data online and also supports offline use through its local cache. Fourth, we integrated **Google Gemini AI** to scan paper receipts and automatically extract details like the store name, date, and amount. And to complete our cloud services, we connected **Cloudinary** for image hosting and **Brevo** for transactional email alerts.
 
-So, in simple words: Flutter builds the UI, Riverpod manages the state, Firestore stores and syncs the data, and Gemini helps with smart receipt scanning. Alright, now let me share my screen and show you PennyPal live in action!
+So, in simple words: Flutter builds the UI, Riverpod manages the state, Firestore stores and syncs the data, Cloudinary and Brevo handle media and emails, and Gemini powers smart receipt scanning. Alright, now let me share my screen and show you PennyPal live in action!
 
 ---
 
 # Part 4 — Live Application Demonstration
 
-## Step 1: Login
-*Action: Open the application, show the login screen, type demo credentials, and tap Sign In.*
+## Step 1: Welcome & Onboarding Flow
+*Action: Show the onboarding screen, swipe across the introductory slides, point to the 4 student pillars, then tap "I already have an account" or "Skip" to reach Login.*
 
-Alright, so we start right here at the login screen. As you can see, we have secure authentication to protect student accounts. PennyPal also has a separate area for administrators. Now, let me type in our student credentials... and tap **Sign In**. And just like that, the app verifies the account and takes us straight to the main dashboard.
+Alright, so when a student opens PennyPal for the very first time, they are welcomed by this clean, friendly onboarding flow.
 
-## Step 2: Dashboard (The Financial Command Center)
+As you can see, it introduces our four core pillars with smooth swipeable slides:
+- First, **Know where your money goes**: logging daily income and expenses in seconds, even completely offline.
+- Second, **Budgets that keep you on track**: setting category limits with gentle warning alerts before overspending.
+- Third, **Save for what matters**: setting specific targets like a laptop, course fee, or emergency fund.
+- And fourth, **Learn money habits as you go**: bite-sized financial lessons and an AI guide.
+
+It is designed to be reassuring and easy for students. From here, a new student can tap **Create account**, or if they already have an account, tap **I already have an account** right here... which takes us straight to the Login screen.
+
+## Step 2: Login & Authentication
+*Action: Show the login screen, enter demo credentials, and tap Sign In.*
+
+Now, right here at the login screen, we have secure authentication to protect student privacy. PennyPal also has a separate, protected area for administrators. 
+
+Let me enter our student credentials... and tap **Sign In**. And just like that, the app verifies the account against Firebase and takes us straight into the main student dashboard!
+
+## Step 3: Dashboard (The Financial Command Center)
 *Action: Point to Income, Expenses, Net Balance cards, Payment Mode badges, Central Budget Ring, Health Score, and Recent Activity list.*
 
 Now, here we are on the student dashboard, which serves as the main command center of PennyPal.
@@ -88,21 +103,21 @@ Right below that, we have the **Financial Health Score** and **Cash Runway Days*
 
 And down here, we have the **Quick Category Ribbon** and **Recent Transactions**, so students can see their latest expenses at a glance without digging through deep menus. So, basically, from just this one single screen, a student gets complete clarity over their entire financial situation.
 
-## Step 3: Monthly Budgets
+## Step 4: Monthly Budgets
 *Action: Tap the Budget section, point to category limits, then show the 1-Tap Quick Copy banner.*
 
 Now, seeing your balance is good, but controlling spending is what really matters. So let's open the **Budget** section. Here, students can set spending limits for different categories, like food, transport, and education. And you know, student allowances and rent run on a monthly basis, so PennyPal organizes budgets strictly by calendar month.
 
 Now, here is a really neat feature we built, called **1-Tap Quick Copy**. You see, when a new month begins, students don't want to type every single category limit all over again. With just one tap right here, PennyPal automatically copies last month's budget. So, this saves time and makes monthly planning super easy.
 
-## Step 4: Add an Expense and Scan a Receipt
+## Step 5: Add an Expense and Scan a Receipt
 *Action: Tap Add Expense (+), show the 8 categories, then tap Attach Receipt / Scan.*
 
 Now, once your budget is set, you need to record your daily spending. So let me tap this plus button to add an expense. As you can see, we have all 8 standard categories ready—like Food, Transport, and Bills. Normally, you can just type the amount and details manually.
 
 But check this out: if a student has a paper receipt from the canteen or a bookstore, they don't even have to type! Let me tap **Scan Receipt**. Our Gemini AI reads the image, extracts the merchant name, the date, and the total amount, and fills in the form automatically. So, all the student has to do is review the information and tap **Save**.
 
-## Step 5: Offline Mode (Key Feature Demonstration)
+## Step 6: Offline Mode (Key Feature Demonstration)
 *Action: Pull down quick settings, turn ON Airplane Mode, add a test expense, tap Save, show it appearing, then turn OFF Airplane Mode.*
 
 Now, I want to show you one of the most important features of PennyPal: our offline engine. Imagine a student is on campus, sitting in a basement classroom where the internet suddenly stops working. Let me demonstrate what happens:
@@ -111,14 +126,14 @@ Watch this—I'll turn on **Airplane Mode** right now. The phone has zero intern
 
 And now, watch what happens when I turn Airplane Mode back off: as soon as the connection returns, Firestore automatically syncs the pending transaction with the cloud in the background. So, this helps students continue recording their expenses anytime, anywhere.
 
-## Step 6: Savings Goals
+## Step 7: Savings Goals
 *Action: Tap the Savings tab, open an active goal (like 'New Laptop'), and tap Contribute to add $20.*
 
 Now, tracking daily expenses is important, but building good money habits also means saving for the future. So let's switch over to **Savings Goals**. You see, students often want to save for something big—for example, buying a laptop or paying for a professional certification. They can set a target amount, choose a deadline date, and track their progress.
 
 Let me show you: I'll open this laptop goal, and let's add a 20-dollar contribution right now... Notice how the progress bar moves forward immediately, the app recalculates the remaining timeline, and it gives a motivational milestone to keep students encouraged.
 
-## Step 7: Extra Student Features
+## Step 8: Extra Student Features
 *Action: From dashboard shortcuts, show Split Bill, Borrow & Lend, and Subscriptions.*
 
 Now, beyond the basic requirements, we asked our classmates: *"What other money headaches do you face?"* And based on their feedback, we included three extra practical tools:
@@ -126,14 +141,14 @@ Now, beyond the basic requirements, we asked our classmates: *"What other money 
 - Second, **Borrow & Lend**: you know how we lend 10 or 20 bucks to a friend for tea or photocopies and then forget about it? This keeps a clear, honest record of money owed, so friendships stay stress-free.
 - And third, **Subscriptions Manager**: this helps students remember recurring payments—like software subscriptions or gym memberships—so they don't secretly drain their monthly allowance.
 
-## Step 8: Learning Hub and AI Assistant
+## Step 9: Learning Hub and AI Assistant
 *Action: Open a lesson in the Learning Hub, then show the AI Assistant.*
 
 We also believe managing money is not just about recording numbers. It's about learning how to make better financial decisions. That's why we included a **Learning Hub** with quick, bite-sized lessons on topics like needs versus wants and emergency savings.
 
 And right next to it, students can also open our **AI Assistant** and ask practical questions—like: *"How can I save 30 dollars this week?"*—and get instant, personalized guidance. Together, these features help students build lasting financial discipline.
 
-## Step 9: Admin Panel
+## Step 10: Admin Panel
 *Action: Sign out of the student account and sign in to the prepared demo admin account (admin@pennypal.com).*
 
 And finally, let me show you the administrative side. Let me sign out and log in with our admin account. You see, while students manage their personal finances, college/institution administrators get a separate dedicated dashboard. From here, the admin can view registered students, monitor system analytics, respond to support tickets, and even publish new educational lessons using the built-in CMS. And that completes our live demonstration of PennyPal!
@@ -234,3 +249,21 @@ Because it brings their expenses, budgets, and savings goals together in one pla
 - Never display passwords or API keys during screen sharing.
 - Be ready to explain any technical term you use in simple words.
 - If you don't know something, be honest and explain how you would investigate it.
+
+---
+
+# Part 9 — 1-Line Tech Stack Cheatsheet (Tools & Technologies Used)
+*Quick, simple 1-line answers if judges ask about any specific tool or service:*
+
+- **Flutter:** Cross-platform framework by Google that builds our application for Android, iOS, Web, and Desktop from a single Dart codebase.
+- **Firebase Authentication:** Handles secure student registration, email/password login, password resets, and user sessions.
+- **Cloud Firestore:** Scalable NoSQL cloud database with automatic offline caching so students can log expenses with zero internet.
+- **Cloudinary:** Cloud media service used to store, optimize, and quickly deliver receipt photos and user profile pictures without loading the database.
+- **Brevo (formerly Sendinblue):** Transactional email delivery service used for sending account verification emails, password reset links, and budget alerts.
+- **Google Gemini AI (Vision & Flash):** Multimodal AI model that reads paper receipt photos, auto-fills transaction details, and answers student budgeting questions in the AI Assistant.
+- **Riverpod 2.0:** Reactive, compile-time safe state management library that automatically updates UI screens whenever financial data changes.
+- **GoRouter:** Declarative URL router with route guards that keeps user sessions safe and cleanly separates student screens from the admin portal.
+- **SharedPreferences:** Lightweight on-device key-value storage used to remember user preferences like dark/light theme, default currency, and onboarding status.
+- **Flutter Local Notifications:** Device notification service that sends immediate alerts when spending hits 80% or 100% of a monthly category budget.
+- **Pdf & Printing Package:** Standard Flutter libraries used to generate, preview, and download monthly student expense reports in formatted PDF and CSV.
+- **GitHub:** Cloud Git platform used by our four-member team for version control, code commits, and project collaboration throughout TechWiz.

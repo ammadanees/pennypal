@@ -1586,9 +1586,17 @@
           <span class="card-timing">1:45 – 5:15</span>
         </div>
 
-        <!-- Step A -->
+        <!-- Step A1: Welcome & Onboarding -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge">👉 Live Action: Launch PennyPal & Sign in as ammad.anees99@gmail.com</div>
+          <div class="action-badge">👉 Live Action: Show Onboarding Carousel, Swipe Slides & Tap "I already have an account"</div>
+          <div class="script-text">
+            "When a student launches PennyPal for the first time, they are welcomed by this clean onboarding flow. It visually introduces our four core pillars: tracking daily cash flows, setting realistic monthly budgets, saving for goals, and building financial literacy. From here, new students can register, or tap <strong>'I already have an account'</strong> to go straight to login."
+          </div>
+        </div>
+
+        <!-- Step A2: Login -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge">👉 Live Action: Launch Login Screen & Sign in as ammad.anees99@gmail.com</div>
           <div class="script-text">
             "Alright, let me start right here by signing in as our student. I'll enter our email and password, and tap <strong>Sign In</strong>. As you can see, it verifies our credentials and takes us directly into the dashboard."
           </div>
@@ -1793,10 +1801,34 @@
         </ul>
       </div>
 
-      <!-- Card 4: Login -->
+      <!-- Card 4: Welcome & Onboarding -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">4. Login & Authentication</div>
+          <div class="card-title">4. Welcome & Onboarding Screen</div>
+          <span class="card-timing">First Launch</span>
+        </div>
+        <div class="action-badge">👉 Action: Swipe through onboarding slides -> Tap "I already have an account"</div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">First launch</span>
+          <span class="vocab-tag">4 Core Pillars</span>
+          <span class="vocab-tag">Swipeable cards</span>
+          <span class="vocab-tag">Create account</span>
+          <span class="vocab-tag">Have account (Login)</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">When a student launches PennyPal first time...</li>
+          <li class="short-line-item">They see this clean onboarding flow.</li>
+          <li class="short-line-item">It introduces our four main pillars:</li>
+          <li class="short-line-item">Track spending, stick to budgets, save goals, and learn habits.</li>
+          <li class="short-line-item">New users can tap Create Account.</li>
+          <li class="short-line-item">Or tap 'I already have an account' to reach Login.</li>
+        </ul>
+      </div>
+
+      <!-- Card 5: Login -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">5. Login & Authentication</div>
           <span class="card-timing">Live Demo</span>
         </div>
         <div class="action-badge">👉 Action: Enter email, enter password, tap Sign In</div>
@@ -1996,6 +2028,39 @@
           <li class="short-line-item">It helps students take control of their money.</li>
           <li class="short-line-item">Thank you so much, respected judges.</li>
           <li class="short-line-item">We are now ready for your questions!</li>
+        </ul>
+      </div>
+
+      <!-- Card 14: 1-Line Tech Stack Cheatsheet -->
+      <div class="card" style="border-left: 4px solid var(--primary-light);">
+        <div class="card-header">
+          <div class="card-title">14. 1-Line Tech Stack Cheatsheet (Tools & Technologies Used)</div>
+          <span class="card-timing">Quick Viva Answers</span>
+        </div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Flutter</span>
+          <span class="vocab-tag">Firebase Auth</span>
+          <span class="vocab-tag">Cloud Firestore</span>
+          <span class="vocab-tag">Cloudinary</span>
+          <span class="vocab-tag">Brevo</span>
+          <span class="vocab-tag">Gemini AI</span>
+          <span class="vocab-tag">Riverpod</span>
+          <span class="vocab-tag">GoRouter</span>
+          <span class="vocab-tag">SharedPreferences</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item"><strong>Flutter:</strong> Builds our app for mobile, tablet, and web from a single codebase.</li>
+          <li class="short-line-item"><strong>Firebase Auth:</strong> Manages secure student login, signups, and password resets.</li>
+          <li class="short-line-item"><strong>Cloud Firestore:</strong> Our cloud database that automatically caches data for offline use.</li>
+          <li class="short-line-item"><strong>Cloudinary:</strong> Stores and optimizes paper receipt photos and profile pictures in the cloud.</li>
+          <li class="short-line-item"><strong>Brevo (Sendinblue):</strong> Sends automated email verification links and budget alerts.</li>
+          <li class="short-line-item"><strong>Google Gemini AI:</strong> Scans receipts to extract amounts and answers budgeting questions.</li>
+          <li class="short-line-item"><strong>Riverpod 2.0:</strong> Manages app data reactively without unnecessary screen rebuilds.</li>
+          <li class="short-line-item"><strong>GoRouter:</strong> Protects application routes and separates student screens from the admin panel.</li>
+          <li class="short-line-item"><strong>SharedPreferences:</strong> Saves user settings like dark mode and default currency on the phone.</li>
+          <li class="short-line-item"><strong>Flutter Local Notifications:</strong> Triggers instant phone notifications when spending reaches 80% or 100% of budget.</li>
+          <li class="short-line-item"><strong>Pdf & Printing Package:</strong> Generates and prints formatted monthly student spending reports.</li>
+          <li class="short-line-item"><strong>GitHub:</strong> Used by our team for version control, code branches, and collaboration.</li>
         </ul>
       </div>
 

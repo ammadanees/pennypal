@@ -89,6 +89,8 @@ If you freeze or forget a word, **do not worry or panic**. Take a breath and use
 - **Flutter** *(single codebase for all devices)*
 - **Riverpod** *(manages app state / data)*
 - **Firestore** *(Firebase cloud database)*
+- **Cloudinary** *(stores receipt photos in cloud)*
+- **Brevo** *(sends email alerts and reset links)*
 - **Cache** *(saves data on phone memory)*
 - **Gemini AI** *(scans paper bills)*
 
@@ -99,11 +101,37 @@ If you freeze or forget a word, **do not worry or panic**. Take a breath and use
 - *"It makes data updates fast and safe."*
 - *"Our database is Cloud Firestore."*
 - *"It saves data locally when offline."*
-- *"We also use Google Gemini AI to scan receipts."*
+- *"Cloudinary securely hosts receipt images."*
+- *"Brevo sends email alerts and verification links."*
+- *"And Google Gemini AI scans receipts automatically."*
 
 ---
 
-## Section 4: Login & Authentication
+## Section 4: Welcome & Onboarding Screen
+
+### 🔑 Essential Words
+- **First launch** *(opening app for first time)*
+- **Welcome flow** *(friendly introduction)*
+- **Swipeable cards** *(slides with pictures)*
+- **4 Core Pillars** *(tracking, budgets, goals, lessons)*
+- **Create account** *(register new student)*
+- **Have account** *(go to login)*
+
+### 👉 Action: Swipe through the onboarding slides, then tap "I already have an account" or "Skip".
+### 🗣️ Small Sentences to Speak
+- *"When a student opens PennyPal first time..."*
+- *"They see this clean onboarding screen."*
+- *"It introduces our four main pillars:"*
+- *"One: tracking income and expenses."*
+- *"Two: staying within monthly budgets."*
+- *"Three: saving for future goals."*
+- *"Four: learning practical financial habits."*
+- *"A new student can tap Create Account."*
+- *"Or tap 'I already have an account' to sign in."*
+
+---
+
+## Section 5: Login & Authentication
 
 ### 🔑 Essential Words
 - **Sign in** *(log in)*
@@ -113,15 +141,16 @@ If you freeze or forget a word, **do not worry or panic**. Take a breath and use
 
 ### 👉 Action: Tap email field, enter password, tap Sign In.
 ### 🗣️ Small Sentences to Speak
-- *"Let me sign in with our test account."*
-- *"I enter email and password."*
+- *"Now we are at the login screen."*
+- *"Student accounts are protected by Firebase Auth."*
+- *"I enter our demo email and password."*
 - *"Now I tap Sign In."*
-- *"It verifies securely with Firebase."*
+- *"It verifies securely in seconds."*
 - *"And opens the dashboard directly."*
 
 ---
 
-## Section 5: Student Dashboard
+## Section 6: Student Dashboard
 
 ### 🔑 Essential Words
 - **Net Balance** *(money you have left)*
@@ -135,14 +164,15 @@ If you freeze or forget a word, **do not worry or panic**. Take a breath and use
 - **Health Score** *(rating from 0 to 100)*
 - **Cash Runway** *(days left until money finishes)*
 
-### 👉 Action: Point to 3 top cards, central ring, and health score.
+### 👉 Action: Point to profile avatar & bell at top header, then Net Balance hero, cards, and pace ring.
 ### 🗣️ Small Sentences to Speak
 - *"Right here is the main dashboard."*
-- *"At the top, we see three cards:"*
-- *"Total Income, Total Expense, and Net Balance."*
+- *"At the top header: profile picture, greeting, and notification bell."*
+- *"Directly below is our financial command center."*
+- *"Net Balance hero, Total Income, and Total Expense."*
 - *"This balance combines all payment types:"*
-- *"Cash in pocket, bank cards, and EasyPaisa."*
-- *"In the center is our Budget Ring."*
+- *"Cash in pocket, bank cards, and Nayapay."*
+- *"In the center is our Budget Pace Ring."*
 - *"It shows how much budget you used."*
 - *"Green means spending is safe."*
 - *"Amber is a warning at eighty percent."*
@@ -328,9 +358,9 @@ If you freeze or forget a word, **do not worry or panic**. Take a breath and use
 
 ### 🗣️ Small Sentences to Speak
 - *"To conclude:"*
-- *"PennyPal is not just an expense tracker."*
-- *"It is a complete financial companion for students."*
-- *"It works offline, saves time, and builds healthy habits."*
+- *"We built PennyPal strictly following the TECHWIZ SRS."*
+- *"It is an offline-first companion tailored for students."*
+- *"We are very proud of what we built."*
 - *"Thank you very much, respected judges."*
 - *"We are ready for your questions!"*
 
@@ -352,3 +382,23 @@ If a judge asks a question, **don't give a long speech**. Give one or two short 
 | **Q8. What if user spends more than budget?** | *"The ring turns red, health score drops, and the app alerts the student immediately."* |
 | **Q9. Can it work on web and desktop?** | *"Yes, Flutter builds for mobile, web, and desktop from this one codebase."* |
 | **Q10. What is your future plan?** | *"We want to connect university meal cards and add local bank notifications."* |
+
+---
+
+## Section 16: 1-Line Tech Stack Cheatsheet (Tools & Technologies Used)
+
+If judges ask: *"What tools did you use and why?"*, use these simple 1-line answers:
+
+- **Flutter:** *"Builds our app for mobile, tablet, and web from a single codebase."*
+- **Firebase Auth:** *"Manages secure student login, signups, and password resets."*
+- **Cloud Firestore:** *"Our cloud database that automatically caches data for offline use."*
+- **Cloudinary:** *"Stores and optimizes paper receipt photos and profile pictures in the cloud."*
+- **Brevo (Sendinblue):** *"Sends automated email verification links and budget alerts."*
+- **Google Gemini AI:** *"Scans receipts to extract amounts and answers budgeting questions."*
+- **Riverpod 2.0:** *"Manages app data reactively without unnecessary screen rebuilds."*
+- **GoRouter:** *"Protects application routes and separates student screens from the admin panel."*
+- **SharedPreferences:** *"Saves user settings like dark mode and default currency on the phone."*
+- **Flutter Local Notifications:** *"Triggers instant phone notifications when spending reaches 80% or 100% of budget."*
+- **Pdf & Printing Package:** *"Generates and prints formatted monthly student spending reports."*
+- **GitHub:** *"Used by our team for version control, code branches, and collaboration."*
+

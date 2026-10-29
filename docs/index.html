@@ -1598,8 +1598,6 @@
           </div>
         </div>
 
-        <button class="nav-tab" onclick="switchTab('srs')" style="color:var(--accent-green); font-weight:700; border:1px solid rgba(16,185,129,0.3); background:rgba(16,185,129,0.08);">📋 SRS Audit</button>
-
         <a href="chatgpt.pdf" target="_blank" class="nav-tab nav-tab-pdf"
           title="Open Presentation Script PDF in new tab">📄 Script ↗</a>
       </div>
@@ -1706,53 +1704,36 @@
       <!-- Section 2 -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">2. Why We Chose PennyPal (30 Seconds)</div>
+          <div class="card-title">2. Why We Chose PennyPal (Problem Statement)</div>
           <span class="card-timing">0:30 – 1:00</span>
         </div>
         <div class="script-text">
-          "Now, let me give you a little background about why we chose this project. You know, in TECHWIZ, the
-          management provided us with three project options, and our team picked PennyPal without hesitation. Because as
-          students, this is a real problem we experience every single day.<br><br>
-          Students have different sources of income. Some receive pocket money from home, some earn through freelancing
-          or part-time jobs, and others receive scholarships or stipends. But regardless of where the money comes from,
-          keeping track of daily spending is really difficult. You spend a little bit on food, a little on transport,
-          maybe pay for a subscription... and basically, by the third week of the month, you wonder: <em>'Where did all
-            my money go?'</em><br><br>
-          We wanted to make managing money simple and stress-free. That's why we chose PennyPal. It helps students
-          record their daily income and expenses, set monthly budgets, track their savings, and understand their
-          spending habits. And most importantly, we wanted the app to work even when the internet is unavailable,
-          because in campus classrooms and basements, students don't always have a reliable connection. So, our goal was
-          to create a simple, useful financial companion for student life."
+          "Now, let me give you a little background. As highlighted in <strong>SRS Section 1.1</strong>, managing daily expenses is a real challenge for college students.<br><br>
+          Students have different sources of income—pocket money, freelancing, or scholarships. But keeping track of daily cash leaks is tough. By the third week of the month, students often wonder: <em>'Where did all my money go?'</em><br><br>
+          That is why we built PennyPal. Under <strong>SRS Section 1.2</strong>, our goal was to build a clean, cross-platform companion that helps students log expenses in seconds, stick to monthly budgets, save for goals, and work reliably even in campus basements without internet."
         </div>
         <div class="tip-box">
-          💡 <strong>Speaker Tip:</strong> Speak naturally and with genuine empathy. Judges love seeing that you built a
-          solution for a problem you actually face every day.
+          💡 <strong>Speaker Tip:</strong> Speak naturally and with genuine empathy. Mentioning SRS Section 1.1 immediately anchors your presentation to the competition specification.
         </div>
       </div>
 
       <!-- Section 3 -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">3. Technology Stack & Architecture (45 Seconds)</div>
-          <span class="card-timing">1:00 – 1:45</span>
+          <div class="card-title">3. Technology Stack & Architecture (30 Seconds)</div>
+          <span class="card-timing">1:00 – 1:30</span>
         </div>
         <div class="script-text">
-          "To turn this vision into a reality that students could genuinely rely on anywhere on campus, we needed an
-          architecture that is rock-solid and completely offline-ready.<br><br>
-          We developed PennyPal using <strong>Flutter</strong> to deliver a responsive, 60 FPS experience across mobile,
-          tablet, and web from a single codebase.<br><br>
-          For state management, we implemented <strong>Riverpod 2.0</strong>, which gives us compile-time safety and
-          handles real-time streams without unnecessary widget rebuilds.<br><br>
-          For our database, we used <strong>Cloud Firestore</strong> with offline cache persistence enabled, so students
-          can log transactions anytime, even without an active internet connection.<br><br>
-          We also integrated <strong>Google Gemini Vision AI</strong> for receipt scanning, backed by an offline regex
-          parser to handle network dropouts.<br><br>
-          Now, having seen the foundation under the hood, let’s jump straight into the application itself. Let me share
-          my screen and walk you through the live demo."
+          "As outlined in <strong>SRS Section 1.8</strong>, we built PennyPal using a modern, scalable stack:<br><br>
+          • <strong>Flutter:</strong> One unified codebase for mobile, web, and desktop.<br>
+          • <strong>Riverpod:</strong> Reactive state management for instant, lag-free UI updates.<br>
+          • <strong>Firebase Firestore:</strong> Secure cloud database with automatic offline caching.<br>
+          • <strong>Google Gemini AI:</strong> Multimodal Vision AI for smart receipt scanning.<br>
+          • <strong>Cloudinary & Brevo:</strong> Fast media hosting and transactional email alerts.<br><br>
+          In short: fast, secure, and offline-ready. Now, let's look at the live app!"
         </div>
         <div class="tip-box">
-          💡 <strong>Speaker Tip:</strong> Deliver this smoothly and calmly. Notice how the opening and closing lines
-          naturally bridge from 'Why we built it' directly into the live screen share.
+          💡 <strong>Speaker Tip:</strong> Deliver these 5 points briskly. Don't overcomplicate. Bridge immediately into sharing your live screen.
         </div>
       </div>
 
@@ -1760,133 +1741,108 @@
       <div class="card">
         <div class="card-header">
           <div class="card-title">4. Live Demonstration Walkthrough (3 to 4 Minutes)</div>
-          <span class="card-timing">1:45 – 5:15</span>
+          <span class="card-timing">1:30 – 4:45</span>
         </div>
 
-        <!-- Step A -->
+        <!-- Step A1: Welcome & Onboarding -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge">👉 Live Action: Launch PennyPal & Sign in as ammad.anees99@gmail.com</div>
+          <div class="action-badge">👉 Live Action: Show Onboarding Carousel, Swipe Slides & Tap "I already have an account"</div>
           <div class="script-text">
-            "Alright, let me start right here by signing in as our student. I'll enter our email and password, and tap
-            <strong>Sign In</strong>. As you can see, it verifies our credentials and takes us directly into the
-            dashboard."
+            "As required by <strong>SRS Section 1.4</strong>, first-time users see our clean 4-step onboarding flow.<br><br>
+            It introduces our core pillars: tracking cash flow, monthly budgets, savings goals, and smart financial habits.<br><br>
+            From here, a student can tap <strong>Create Account</strong>, or tap <strong>'I already have an account'</strong> to go straight to login."
           </div>
         </div>
 
-        <!-- Step B -->
+        <!-- Step A2: Login -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge">👉 Live Action: Point to 3 Summary Cards, Multi-Mode Breakdown & Budget Pace Ring
-          </div>
+          <div class="action-badge">👉 Live Action: Launch Login Screen & Sign in as ammad.anees99@gmail.com</div>
           <div class="script-text">
-            "Now, we are on the main dashboard. Let's spend a moment here because this is where the student sees their
-            complete financial picture.<br><br>
-            Right at the top, we have three clear summary cards: <strong>Total Income</strong>, <strong>Monthly
-              Expenses</strong>, and <strong>Net Balance</strong>. And what's really convenient is that this balance
-            combines all payment modes — cash in pocket, bank cards, and mobile wallets like Nayapay or
-            Easypaisa.<br><br>
-            Right here in the center, you can see our <strong>budget pace ring</strong>. This visual ring instantly
-            shows how much of this month's budget has been spent. Notice the color: it's green when spending is healthy,
-            turns amber as a warning when you reach eighty percent, and changes to coral red if you ever go over
-            budget.<br><br>
-            Next, right below the ring, you'll see two smart indicators: our <strong>Financial Health Score</strong>,
-            rated from zero to one hundred based on the student's savings ratio and budget discipline, and right next to
-            it, the <strong>Cash Runway Days</strong>, which counts down how many days their remaining cash will last
-            based on their daily spending speed. So, with just one look at the dashboard, a student knows exactly where
-            they stand without doing any math!"
+            "Following <strong>SRS Section 1.4</strong>, we use Firebase Authentication with secure role separation.<br><br>
+            Let me enter our student credentials... tap <strong>Sign In</strong>... and we land straight on the dashboard!"
           </div>
         </div>
 
-        <!-- Step C -->
+        <!-- Step B: Dashboard -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge">👉 Live Action: Tap Budget Tab & Show 1-Tap Copy from Previous Month</div>
+          <div class="action-badge">👉 Live Action: Point to Top Header (Profile Avatar, Greeting, Notification Bell), then Balance Hero, Summary Cards & Central Pace Ring</div>
           <div class="script-text">
-            "Now, seeing your balance is one thing, but preventing overspending is what truly matters. So let's head
-            over to the Budget section.<br><br>
-            Budgets in PennyPal are organized strictly by calendar month, matching how student allowances and hostel
-            rent operate. Students can set spending caps for individual categories.<br><br>
-            And to save students from tedious data entry at the start of every month, we built a <strong>1-Tap Quick
-              Copy</strong> feature. Instead of typing every category limit again, a single tap copies the previous
-            month's budget automatically."
+            "Right at the top header, you can see the student profile avatar, personal greeting, and notification bell.<br><br>
+            Directly below, following <strong>SRS Section 1.4</strong>, is our main financial command center:<br>
+            • <strong>Net Balance Hero</strong> and summary cards showing total monthly income and expenses.<br>
+            • Separate running balances for cash, bank, and mobile wallets like Nayapay.<br>
+            • This <strong>Central Pace Ring:</strong> green for safe spending, amber at 80%, and red if over budget.<br>
+            • And <strong>Cash Runway:</strong> tells the student exactly how many days their remaining cash will last.<br><br>
+            In one glance, the student knows their complete financial health."
           </div>
         </div>
 
-        <!-- Step D -->
+        <!-- Step C: Budgets -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge">👉 Live Action: Tap Add Expense (+) & Show 8 Categories + AI Receipt Scanner</div>
+          <div class="action-badge">👉 Live Action: Tap Budget Tab & Show 1-Tap Quick Copy</div>
           <div class="script-text">
-            "Once a budget is in place, the student needs to log their daily spending. Adding an expense takes just a
-            few seconds across all 8 standard categories, like Food, Transport, and Education.<br><br>
-            In addition to manual entry, students can scan paper receipts. Using Google Gemini Vision AI, the app scans
-            the photo, extracts the merchant name, transaction date, and total amount, and pre-fills the form
-            automatically."
+            "Under <strong>SRS Section 1.4</strong>, budgets are organized by calendar month.<br><br>
+            Students set spending limits for categories like Food, Transport, and Books.<br><br>
+            To save time every month, we built <strong>1-Tap Quick Copy</strong>. With one tap, it duplicates last month's budget into the new month—no manual retyping needed!"
           </div>
         </div>
 
-        <!-- Step E -->
+        <!-- Step D: Add Expense & AI Receipt -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge" style="background: var(--accent-coral-soft); color: var(--accent-coral);">⭐ Live
-            Action: Turn ON Airplane Mode -> Add $15 Expense -> Turn OFF Airplane Mode</div>
+          <div class="action-badge">👉 Live Action: Tap Add Expense (+), show 8 categories, then tap Scan Receipt</div>
           <div class="script-text">
-            "Now, watch this: what happens if the student loses internet connection or is sitting in a basement
-            classroom with zero signal? Let me show you how PennyPal handles this.<br><br>
-            I'm turning on <strong>Airplane Mode</strong> right now to disconnect from the internet completely.<br><br>
-            Now, let's add a quick expense: fifteen dollars for lunch under Food. I'll tap Save. Notice that it saves
-            instantly to local storage and updates our dashboard numbers with zero delay or loading spinner.<br><br>
-            And now, when I turn Airplane Mode back off, Firebase automatically detects the connection and syncs our new
-            expense to the cloud database in the background. It's completely seamless for the student."
+            "Under <strong>SRS Section 1.4</strong>, logging expenses takes just seconds across 8 preset categories.<br><br>
+            Even better—as noted in our AI feature clause—students can tap <strong>Scan Receipt</strong>.<br><br>
+            Google Gemini AI reads the paper receipt, auto-fills the merchant, date, and amount. The student simply reviews and taps <strong>Save</strong>."
           </div>
         </div>
 
-        <!-- Step F -->
+        <!-- Step E: Offline Mode -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge">👉 Live Action: Tap Savings Tab & Add $20 Contribution to Active Goal</div>
+          <div class="action-badge" style="background: var(--accent-coral-soft); color: var(--accent-coral);">⭐ Live Action: Turn ON Airplane Mode -> Save $15 Expense -> Turn OFF Airplane Mode</div>
           <div class="script-text">
-            "Keeping daily expenses in check is essential, but building long-term financial health requires saving. That
-            brings us to our Savings Goals.<br><br>
-            Here, students can set dedicated targets—such as saving for a laptop, a certification, or emergency
-            cash—with specific deadlines. When we add a contribution, the progress bar updates, the app recalculates the
-            remaining timeline, and provides milestone encouragement to help students stay disciplined."
+            "Meeting the offline resilience requirement of <strong>SRS Section 1.5</strong>, PennyPal works without internet.<br><br>
+            Watch: I enable <strong>Airplane Mode</strong>. Zero connection.<br><br>
+            I add a 15-dollar campus lunch... tap Save... and it appears immediately. No freeze, no spinner.<br><br>
+            When I turn Airplane Mode off, Firestore syncs it to the cloud automatically in the background."
           </div>
         </div>
 
-        <!-- Step G -->
+        <!-- Step F: Savings Goals -->
         <div style="margin-bottom: 18px;">
-          <div class="action-badge" style="background: var(--accent-green-soft); color: var(--accent-green);">🚀 Live
-            Action: Show Split Bill, Borrow & Lend, and Subscriptions</div>
+          <div class="action-badge">👉 Live Action: Tap Savings Tab, Open 'New Laptop' Goal & Add $20 Contribution</div>
           <div class="script-text">
-            "Now, while testing the app with our classmates, we realized that student life involves social moments that
-            traditional banking apps completely ignore. That's why we engineered three practical student utilities right
-            on the dashboard:<br><br>
-            First, <strong>Split Bill</strong>—which calculates each person's exact share when dining out with
-            classmates and lets you copy a payment reminder to WhatsApp in one tap.<br><br>
-            Second, <strong>Borrow and Lend</strong>—to keep a clear, transparent record of small informal peer debts so
-            friendships don't get awkward.<br><br>
-            And third, <strong>Subscriptions Manager</strong>—to track recurring monthly services like software or gym
-            passes so they don't quietly drain your allowance."
+            "As defined in <strong>SRS Section 1.4</strong>, students can set visual savings targets for big milestones—like a laptop or exam fees.<br><br>
+            Let's contribute 20 dollars right now.<br><br>
+            Instantly, the progress ring advances, the app updates the projected completion date, and triggers a milestone celebration. It turns saving into an enjoyable habit."
           </div>
         </div>
 
-        <!-- Step H -->
+        <!-- Step G: Extra Features -->
+        <div style="margin-bottom: 18px;">
+          <div class="action-badge" style="background: var(--accent-green-soft); color: var(--accent-green);">🚀 Live Action: Show Split Bill, Borrow & Lend, and Subscriptions</div>
+          <div class="script-text">
+            "Under the <strong>SRS Section 1.9</strong> innovation clause, we added 3 everyday student utilities:<br><br>
+            • <strong>Split Bill:</strong> divides group lunch bills and generates a WhatsApp payment text in one tap.<br>
+            • <strong>Borrow & Lend:</strong> tracks small loans between classmates so friendships stay stress-free.<br>
+            • <strong>Subscriptions:</strong> tracks recurring monthly fees so allowances aren't silently drained."
+          </div>
+        </div>
+
+        <!-- Step H: Learning Hub & AI Assistant -->
         <div style="margin-bottom: 18px;">
           <div class="action-badge">👉 Live Action: Open Learning Hub lesson & Send an AI prompt in Assistant</div>
           <div class="script-text">
-            "Beyond daily tracking, we also wanted to empower students with financial knowledge. That's why our
-            <strong>Learning Hub</strong> offers bite-sized lessons on topics like needs versus wants and emergency
-            funds.<br><br>
-            And if a student is ever unsure about their spending decisions, they can consult our <strong>AI
-              Assistant</strong> for personalized advice on budgeting and saving."
+            "To promote financial literacy (<strong>SRS Section 1.4</strong>), we included bite-sized lessons on budgeting basics.<br><br>
+            Students can also chat with our <strong>AI Assistant</strong> for instant tips—like: <em>'How can I save 25 dollars on food this week?'</em>"
           </div>
         </div>
 
-        <!-- Step I -->
+        <!-- Step I: Admin Portal -->
         <div style="margin-bottom: 18px;">
           <div class="action-badge">👉 Live Action: Logout & Log in as admin@pennypal.com / Admin@1234</div>
           <div class="script-text">
-            "Everything we’ve seen so far is from the student’s perspective. But a campus platform also needs
-            administrative oversight. So let's quickly switch over to the Administrator Portal.<br><br>
-            When an administrator signs in, they access a dedicated administrative dashboard to monitor registered
-            students, inspect system analytics, resolve support tickets, and publish new educational lessons through the
-            built-in CMS."
+            "Fulfilling the role-based system requirement in <strong>SRS Section 1.4 and 1.6</strong>, administrators have a protected portal to monitor system analytics, handle user support tickets, and manage educational lessons."
           </div>
         </div>
       </div>
@@ -1895,18 +1851,15 @@
       <div class="card">
         <div class="card-header">
           <div class="card-title">5. Closing Statement & Handover (20 Seconds)</div>
-          <span class="card-timing">5:15 – 5:45</span>
+          <span class="card-timing">4:45 – 5:15</span>
         </div>
         <div class="script-text">
-          "To bring everything together—PennyPal was designed from day one to be more than just a digital ledger. It is
-          a dependable, offline-ready companion that genuinely helps students take control of their finances and build
-          healthy habits for life.<br><br>
-          On behalf of team <strong>TechBeast</strong> and <strong>Aptech North Nazimabad Center</strong>, thank you
-          very much for your time and guidance today. We would be delighted to answer any questions you have!"
+          "To conclude, our team built PennyPal strictly following the requirements of the TECHWIZ SRS—from offline budgeting and secure authentication to AI receipt scanning and student utility tools under Section 1.9.<br><br>
+          As students ourselves, we designed PennyPal to be simple, fast, and genuinely helpful in daily campus life. We learned so much during this journey, and we are proud of what we built.<br><br>
+          Thank you so much, respected judges, for your time and guidance today. We are now ready to answer your questions!"
         </div>
         <div class="tip-box">
-          💡 <strong>Speaker Tip:</strong> Close with confidence, maintain eye contact, and leave your screen showing
-          the Student Dashboard as a visual reference for the judges.
+          💡 <strong>Speaker Tip:</strong> Close with confidence, maintain eye contact, and leave your screen showing the Student Dashboard as a visual reference for the judges.
         </div>
       </div>
 
@@ -2014,10 +1967,34 @@
         </ul>
       </div>
 
-      <!-- Card 4: Login -->
+      <!-- Card 4: Welcome & Onboarding -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">4. Login & Authentication</div>
+          <div class="card-title">4. Welcome & Onboarding Screen</div>
+          <span class="card-timing">First Launch</span>
+        </div>
+        <div class="action-badge">👉 Action: Swipe through onboarding slides -> Tap "I already have an account"</div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">First launch</span>
+          <span class="vocab-tag">4 Core Pillars</span>
+          <span class="vocab-tag">Swipeable cards</span>
+          <span class="vocab-tag">Create account</span>
+          <span class="vocab-tag">Have account (Login)</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item">When a student launches PennyPal first time...</li>
+          <li class="short-line-item">They see this clean onboarding flow.</li>
+          <li class="short-line-item">It introduces our four main pillars:</li>
+          <li class="short-line-item">Track spending, stick to budgets, save goals, and learn habits.</li>
+          <li class="short-line-item">New users can tap Create Account.</li>
+          <li class="short-line-item">Or tap 'I already have an account' to reach Login.</li>
+        </ul>
+      </div>
+
+      <!-- Card 5: Login -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">5. Login & Authentication</div>
           <span class="card-timing">Live Demo</span>
         </div>
         <div class="action-badge">👉 Action: Enter email, enter password, tap Sign In</div>
@@ -2036,30 +2013,28 @@
           <div class="card-title">5. Student Dashboard Walkthrough</div>
           <span class="card-timing">Key Screen</span>
         </div>
-        <div class="action-badge">👉 Action: Point to 3 summary cards, central ring, and health score</div>
+        <div class="action-badge">👉 Action: Point to profile avatar & notification bell at top, then Balance hero, cards, and pace ring</div>
         <div class="vocab-tags">
-          <span class="vocab-tag">Net Balance</span>
-          <span class="vocab-tag">Income</span>
-          <span class="vocab-tag">Expenses</span>
-          <span class="vocab-tag">Cash & Cards & EasyPaisa</span>
-          <span class="vocab-tag">Budget Pace Ring</span>
+          <span class="vocab-tag">Profile avatar & bell</span>
+          <span class="vocab-tag">Net Balance Hero</span>
+          <span class="vocab-tag">Income & Expenses</span>
+          <span class="vocab-tag">Cash, Bank, Nayapay</span>
+          <span class="vocab-tag">Central Pace Ring</span>
           <span class="vocab-tag" style="color:var(--accent-green);">Green = Safe</span>
-          <span class="vocab-tag" style="color:var(--accent-amber);">Amber = Warning (80%)</span>
+          <span class="vocab-tag" style="color:var(--accent-amber);">Amber = 80% Warning</span>
           <span class="vocab-tag" style="color:var(--accent-coral);">Red = Over budget</span>
-          <span class="vocab-tag">Health Score (0-100)</span>
           <span class="vocab-tag">Runway Days</span>
         </div>
         <ul class="short-lines">
-          <li class="short-line-item">Right here is the main dashboard.</li>
-          <li class="short-line-item">At the top, we see three summary cards:</li>
-          <li class="short-line-item">Total Income, Monthly Expenses, and Net Balance.</li>
-          <li class="short-line-item">This balance combines cash, bank cards, and EasyPaisa.</li>
-          <li class="short-line-item">In the center is our Budget Ring.</li>
+          <li class="short-line-item">At the top header: profile picture, greeting, and notification bell.</li>
+          <li class="short-line-item">Directly below is our financial command center.</li>
+          <li class="short-line-item">Net Balance hero and summary cards: Income and Expenses.</li>
+          <li class="short-line-item">This balance combines cash, bank cards, and Nayapay.</li>
+          <li class="short-line-item">In the center is our Budget Pace Ring.</li>
           <li class="short-line-item">Green means spending is safe and healthy.</li>
           <li class="short-line-item">Amber is a warning at eighty percent.</li>
           <li class="short-line-item">Red alerts that you are over budget.</li>
-          <li class="short-line-item">Below is the Financial Health Score from 0 to 100.</li>
-          <li class="short-line-item">Next to it, Cash Runway counts down remaining days.</li>
+          <li class="short-line-item">Cash Runway counts down remaining spending days.</li>
         </ul>
       </div>
 
@@ -2213,10 +2188,44 @@
         </div>
         <ul class="short-lines">
           <li class="short-line-item">To wrap up:</li>
-          <li class="short-line-item">PennyPal is a dependable, offline financial companion.</li>
-          <li class="short-line-item">It helps students take control of their money.</li>
+          <li class="short-line-item">We built PennyPal strictly following the TECHWIZ SRS.</li>
+          <li class="short-line-item">It is an offline-first companion tailored for students.</li>
+          <li class="short-line-item">We are proud of what we built.</li>
           <li class="short-line-item">Thank you so much, respected judges.</li>
           <li class="short-line-item">We are now ready for your questions!</li>
+        </ul>
+      </div>
+
+      <!-- Card 14: 1-Line Tech Stack Cheatsheet -->
+      <div class="card" style="border-left: 4px solid var(--primary-light);">
+        <div class="card-header">
+          <div class="card-title">14. 1-Line Tech Stack Cheatsheet (Tools & Technologies Used)</div>
+          <span class="card-timing">Quick Viva Answers</span>
+        </div>
+        <div class="vocab-tags">
+          <span class="vocab-tag">Flutter</span>
+          <span class="vocab-tag">Firebase Auth</span>
+          <span class="vocab-tag">Cloud Firestore</span>
+          <span class="vocab-tag">Cloudinary</span>
+          <span class="vocab-tag">Brevo</span>
+          <span class="vocab-tag">Gemini AI</span>
+          <span class="vocab-tag">Riverpod</span>
+          <span class="vocab-tag">GoRouter</span>
+          <span class="vocab-tag">SharedPreferences</span>
+        </div>
+        <ul class="short-lines">
+          <li class="short-line-item"><strong>Flutter:</strong> Builds our app for mobile, tablet, and web from a single codebase.</li>
+          <li class="short-line-item"><strong>Firebase Auth:</strong> Manages secure student login, signups, and password resets.</li>
+          <li class="short-line-item"><strong>Cloud Firestore:</strong> Our cloud database that automatically caches data for offline use.</li>
+          <li class="short-line-item"><strong>Cloudinary:</strong> Stores and optimizes paper receipt photos and profile pictures in the cloud.</li>
+          <li class="short-line-item"><strong>Brevo (Sendinblue):</strong> Sends automated email verification links and budget alerts.</li>
+          <li class="short-line-item"><strong>Google Gemini AI:</strong> Scans receipts to extract amounts and answers budgeting questions.</li>
+          <li class="short-line-item"><strong>Riverpod 2.0:</strong> Manages app data reactively without unnecessary screen rebuilds.</li>
+          <li class="short-line-item"><strong>GoRouter:</strong> Protects application routes and separates student screens from the admin panel.</li>
+          <li class="short-line-item"><strong>SharedPreferences:</strong> Saves user settings like dark mode and default currency on the phone.</li>
+          <li class="short-line-item"><strong>Flutter Local Notifications:</strong> Triggers instant phone notifications when spending reaches 80% or 100% of budget.</li>
+          <li class="short-line-item"><strong>Pdf & Printing Package:</strong> Generates and prints formatted monthly student spending reports.</li>
+          <li class="short-line-item"><strong>GitHub:</strong> Used by our team for version control, code branches, and collaboration.</li>
         </ul>
       </div>
 
