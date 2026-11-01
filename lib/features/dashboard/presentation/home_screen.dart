@@ -9,6 +9,7 @@ import '../../../core/services/currency_service.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/finance_strings.dart';
 import '../../../core/constants/step5_strings.dart';
+import '../../../core/responsive/web_device_preview_wrapper.dart';
 import '../../../core/theme/app_accents.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
@@ -213,8 +214,6 @@ class _HomeContent extends ConsumerWidget {
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  quickShortcuts,
-                  AppSpacing.vLg,
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -245,6 +244,8 @@ class _HomeContent extends ConsumerWidget {
                       ),
                     ],
                   ),
+                  AppSpacing.vLg,
+                  quickShortcuts,
                 ],
               )
             : Column(
@@ -285,6 +286,9 @@ class _HomeHeader extends ConsumerWidget {
     final t = context.text;
     final unread = ref.watch(unreadNotificationCountProvider);
     final currentUser = ref.watch(authStateProvider).valueOrNull ?? user;
+    final isMobilePreview = ref.watch(webMobileFrameProvider);
+    final isWideViewport = MediaQuery.sizeOf(context).width > 550;
+
     return Row(
       children: [
         UserAvatar(
@@ -307,6 +311,14 @@ class _HomeHeader extends ConsumerWidget {
             ],
           ),
         ),
+        if (isWideViewport || isMobilePreview) ...[
+          _HeaderButton(
+            icon: isMobilePreview ? Icons.laptop_mac_rounded : Icons.phone_iphone_rounded,
+            tooltip: isMobilePreview ? 'Switch to Full Desktop View' : 'Preview Mobile View',
+            onTap: () => ref.read(webMobileFrameProvider.notifier).state = !isMobilePreview,
+          ),
+          AppSpacing.hSm,
+        ],
         _HeaderButton(
           icon: Icons.auto_awesome,
           tooltip: Step5Strings.assistantTitle,
