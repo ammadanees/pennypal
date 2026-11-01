@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/config/dev_tools.dart';
 import '../core/constants/app_strings.dart';
+import '../core/responsive/web_device_preview_wrapper.dart';
 import '../core/services/currency_service.dart';
 import '../core/theme/app_theme.dart';
 import '../core/theme/theme_provider.dart';
@@ -23,7 +24,13 @@ class PennyPalApp extends ConsumerWidget {
       themeMode: ref.watch(themeModeProvider),
       routerConfig: ref.watch(routerProvider),
       locale: devicePreviewEnabled ? DevicePreview.locale(context) : null,
-      builder: devicePreviewEnabled ? DevicePreview.appBuilder : null,
+      builder: (context, child) {
+        Widget content = child ?? const SizedBox.shrink();
+        if (devicePreviewEnabled) {
+          content = DevicePreview.appBuilder(context, content);
+        }
+        return WebDevicePreviewWrapper(child: content);
+      },
     );
   }
 }

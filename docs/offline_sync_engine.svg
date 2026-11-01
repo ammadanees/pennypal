@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <filter id="lightShadow3" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Clean Light Canvas -->
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+
+  <!-- Top Accent Bar -->
+  <rect x="0" y="0" width="1280" height="6" fill="#EA580C"/>
+
+  <!-- Header -->
+  <g transform="translate(80, 50)">
+    <rect x="0" y="0" width="165" height="24" rx="12" fill="#FFEDD5" stroke="#FED7AA" stroke-width="1"/>
+    <text x="82" y="16" fill="#C2410C" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">STAR VIVA FEATURE</text>
+    
+    <text x="0" y="52" fill="#0F172A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800">PennyPal — Offline Engine &amp; Background Sync Flow</text>
+    <text x="0" y="74" fill="#475569" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="500">SRS Section 1.5 Compliance: Zero internet dropouts, instant local saves, and cloud sync</text>
+  </g>
+
+  <!-- STEP 1 -->
+  <g transform="translate(80, 160)" filter="url(#lightShadow3)">
+    <rect width="260" height="360" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <rect x="0" y="0" width="260" height="55" rx="16" fill="#EEF2FF"/>
+    <text x="30" y="34" fill="#4338CA" font-family="sans-serif" font-size="13" font-weight="800">STEP 1</text>
+    <text x="130" y="34" fill="#4F46E5" font-family="sans-serif" font-size="12" font-weight="600">User Action</text>
+
+    <!-- Subtitle -->
+    <text x="130" y="95" fill="#4F46E5" font-family="sans-serif" font-size="32" text-anchor="middle">📱</text>
+    <text x="130" y="130" fill="#0F172A" font-family="sans-serif" font-size="17" font-weight="700" text-anchor="middle">Log Transaction</text>
+    <text x="130" y="152" fill="#4F46E5" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">AIRPLANE MODE / NO WI-FI</text>
+
+    <!-- Details Box -->
+    <rect x="18" y="175" width="224" height="165" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="30" y="208" fill="#334155" font-family="sans-serif" font-size="12">• Campus Basement / Canteen</text>
+    <text x="30" y="238" fill="#334155" font-family="sans-serif" font-size="12">• $15 Lunch expense entered</text>
+    <text x="30" y="268" fill="#334155" font-family="sans-serif" font-size="12">• User taps "Save" button</text>
+    <text x="30" y="298" fill="#4338CA" font-family="sans-serif" font-size="12" font-weight="700">• Zero connection needed</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <g transform="translate(350, 320)">
+    <line x1="0" y1="0" x2="30" y2="0" stroke="#4F46E5" stroke-width="3"/>
+    <polygon points="30,-6 40,0 30,6" fill="#4F46E5"/>
+  </g>
+
+  <!-- STEP 2 -->
+  <g transform="translate(390, 160)" filter="url(#lightShadow3)">
+    <rect width="260" height="360" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <rect x="0" y="0" width="260" height="55" rx="16" fill="#FFEDD5"/>
+    <text x="30" y="34" fill="#C2410C" font-family="sans-serif" font-size="13" font-weight="800">STEP 2</text>
+    <text x="130" y="34" fill="#EA580C" font-family="sans-serif" font-size="12" font-weight="600">Local Cache</text>
+
+    <!-- Subtitle -->
+    <text x="130" y="95" fill="#EA580C" font-family="sans-serif" font-size="32" text-anchor="middle">💾</text>
+    <text x="130" y="130" fill="#0F172A" font-family="sans-serif" font-size="17" font-weight="700" text-anchor="middle">Firestore Persistence</text>
+    <text x="130" y="152" fill="#EA580C" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">0ms LATENCY (NO SPINNER)</text>
+
+    <!-- Details Box -->
+    <rect x="18" y="175" width="224" height="165" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="30" y="208" fill="#334155" font-family="sans-serif" font-size="12">• Writes to local device cache</text>
+    <text x="30" y="238" fill="#334155" font-family="sans-serif" font-size="12">• `persistenceEnabled: true`</text>
+    <text x="30" y="268" fill="#334155" font-family="sans-serif" font-size="12">• Unlimited local storage</text>
+    <text x="30" y="298" fill="#C2410C" font-family="sans-serif" font-size="12" font-weight="700">• Optimistic instant commit</text>
+  </g>
+
+  <!-- Arrow 2 -->
+  <g transform="translate(660, 320)">
+    <line x1="0" y1="0" x2="30" y2="0" stroke="#EA580C" stroke-width="3"/>
+    <polygon points="30,-6 40,0 30,6" fill="#EA580C"/>
+  </g>
+
+  <!-- STEP 3 -->
+  <g transform="translate(700, 160)" filter="url(#lightShadow3)">
+    <rect width="260" height="360" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <rect x="0" y="0" width="260" height="55" rx="16" fill="#ECFDF5"/>
+    <text x="30" y="34" fill="#047857" font-family="sans-serif" font-size="13" font-weight="800">STEP 3</text>
+    <text x="130" y="34" fill="#059669" font-family="sans-serif" font-size="12" font-weight="600">Reactive UI</text>
+
+    <!-- Subtitle -->
+    <text x="130" y="95" fill="#059669" font-family="sans-serif" font-size="32" text-anchor="middle">⚡</text>
+    <text x="130" y="130" fill="#0F172A" font-family="sans-serif" font-size="17" font-weight="700" text-anchor="middle">Real-Time Refresh</text>
+    <text x="130" y="152" fill="#059669" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">RIVERPOD NOTIFIERS</text>
+
+    <!-- Details Box -->
+    <rect x="18" y="175" width="224" height="165" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="30" y="208" fill="#334155" font-family="sans-serif" font-size="12">• Budget Pace Ring updates</text>
+    <text x="30" y="238" fill="#334155" font-family="sans-serif" font-size="12">• Runway Days recalculated</text>
+    <text x="30" y="268" fill="#334155" font-family="sans-serif" font-size="12">• Cash / Wallet chips refresh</text>
+    <text x="30" y="298" fill="#047857" font-family="sans-serif" font-size="12" font-weight="700">• Student sees new numbers</text>
+  </g>
+
+  <!-- Arrow 3 -->
+  <g transform="translate(970, 320)">
+    <line x1="0" y1="0" x2="30" y2="0" stroke="#059669" stroke-width="3"/>
+    <polygon points="30,-6 40,0 30,6" fill="#059669"/>
+  </g>
+
+  <!-- STEP 4 -->
+  <g transform="translate(1010, 160)" filter="url(#lightShadow3)">
+    <rect width="190" height="360" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <rect x="0" y="0" width="190" height="55" rx="16" fill="#E0F2FE"/>
+    <text x="25" y="34" fill="#0369A1" font-family="sans-serif" font-size="13" font-weight="800">STEP 4</text>
+    <text x="95" y="34" fill="#0284C7" font-family="sans-serif" font-size="11" font-weight="600">Cloud Sync</text>
+
+    <!-- Subtitle -->
+    <text x="95" y="95" fill="#0284C7" font-family="sans-serif" font-size="32" text-anchor="middle">☁️</text>
+    <text x="95" y="130" fill="#0F172A" font-family="sans-serif" font-size="16" font-weight="700" text-anchor="middle">Auto-Sync</text>
+    <text x="95" y="152" fill="#0284C7" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle">ON WI-FI RESTORE</text>
+
+    <!-- Details Box -->
+    <rect x="14" y="175" width="162" height="165" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="22" y="208" fill="#334155" font-family="sans-serif" font-size="11">• Wi-Fi reconnects</text>
+    <text x="22" y="238" fill="#334155" font-family="sans-serif" font-size="11">• Silent background push</text>
+    <text x="22" y="268" fill="#334155" font-family="sans-serif" font-size="11">• Zero data conflicts</text>
+    <text x="22" y="298" fill="#0369A1" font-family="sans-serif" font-size="11" font-weight="700">• Backed up to cloud</text>
+  </g>
+
+  <!-- Bottom Callout -->
+  <g transform="translate(80, 560)">
+    <rect width="1120" height="65" rx="12" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="560" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+      Why this is critical for students:
+    </text>
+    <text x="560" y="48" fill="#64748B" font-family="sans-serif" font-size="12" text-anchor="middle">
+      Traditional banking apps lock up with no internet. PennyPal lets students log anywhere on campus, and syncs automatically without user intervention.
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <filter id="lightShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+    <marker id="arrowDown" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#4F46E5"/>
+    </marker>
+    <marker id="arrowDownGreen" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <!-- Clean Light Canvas -->
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+
+  <!-- Top Decorative Header Bar -->
+  <rect x="0" y="0" width="1280" height="6" fill="#4F46E5"/>
+
+  <!-- Header Title -->
+  <g transform="translate(100, 50)">
+    <rect x="0" y="0" width="135" height="24" rx="12" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1"/>
+    <text x="67" y="16" fill="#4338CA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">CLEAN ARCHITECTURE</text>
+    
+    <text x="0" y="52" fill="#0F172A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800">PennyPal — 3-Layer Feature Architecture</text>
+    <text x="0" y="74" fill="#475569" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="500">Separation of Concerns: Presentation → Domain → Data (Directly matching our codebase)</text>
+  </g>
+
+  <!-- ==================== TIER 1: PRESENTATION LAYER ==================== -->
+  <g transform="translate(100, 145)" filter="url(#lightShadow)">
+    <rect width="1080" height="130" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <!-- Left Accent Strip -->
+    <rect x="0" y="0" width="8" height="130" rx="4" fill="#4F46E5"/>
+    
+    <g transform="translate(30, 24)">
+      <!-- Tier Label -->
+      <text x="0" y="20" fill="#4F46E5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="1">TIER 1 • USER INTERFACE</text>
+      <text x="0" y="48" fill="#0F172A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="800">Presentation Layer</text>
+      <text x="0" y="72" fill="#64748B" font-family="'JetBrains Mono', Consolas, monospace" font-size="12" font-weight="600">lib/features/*/presentation/</text>
+
+      <!-- Clean Feature Pills on Right -->
+      <g transform="translate(420, 5)">
+        <!-- Pill 1 -->
+        <rect x="0" y="0" width="185" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">UI Screens &amp; Views</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">HomeScreen, Budgets,</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">Savings, Activity Feed</text>
+
+        <!-- Pill 2 -->
+        <rect x="200" y="0" width="195" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">Riverpod UI Consumers</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">ConsumerStatefulWidgets,</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">Instant Reactive Rebuilds</text>
+
+        <!-- Pill 3 -->
+        <rect x="410" y="0" width="195" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">Modals &amp; User Inputs</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">Add Expense Bottom Sheet,</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">1-Tap Quick Copy Actions</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Connector Line 1 -->
+  <g transform="translate(640, 275)">
+    <line x1="0" y1="0" x2="0" y2="45" stroke="#4F46E5" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrowDown)"/>
+    <rect x="-85" y="12" width="170" height="22" rx="11" fill="#EEF2FF" stroke="#C7D2FE"/>
+    <text x="0" y="27" fill="#4338CA" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Watches &amp; Dispatches</text>
+  </g>
+
+  <!-- ==================== TIER 2: DOMAIN LAYER ==================== -->
+  <g transform="translate(100, 325)" filter="url(#lightShadow)">
+    <rect width="1080" height="130" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <!-- Left Accent Strip -->
+    <rect x="0" y="0" width="8" height="130" rx="4" fill="#059669"/>
+    
+    <g transform="translate(30, 24)">
+      <!-- Tier Label -->
+      <text x="0" y="20" fill="#059669" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="1">TIER 2 • BUSINESS LOGIC</text>
+      <text x="0" y="48" fill="#0F172A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="800">Domain Layer</text>
+      <text x="0" y="72" fill="#64748B" font-family="'JetBrains Mono', Consolas, monospace" font-size="12" font-weight="600">lib/features/*/domain/</text>
+
+      <!-- Clean Feature Pills on Right -->
+      <g transform="translate(420, 5)">
+        <!-- Pill 1 -->
+        <rect x="0" y="0" width="185" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">Pure Entities</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">Transaction, Budget,</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">SavingsGoal, AppUser</text>
+
+        <!-- Pill 2 -->
+        <rect x="200" y="0" width="195" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">Financial Calculators</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">Budget Pace (Green/Red),</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">Runway Days, Health Score</text>
+
+        <!-- Pill 3 -->
+        <rect x="410" y="0" width="195" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">Zero UI Dependencies</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">Pure Dart Logic,</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">Verified by 73 Unit Tests</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Connector Line 2 -->
+  <g transform="translate(640, 455)">
+    <line x1="0" y1="0" x2="0" y2="45" stroke="#059669" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrowDownGreen)"/>
+    <rect x="-85" y="12" width="170" height="22" rx="11" fill="#ECFDF5" stroke="#A7F3D0"/>
+    <text x="0" y="27" fill="#047857" font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">Persists &amp; Retrieves</text>
+  </g>
+
+  <!-- ==================== TIER 3: DATA LAYER ==================== -->
+  <g transform="translate(100, 505)" filter="url(#lightShadow)">
+    <rect width="1080" height="130" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <!-- Left Accent Strip -->
+    <rect x="0" y="0" width="8" height="130" rx="4" fill="#D97706"/>
+    
+    <g transform="translate(30, 24)">
+      <!-- Tier Label -->
+      <text x="0" y="20" fill="#D97706" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="1">TIER 3 • REPOSITORIES &amp; SERVICES</text>
+      <text x="0" y="48" fill="#0F172A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="800">Data Layer</text>
+      <text x="0" y="72" fill="#64748B" font-family="'JetBrains Mono', Consolas, monospace" font-size="12" font-weight="600">lib/features/*/data/ &amp; lib/data/</text>
+
+      <!-- Clean Feature Pills on Right -->
+      <g transform="translate(420, 5)">
+        <!-- Pill 1 -->
+        <rect x="0" y="0" width="185" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">Repositories</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">FirebaseAuthRepository,</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">RecordStore Abstraction</text>
+
+        <!-- Pill 2 -->
+        <rect x="200" y="0" width="195" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">Offline Cache Store</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">Firestore SQLite Cache,</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">Local Memory Fallback</text>
+
+        <!-- Pill 3 -->
+        <rect x="410" y="0" width="195" height="75" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="16" y="28" fill="#0F172A" font-family="sans-serif" font-size="13" font-weight="700">External Cloud Services</text>
+        <text x="16" y="48" fill="#64748B" font-family="sans-serif" font-size="11.5">Gemini Vision OCR API,</text>
+        <text x="16" y="64" fill="#64748B" font-family="sans-serif" font-size="11.5">Cloudinary Media, Brevo Mail</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Explanatory Caption -->
+  <g transform="translate(100, 665)">
+    <text x="540" y="15" fill="#64748B" font-family="sans-serif" font-size="12" font-weight="500" text-anchor="middle">
+      Benefit for TechWiz: Presentation changes never break financial calculation formulas; and replacing a database service never alters the UI widgets.
+    </text>
+  </g>
+</svg>
