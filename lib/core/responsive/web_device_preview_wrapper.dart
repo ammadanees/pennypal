@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../theme/app_colors.dart';
-
 /// State provider to toggle between Full Desktop and Mobile Frame view on Web.
 /// Automatically detects `?device=mobile` or `?mode=mobile` in the URL right on initial load!
 final webMobileFrameProvider = StateProvider<bool>((ref) {
@@ -174,7 +172,7 @@ class WebDevicePreviewWrapper extends ConsumerWidget {
               elevation: 12,
               shadowColor: Colors.black.withOpacity(0.35),
               borderRadius: BorderRadius.circular(30),
-              color: isMobileMode ? AppColors.indigo : (isDark ? const Color(0xFF1E293B) : Colors.white),
+              color: isMobileMode ? const Color(0xFF4F46E5) : (isDark ? const Color(0xFF1E293B) : Colors.white),
               child: InkWell(
                 borderRadius: BorderRadius.circular(30),
                 onTap: () {
@@ -185,7 +183,7 @@ class WebDevicePreviewWrapper extends ConsumerWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(
-                      color: isMobileMode ? AppColors.indigo : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                      color: isMobileMode ? const Color(0xFF4F46E5) : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
                       width: 1.5,
                     ),
                   ),

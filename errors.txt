@@ -1,304 +1,100 @@
-C:\flutterprojects\pennypal>flutter run -d chrome
-Launching lib\main.dart on Chrome in debug mode...
-Waiting for connection from debug service on Chrome...             49.7s
+The Netlify deploy errored, with the following guidance provided:
 
-Flutter run key commands.
-r Hot reload.
-R Hot restart.
-h List all available interactive commands.
-d Detach (terminate "flutter run" but leave application running).
-c Clear the screen
-q Quit (terminate the application on the device).
+The build fails because `AppColors.indigo` is not a valid member of the `AppColors` class.
 
-This app is linked to the debug service: ws://127.0.0.1:64882/m0m1sQALtCQ=/ws
-Debug service listening on ws://127.0.0.1:64882/m0m1sQALtCQ=/ws
-A Dart VM Service on Chrome is available at: http://127.0.0.1:64882/m0m1sQALtCQ=
-The Flutter DevTools debugger and profiler on Chrome is available at:
-http://127.0.0.1:64882/m0m1sQALtCQ=/devtools/?uri=ws://127.0.0.1:64882/m0m1sQALtCQ=/ws
-Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.
-══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞═════════════════════════════════════════════════════════
-The following assertion was thrown during a scheduler callback:
-There are multiple heroes that share the same tag within a subtree.
-Within each subtree for which heroes are to be animated (i.e. a PageRoute subtree), each Hero must
-have a unique non-null tag.
-In this case, multiple heroes had the following tag: <default FloatingActionButton tag>
-├# Here is the subtree for one of the offending heroes: Hero
+The errors at [lines 322-329](#L322-L329) show that the Dart compiler cannot find a member named `indigo` on `AppColors` when compiling [`lib/core/responsive/web_device_preview_wrapper.dart`](https://github.com/ammadanees/pennypal/blob/main/lib/core/responsive/web_device_preview_wrapper.dart).
 
-When the exception was thrown, this was the stack:
-dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 274:3       throw_
-package:flutter/src/widgets/heroes.dart 277:11                                    <fn>
-package:flutter/src/widgets/heroes.dart 292:16                                    inviteHero
-package:flutter/src/widgets/heroes.dart 320:13                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7228:9                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7228:9                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7228:9                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7228:9                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7228:9                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7228:9                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 5874:7                                 visitChildren
-package:flutter/src/widgets/heroes.dart 326:14                                    visitor
-package:flutter/src/widgets/framework.dart 7104:7                                 visitChildren
-package:flutter/src/widgets/framework.dart 3934:5                                 visitChildElements
-package:flutter/src/widgets/heroes.dart 329:12                                    _allHeroesFor
-package:flutter/src/widgets/heroes.dart 991:16                                    [_startHeroTransition]
-package:flutter/src/widgets/heroes.dart 947:9                                     <fn>
-package:flutter/src/scheduler/binding.dart 1434:7                                 [_invokeFrameCallback]
-package:flutter/src/scheduler/binding.dart 1361:11                                handleDrawFrame
-package:flutter/src/scheduler/binding.dart 1200:5                                 [_handleDrawFrame]
-dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77  tear
-lib/_engine/engine/platform_dispatcher.dart 1538:5                                invoke
-lib/_engine/engine/platform_dispatcher.dart 265:5                                 invokeOnDrawFrame
-lib/_engine/engine/frame_service.dart 209:32                                      [_renderFrame]
-lib/_engine/engine/frame_service.dart 117:9                                       <fn>
-dart-sdk/lib/async/zone.dart 1849:54                                              runUnary
-dart-sdk/lib/async/zone.dart 1804:26                                              <fn>
-dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 224:27    _callDartFunctionFast1
-════════════════════════════════════════════════════════════════════════════════════════════════════
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
-Another exception was thrown: There are multiple heroes that share the same tag within a subtree.
+**Solution:**
+
+1. Open your `AppColors` class (likely in `lib/core/constants/app_colors.dart` or similar) and check if `indigo` is defined. It may be missing, misspelled, or was recently removed.
+
+2. Either add the missing color to your `AppColors` class:
+
+```dart
+static const Color indigo = Color(0xFF3949AB); // replace with your desired value
+```
+
+3. Or, if `indigo` was meant to reference `Colors.indigo` from Flutter's Material library, update the references in `web_device_preview_wrapper.dart` at lines 177 and 188 accordingly:
+
+```dart
+// Replace AppColors.indigo with Colors.indigo
+color: isMobileMode ? Colors.indigo : (isDark ? const Color(0xFF1E293B) : Colors.white),
+```
+
+After making the fix, commit and push the change to trigger a new build.
+
+The relevant error logs are:
+
+Line 307: > test_api 0.7.12 (was 0.7.7) (0.7.15 available)
+Line 308:   timezone 0.11.1 (0.11.2 available)
+Line 309: > vector_math 2.4.4 (was 2.2.0)
+Line 310:   vm_service 15.3.0 (15.4.0 available)
+Line 311:   web 1.1.1 (1.1.2 available)
+Line 312:   xml 6.6.1 (7.1.0 available)
+Line 313: Changed 7 dependencies!
+Line 314: 57 packages have newer versions incompatible with dependency constraints.
+Line 315: Try `flutter pub outdated` for more information.
+Line 316: Upgrading analysis_options.yaml to exclude build and platform directories.
+Line 317: Failed during stage 'building site': Build script returned non-zero exit code: 2
+Line 318: Compiling lib/main.dart for the Web...
+Line 319: Wasm dry run succeeded. Consider building and testing your application with the `--wasm` flag. See docs for more info: https://d
+Line 320: Use --no-wasm-dry-run to disable these warnings.
+Line 321: Target dart2js failed: ProcessException: Process exited abnormally with exit code 1:
+Line 322: lib/core/responsive/web_device_preview_wrapper.dart:177:47:
+Line 323: Error: Member not found: 'indigo'.
+Line 324:               color: isMobileMode ? AppColors.indigo : (isDark ? const Color(0xFF1E293B) : Colors.white),
+Line 325:                                               ^^^^^^
+Line 326: lib/core/responsive/web_device_preview_wrapper.dart:188:55:
+Line 327: Error: Member not found: 'indigo'.
+Line 328:                       color: isMobileMode ? AppColors.indigo : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+Line 329:                                                       ^^^^^^
+Line 330: Error: Compilation failed.
+Line 331:   Command: /opt/buildhome/flutter/bin/cache/dart-sdk/bin/dart compile js --platform-binaries=/opt/buildhome/flutter/bin/cache/fl
+Line 332: #0      RunResult.throwException (package:flutter_tools/src/base/process.dart:153:5)
+Line 333: #1      _DefaultProcessUtils.run (package:flutter_tools/src/base/process.dart:379:19)
+Line 334: <asynchronous suspension>
+Line 335: #2      Dart2JSTarget.build (package:flutter_tools/src/build_system/targets/web.dart:222:5)
+Line 336: <asynchronous suspension>
+Line 337: #3      _BuildInstance._invokeInternal (package:flutter_tools/src/build_system/build_system.dart:937:9)
+Line 338: <asynchronous suspension>
+Line 339: #4      Future.wait.<anonymous closure> (dart:async/future.dart:567:21)
+Line 340: <asynchronous suspension>
+Line 341: #5      _BuildInstance.invokeTarget (package:flutter_tools/src/build_system/build_system.dart:875:32)
+Line 342: <asynchronous suspension>
+Line 368: <asynchronous suspension>
+Line 369: #19     FlutterCommandRunner.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:307:33)
+Line 370: <asynchronous suspension>
+Line 371: #20     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:104:11)
+Line 372: <asynchronous suspension>
+Line 373: #21     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+Line 374: <asynchronous suspension>
+Line 375: #22     main (package:flutter_tools/executable.dart:103:3)
+Line 376: <asynchronous suspension>
+Line 377: Compiling lib/main.dart for the Web...                             61.1s
+Line 378: Error: Failed to compile application for the Web.
+Line 379: ​
+Line 380: "build.command" failed                                        
+Line 381: ────────────────────────────────────────────────────────────────
+Line 382: ​
+Line 383:   Error message
+Line 384:   Command failed with exit code 1: flutter build web --release
+Line 385: ​
+Line 386:   Error location
+Line 387:   In Build command from Netlify app:
+Line 388:   flutter build web --release
+Line 389: ​
+Line 390:   Resolved config
+Line 391:   build:
+Line 392:     base: /opt/build/repo
+Line 393:     command: flutter build web --release
+Line 394:     commandOrigin: ui
+Line 395:     publish: /opt/build/repo/build/web
+Line 396:     publishOrigin: ui
+Line 397:   functionsDirectory: /opt/build/repo/netlify/functions
+Line 398:   plugins:
+Line 399:     - inputs: {}
+Line 400:       origin: ui
+Line 401:       package: netlify-plugin-flutter
+Line 402: Build failed due to a user error: Build script returned non-zero exit code: 2
+Line 403: Failing build: Failed to build site
+Line 404: Finished processing build request in 2m53.311s
