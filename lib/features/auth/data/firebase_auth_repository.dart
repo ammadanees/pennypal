@@ -150,6 +150,7 @@ class FirebaseAuthRepository implements AuthRepository {
       isEmailVerified: isVerified,
       studentStatus: (data['studentStatus'] as String?) ?? 'Full-time',
       notificationsEnabled: (data['notificationsEnabled'] as bool?) ?? true,
+      currency: (data['currency'] as String?) ?? (data['currencySymbol'] as String?),
     );
   }
 

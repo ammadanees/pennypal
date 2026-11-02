@@ -49,6 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier<int>(0);
   ref.listen<AsyncValue<AppUser?>>(
       authStateProvider, (_, __) => refresh.value++);
+  ref.listen<bool>(splashCompleteProvider, (_, __) => refresh.value++);
   ref.onDispose(refresh.dispose);
 
   return GoRouter(
@@ -245,6 +246,8 @@ final routerProvider = Provider<GoRouter>((ref) {
 });
 
 String? _redirect(Ref ref, String location) {
+  final splashDone = ref.read(splashCompleteProvider);
+  if (!splashDone) return AppRoutes.splash;
   if (location == AppRoutes.splash) return null;
 
   final auth = ref.read(authStateProvider);

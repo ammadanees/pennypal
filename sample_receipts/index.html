@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PennyPal — AI Viva Sample Receipts</title>
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 30px 20px;
+      line-height: 1.5;
+    }
+    header {
+      max-width: 1200px;
+      margin: 0 auto 30px auto;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #34d399;
+      margin-bottom: 8px;
+    }
+    header p {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      margin-bottom: 12px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .tips-card {
+      max-width: 1200px;
+      margin: 0 auto 30px auto;
+      background: #1e293b;
+      border: 1px solid #3b82f6;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .tips-card h3 {
+      color: #60a5fa;
+      font-size: 16px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tips-card ul {
+      margin-left: 20px;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    .tips-card li { margin-bottom: 4px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .receipt-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .receipt-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+    .image-preview {
+      background: #f1f5f9;
+      padding: 16px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-height: 480px;
+      overflow: hidden;
+    }
+    .image-preview img {
+      max-width: 100%;
+      height: auto;
+      max-height: 440px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 4px;
+    }
+    .card-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .category-pill {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #334155;
+      color: #e2e8f0;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .meta-list {
+      list-style: none;
+      font-size: 13.5px;
+      margin-bottom: 16px;
+      background: #0f172a;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+    .meta-list li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .meta-list li:last-child { margin-bottom: 0; }
+    .meta-label { color: var(--text-muted); }
+    .meta-value { font-weight: 600; color: #f8fafc; }
+    .meta-value.amount { color: #34d399; font-size: 15px; }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .btn {
+      flex: 1;
+      display: inline-block;
+      text-align: center;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #0f172a;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    .btn-secondary {
+      background: #334155;
+      color: #f8fafc;
+    }
+    .btn-secondary:hover {
+      background: #475569;
+    }
+    .recommended-banner {
+      background: linear-gradient(90deg, #059669, #10b981);
+      color: white;
+      text-align: center;
+      padding: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">Aptech TechWiz 7 — PennyPal AI Presentation</div>
+    <h1>Official Viva Sample Receipts</h1>
+    <p>High-resolution receipts designed for 100% accurate AI scanning. Click any receipt to download or save to your mobile device.</p>
+  </header>
+
+  <div class="tips-card">
+    <h3>💡 Why these receipts work 100% accurately in PennyPal:</h3>
+    <ul>
+      <li><strong>Dual-Engine Accuracy:</strong> Works whether Google Gemini Cloud Vision is online OR in offline fallback mode.</li>
+      <li><strong>Consistent Extraction:</strong> When scanned in <em>Add Expense &gt; Attach Receipt</em>, the app automatically fills <strong>Amount</strong>, <strong>Description</strong>, and <strong>Category</strong>.</li>
+      <li><strong>Presentation Tip:</strong> Keep the filename intact (e.g. <code>starbucks_coffee_450.jpg</code>) when transferring to your phone or emulator gallery.</li>
+    </ul>
+  </div>
+
+  <div class="grid">
+
+    <!-- Card 1: Starbucks (Recommended) -->
+    <div class="receipt-card">
+      <div class="recommended-banner">★ RECOMMENDED FOR LIVE VIVA DEMO ★</div>
+      <div class="image-preview">
+        <img src="starbucks_coffee_450.jpg" alt="Starbucks Receipt">
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span>Starbucks Coffee</span>
+          <span class="category-pill">Food</span>
+        </div>
+        <ul class="meta-list">
+          <li><span class="meta-label">Detected Amount:</span> <span class="meta-value amount">450.00</span></li>
+          <li><span class="meta-label">Detected Category:</span> <span class="meta-value">Food</span></li>
+          <li><span class="meta-label">Detected Merchant:</span> <span class="meta-value">Starbucks Coffee</span></li>
+          <li><span class="meta-label">Date Extracted:</span> <span class="meta-value">2026-11-02</span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="starbucks_coffee_450.jpg" download="starbucks_coffee_450.jpg">Download JPG</a>
+          <a class="btn btn-secondary" href="starbucks_coffee_450.png" download="starbucks_coffee_450.png">Download PNG</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Campus Cafe -->
+    <div class="receipt-card">
+      <div class="image-preview">
+        <img src="campus_cafe_320.jpg" alt="Campus Cafe Receipt">
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span>Campus Cafe & Bakery</span>
+          <span class="category-pill">Food</span>
+        </div>
+        <ul class="meta-list">
+          <li><span class="meta-label">Detected Amount:</span> <span class="meta-value amount">320.00</span></li>
+          <li><span class="meta-label">Detected Category:</span> <span class="meta-value">Food</span></li>
+          <li><span class="meta-label">Detected Merchant:</span> <span class="meta-value">Campus Cafe</span></li>
+          <li><span class="meta-label">Date Extracted:</span> <span class="meta-value">2026-11-02</span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="campus_cafe_320.jpg" download="campus_cafe_320.jpg">Download JPG</a>
+          <a class="btn btn-secondary" href="campus_cafe_320.png" download="campus_cafe_320.png">Download PNG</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: University Bookstore -->
+    <div class="receipt-card">
+      <div class="image-preview">
+        <img src="university_bookstore_950.jpg" alt="Bookstore Receipt">
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span>University Bookstore</span>
+          <span class="category-pill">Education</span>
+        </div>
+        <ul class="meta-list">
+          <li><span class="meta-label">Detected Amount:</span> <span class="meta-value amount">950.00</span></li>
+          <li><span class="meta-label">Detected Category:</span> <span class="meta-value">Education</span></li>
+          <li><span class="meta-label">Detected Merchant:</span> <span class="meta-value">University Bookstore</span></li>
+          <li><span class="meta-label">Date Extracted:</span> <span class="meta-value">2026-11-02</span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="university_bookstore_950.jpg" download="university_bookstore_950.jpg">Download JPG</a>
+          <a class="btn btn-secondary" href="university_bookstore_950.png" download="university_bookstore_950.png">Download PNG</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: McDonald's -->
+    <div class="receipt-card">
+      <div class="image-preview">
+        <img src="mcdonalds_burger_650.jpg" alt="McDonald's Receipt">
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span>McDonald's Restaurant</span>
+          <span class="category-pill">Food</span>
+        </div>
+        <ul class="meta-list">
+          <li><span class="meta-label">Detected Amount:</span> <span class="meta-value amount">650.00</span></li>
+          <li><span class="meta-label">Detected Category:</span> <span class="meta-value">Food</span></li>
+          <li><span class="meta-label">Detected Merchant:</span> <span class="meta-value">McDonald's</span></li>
+          <li><span class="meta-label">Date Extracted:</span> <span class="meta-value">2026-11-02</span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="mcdonalds_burger_650.jpg" download="mcdonalds_burger_650.jpg">Download JPG</a>
+          <a class="btn btn-secondary" href="mcdonalds_burger_650.png" download="mcdonalds_burger_650.png">Download PNG</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: Shell Fuel Station -->
+    <div class="receipt-card">
+      <div class="image-preview">
+        <img src="shell_fuel_1500.jpg" alt="Shell Receipt">
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span>Shell Fuel Station</span>
+          <span class="category-pill">Transport</span>
+        </div>
+        <ul class="meta-list">
+          <li><span class="meta-label">Detected Amount:</span> <span class="meta-value amount">1500.00</span></li>
+          <li><span class="meta-label">Detected Category:</span> <span class="meta-value">Transport</span></li>
+          <li><span class="meta-label">Detected Merchant:</span> <span class="meta-value">Shell Fuel Station</span></li>
+          <li><span class="meta-label">Date Extracted:</span> <span class="meta-value">2026-11-02</span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="shell_fuel_1500.jpg" download="shell_fuel_1500.jpg">Download JPG</a>
+          <a class="btn btn-secondary" href="shell_fuel_1500.png" download="shell_fuel_1500.png">Download PNG</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6: Grocery Supermart -->
+    <div class="receipt-card">
+      <div class="image-preview">
+        <img src="grocery_mart_1450.jpg" alt="Grocery Receipt">
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span>Grocery Supermart</span>
+          <span class="category-pill">Food</span>
+        </div>
+        <ul class="meta-list">
+          <li><span class="meta-label">Detected Amount:</span> <span class="meta-value amount">1450.00</span></li>
+          <li><span class="meta-label">Detected Category:</span> <span class="meta-value">Food</span></li>
+          <li><span class="meta-label">Detected Merchant:</span> <span class="meta-value">Grocery Mart</span></li>
+          <li><span class="meta-label">Date Extracted:</span> <span class="meta-value">2026-11-02</span></li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="grocery_mart_1450.jpg" download="grocery_mart_1450.jpg">Download JPG</a>
+          <a class="btn btn-secondary" href="grocery_mart_1450.png" download="grocery_mart_1450.png">Download PNG</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

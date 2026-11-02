@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,9 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../shared/widgets/hex_pattern.dart';
 import '../../auth/data/auth_providers.dart';
 
+/// Provider to ensure the router never navigates away from splash until presentation timer is done.
+final splashCompleteProvider = StateProvider<bool>((ref) => false);
+
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
@@ -23,7 +27,6 @@ class SplashScreen extends ConsumerStatefulWidget {
 class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   static const _duration = Duration(milliseconds: 3400);
-  static const _holdAfter = Duration(milliseconds: 400);
   static const _authTimeout = Duration(seconds: 4);
 
   static const _grid = Interval(0.0, 0.6, curve: Curves.easeOutCubic);
@@ -46,6 +49,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       AnimationController(vsync: this, duration: _duration);
 
   AppColors get _brand => AppColors.light;
+  bool _navigated = false;
+
+  void _navigateNext() {
+    if (_navigated || !mounted) return;
+    _navigated = true;
+    ref.read(splashCompleteProvider.notifier).state = true;
+    context.go(AppRoutes.welcome);
+  }
 
   @override
   void initState() {
@@ -54,22 +65,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _run() async {
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final stopwatch = Stopwatch()..start();
     final authReady = _authReady();
 
-    if (reduceMotion) {
-      _controller.value = 1;
-      await Future.wait<Object?>([
-        authReady,
-        Future<void>.delayed(const Duration(milliseconds: 600)),
-      ]);
-    } else {
-      await Future.wait<Object?>([_controller.forward(), authReady]);
-      await Future<void>.delayed(_holdAfter);
-    }
-    if (!mounted) return;
+    try {
+      _controller.forward();
+    } catch (_) {}
 
-    context.go(AppRoutes.welcome);
+    await authReady;
+
+    // Guaranteed minimum display time for presentation / viva:
+    // 4.5 seconds in debug mode so you can comfortably present the logo and tagline.
+    const minDuration = kDebugMode
+        ? Duration(milliseconds: 4500)
+        : Duration(milliseconds: 3200);
+
+    final elapsed = stopwatch.elapsed;
+    if (elapsed < minDuration) {
+      await Future.delayed(minDuration - elapsed);
+    }
+
+    _navigateNext();
   }
 
   Future<Object?> _authReady() async {
@@ -91,58 +107,62 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     final brand = _brand;
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        backgroundColor: brand.primary,
-        body: Semantics(
-          label: '${AppStrings.appName}. ${AppStrings.tagline}.',
-          excludeSemantics: true,
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, _) {
-              final v = _controller.value;
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  CustomPaint(
-                    painter: HexPatternPainter(
-                      color: brand.onPrimary,
-                      opacity: 0.10,
-                      reveal: _grid.transform(v),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _navigateNext(),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: Scaffold(
+          backgroundColor: brand.primary,
+          body: Semantics(
+            label: '${AppStrings.appName}. ${AppStrings.tagline}.',
+            excludeSemantics: true,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                final v = _controller.value;
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CustomPaint(
+                      painter: HexPatternPainter(
+                        color: brand.onPrimary,
+                        opacity: 0.10,
+                        reveal: _grid.transform(v),
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _stage(v, MediaQuery.sizeOf(context).height),
-                        const SizedBox(height: 28),
-                        _wordmark(v, context),
-                        const SizedBox(height: 10),
-                        _tagline(v, context),
-                      ],
+                    Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _stage(v, MediaQuery.sizeOf(context).height),
+                          const SizedBox(height: 28),
+                          _wordmark(v, context),
+                          const SizedBox(height: 10),
+                          _tagline(v, context),
+                        ],
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 28),
-                        child: Opacity(
-                          opacity: _fade(v, _taglineStart + 0.04, 0.16),
-                          child: Text(
-                            AppStrings.splashFootnote,
-                            style: context.text.bodySmall?.copyWith(
-                                color: brand.onPrimary.withOpacity(0.65)),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 28),
+                          child: Opacity(
+                            opacity: _fade(v, _taglineStart + 0.04, 0.16),
+                            child: Text(
+                              AppStrings.splashFootnote,
+                              style: context.text.bodySmall?.copyWith(
+                                  color: brand.onPrimary.withOpacity(0.65)),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

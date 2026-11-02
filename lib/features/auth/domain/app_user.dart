@@ -18,6 +18,7 @@ class AppUser {
     this.isEmailVerified = true,
     this.studentStatus = 'Full-time',
     this.notificationsEnabled = true,
+    this.currency,
   });
 
   final String uid;
@@ -30,6 +31,7 @@ class AppUser {
   final bool isEmailVerified;
   final String studentStatus;
   final bool notificationsEnabled;
+  final String? currency;
 
   bool get isAdmin => role == UserRole.admin;
 
@@ -57,6 +59,7 @@ class AppUser {
     bool? isEmailVerified,
     String? studentStatus,
     bool? notificationsEnabled,
+    String? currency,
   }) =>
       AppUser(
         uid: uid,
@@ -69,5 +72,6 @@ class AppUser {
         isEmailVerified: isEmailVerified ?? this.isEmailVerified,
         studentStatus: studentStatus ?? this.studentStatus,
         notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+        currency: currency ?? this.currency,
       );
 }

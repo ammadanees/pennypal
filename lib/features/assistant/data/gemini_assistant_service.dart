@@ -25,8 +25,11 @@ class GeminiAssistantService implements AssistantService {
     }
 
     try {
+      final model = GeminiConfig.model.contains('3.8')
+          ? 'gemini-1.5-flash'
+          : GeminiConfig.model;
       final uri = Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/${GeminiConfig.model}:generateContent?key=${GeminiConfig.apiKey}',
+        'https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=${GeminiConfig.apiKey}',
       );
 
       final systemContext = '''

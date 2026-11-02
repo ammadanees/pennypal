@@ -42,9 +42,9 @@
 
 # Part 1 — Opening & Team Introduction
 
-Good morning, everyone! First of all, thank you so much for giving us this opportunity to present our project. My name is Muhammad Ammad Anees, and I'm the team lead of Team TechBeast from Aptech North Nazimabad Center.
+Good afternoon, everyone! First of all, thank you so much for giving us this opportunity to present our project. My name is Muhammad Ammad Anees, and I'm the team lead of Team TechBeast from Aptech North Nazimabad Center.
 
-Before we get started, let me quickly introduce my team members who are here with me today: so, we have Muhammad Hadi, who worked on the UI design; Ahmed Raza, who worked on the admin panel; and Abdul Qadir, who handled the project documentation.
+Before we get started, let me quickly introduce my team members who are here with me today: so, we have Muhammad Hadi, who worked on the Admin Panel; Muhammad Sharjeel, who worked on the UI design ; and Yaseen Saleem, who handled the project documentation.
 
 Together, we developed an application called **PennyPal**, with one simple goal: to help students manage their money better. Our motto is: **Make Every Penny Count.** Today, I'll explain why we built PennyPal, how it works, and then I will share my screen and demonstrate all its main features live. So, let's get started!
 
@@ -309,3 +309,5 @@ Muhammad Ammad led the project, Muhammad Hadi designed the UI, Ahmed Raza built 
 - **`device_preview` Package:** Allows testing and presenting mobile screens on any screen size or browser during live demos.
 - **`path_provider` Package:** Finds safe device storage folders to save exported PDF reports before opening or sharing.
 - **GitHub:** Cloud Git platform used by our four-member team for version control, code commits, and project collaboration throughout TechWiz.
+
+- No external package or GPS permission is needed — it uses Flutter's built-in PlatformDispatcher, which directly reads the operating system's native locale settings (dart:ui).

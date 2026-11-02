@@ -18,6 +18,7 @@ class DemoAuthRepository implements AuthRepository {
         email: studentEmail,
         mobile: '+92 306 9074462',
         role: UserRole.student,
+        currency: 'Rs.',
       ),
     );
     _accounts[adminEmail] = _Account(
