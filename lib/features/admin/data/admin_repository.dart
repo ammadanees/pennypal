@@ -54,14 +54,36 @@ class AdminRepository {
   Stream<List<Lesson>> watchLearningContent() =>
       _store.watchAdminCollection('learningContent').map((records) {
         if (records.isEmpty) return bundledLessons;
-        return records.map(Lesson.fromRecord).toList();
+        final deletedIds = <String>{};
+        final custom = <Lesson>[];
+        for (final r in records) {
+          final d = r.data as Map<String, dynamic>;
+          if (d['deleted'] == true) {
+            deletedIds.add(r.id);
+          } else {
+            custom.add(Lesson.fromRecord(r));
+          }
+        }
+        final customIds = {...custom.map((l) => l.id), ...deletedIds};
+        return [
+          ...custom,
+          ...bundledLessons.where((l) => !customIds.contains(l.id)),
+        ];
       });
 
   Future<void> saveLesson(Lesson lesson) =>
-      _store.updateAdminDoc('learningContent', lesson.id, lesson.toMap());
+      _store.updateAdminDoc('learningContent', lesson.id, {
+        ...lesson.toMap(),
+        'deleted': false,
+      });
 
-  Future<void> deleteLesson(String id) =>
-      _store.delete('', 'learningContent', id);
+  Future<void> deleteLesson(String id) async {
+    if (bundledLessons.any((l) => l.id == id)) {
+      await _store.updateAdminDoc('learningContent', id, {'deleted': true});
+    } else {
+      await _store.delete('', 'learningContent', id);
+    }
+  }
 }
 
 final adminRepositoryProvider = Provider<AdminRepository>(

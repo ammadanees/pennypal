@@ -6,8 +6,17 @@ final allLessonsProvider = StreamProvider<List<Lesson>>((ref) {
   final store = ref.watch(recordStoreProvider);
   return store.watchAdminCollection('learningContent').map((records) {
     if (records.isEmpty) return bundledLessons;
-    final custom = records.map(Lesson.fromRecord).toList();
-    final customIds = custom.map((l) => l.id).toSet();
+    final deletedIds = <String>{};
+    final custom = <Lesson>[];
+    for (final r in records) {
+      final d = r.data as Map<String, dynamic>;
+      if (d['deleted'] == true) {
+        deletedIds.add(r.id);
+      } else {
+        custom.add(Lesson.fromRecord(r));
+      }
+    }
+    final customIds = {...custom.map((l) => l.id), ...deletedIds};
     return [
       ...custom,
       ...bundledLessons.where((l) => !customIds.contains(l.id)),
